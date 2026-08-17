@@ -4,6 +4,7 @@ const modal = readFileSync(new URL('../src/components/controls/RemotionVideoModa
 const remotionEntry = readFileSync(new URL('../src/remotion/index.ts', import.meta.url), 'utf8');
 const tailwindConfig = readFileSync(new URL('../tailwind.config.js', import.meta.url), 'utf8');
 const composition = readFileSync(new URL('../src/remotion/PhoneShowcaseVideo.tsx', import.meta.url), 'utf8');
+const root = readFileSync(new URL('../src/remotion/Root.tsx', import.meta.url), 'utf8');
 const remotionCssPath = new URL('../src/remotion/remotion.css', import.meta.url);
 const failures = [];
 
@@ -13,8 +14,17 @@ if (remotionEntry.includes("import '../app/globals.css'")) {
 if (!tailwindConfig.includes("./src/remotion/**/*.{js,ts,jsx,tsx,mdx}")) {
   failures.push('Tailwind does not scan Remotion compositions for utility classes');
 }
-if (!composition.includes('const deviceScale = 1.8')) {
-  failures.push('Remotion device is not scaled to fill the portrait canvas');
+if (!composition.includes('<DeviceFrame isFrameEnabled={false}>')) {
+  failures.push('Remotion composition still renders the outer phone chassis');
+}
+if (composition.includes('deviceScale')) {
+  failures.push('Remotion composition still applies outer-device scaling');
+}
+if (!composition.includes('const screenScale = 2')) {
+  failures.push('borderless 412x915 screen is not pixel-doubled to fill 824x1830');
+}
+if (!root.includes('width={824}') || !root.includes('height={1830}')) {
+  failures.push('Remotion composition does not use the exact 412:915 screen ratio');
 }
 if (!remotionEntry.includes("import './remotion.css'")) {
   failures.push('Remotion entry does not import precompiled Tailwind CSS');

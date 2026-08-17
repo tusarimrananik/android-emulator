@@ -45,7 +45,7 @@ export const PhoneShowcaseVideo: React.FC<PhoneShowcaseVideoProps> = ({ override
   // 360 - 420 (6s - 7s): Clean return to Home Screen
 
   const wallpaper = WALLPAPERS[0]; // Pixel 9 Horizon Blue
-  const deviceScale = 1.8;
+  const screenScale = 2;
 
   // --- 1. App Open/Close Spring Animation ---
   const appOpenProgress = spring({
@@ -129,8 +129,8 @@ export const PhoneShowcaseVideo: React.FC<PhoneShowcaseVideoProps> = ({ override
             justifyContent: 'center',
           }}
         >
-          <div style={{ transform: `scale(${deviceScale})`, transformOrigin: 'center center' }}>
-            <DeviceFrame isFrameEnabled={true}>
+          <div style={{ transform: `scale(${screenScale})`, transformOrigin: 'center center' }}>
+            <DeviceFrame isFrameEnabled={false}>
               <div className="relative w-full h-full overflow-hidden bg-black select-none flex flex-col justify-between font-sans">
               {/* Wallpaper Background */}
               <div

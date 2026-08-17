@@ -10,8 +10,8 @@ export const RemotionRoot: React.FC = () => {
         component={PhoneShowcaseVideo}
         durationInFrames={420} // 7.0 seconds at 60 FPS
         fps={60}
-        width={1080}
-        height={1920}
+        width={824}
+        height={1830}
       />
     </>
   );
