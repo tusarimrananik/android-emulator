@@ -1,23 +1,15 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import * as htmlToImage from 'html-to-image';
+
 import { PhoneShowcaseVideo } from '@/remotion/PhoneShowcaseVideo';
 import {
   Clapperboard,
   Download,
-  Play,
-  RotateCcw,
   X,
-  Sparkles,
-  CheckCircle2,
-  Film,
-  Zap,
-  AlertCircle,
   Clock,
-  Gauge,
 } from 'lucide-react';
 
 const Player = dynamic(
@@ -35,145 +27,18 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   onClose,
 }) => {
   const [selectedDuration, setSelectedDuration] = useState<4 | 7>(4); // Default 4 seconds
-  const [isExporting, setIsExporting] = useState(false);
-  const [exportProgress, setExportProgress] = useState(0);
-  const [exportFrame, setExportFrame] = useState<number>(0);
-  const [recordedFileSize, setRecordedFileSize] = useState<string>('');
-  const [exportedUrl, setExportedUrl] = useState<string | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const videoByDuration = {
+    4: '/videos/lawnchair-showcase-4s.webm',
+    7: '/videos/lawnchair-showcase-7s.webm',
+  } as const;
 
-  useEffect(() => {
-    return () => {
-      if (exportedUrl) URL.revokeObjectURL(exportedUrl);
-    };
-  }, [exportedUrl]);
-
-  // Robust, Real-Pixel Frame-by-Frame Video Exporter
-  const renderAndDownloadVideo = async () => {
-    setIsExporting(true);
-    setExportProgress(0);
-    setExportedUrl(null);
-    setErrorMsg(null);
-    setRecordedFileSize('');
-
-    try {
-      const renderContainer = document.getElementById('remotion-export-canvas-source');
-      if (!renderContainer) {
-        throw new Error('Export canvas container element not found.');
-      }
-
-      // 1. Create recording canvas (540x960 for crisp 9:16 vertical video)
-      const width = 540;
-      const height = 960;
-      const recordCanvas = document.createElement('canvas');
-      recordCanvas.width = width;
-      recordCanvas.height = height;
-      const ctx = recordCanvas.getContext('2d', { alpha: false });
-
-      if (!ctx) {
-        throw new Error('Could not initialize 2D canvas context.');
-      }
-
-      // Initial black fill
-      ctx.fillStyle = '#0a0c10';
-      ctx.fillRect(0, 0, width, height);
-
-      // 2. Prepare canvas stream and MediaRecorder
-      const stream = recordCanvas.captureStream(30);
-      const mimeTypes = [
-        'video/webm;codecs=vp9',
-        'video/webm;codecs=vp8',
-        'video/webm',
-        'video/mp4',
-      ];
-      const selectedMime = mimeTypes.find((m) => MediaRecorder.isTypeSupported(m)) || 'video/webm';
-
-      const chunks: Blob[] = [];
-      const recorder = new MediaRecorder(stream, {
-        mimeType: selectedMime,
-        videoBitsPerSecond: 8000000, // 8 Mbps high-bitrate
-      });
-
-      recorder.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) {
-          chunks.push(e.data);
-        }
-      };
-
-      const recordPromise = new Promise<Blob>((resolve) => {
-        recorder.onstop = () => {
-          const finalBlob = new Blob(chunks, { type: selectedMime });
-          resolve(finalBlob);
-        };
-      });
-
-      recorder.start(100); // chunk every 100ms
-
-      // 3. Step through keyframes (4 seconds = 240 frames total)
-      const totalFrames = selectedDuration * 60;
-      const step = 8; // Sample every 8th frame for ultra-fast, reliable capture
-      const frameList: number[] = [];
-      for (let f = 0; f < totalFrames; f += step) {
-        frameList.push(f);
-      }
-
-      for (let i = 0; i < frameList.length; i++) {
-        const currentF = frameList[i];
-        setExportFrame(currentF);
-
-        // Wait small tick for React DOM commit
-        await new Promise((r) => setTimeout(r, 40));
-
-        try {
-          // Render genuine DOM snapshot into HTMLCanvasElement
-          const capturedCanvas = await htmlToImage.toCanvas(renderContainer, {
-            quality: 0.95,
-            pixelRatio: 1.2,
-            backgroundColor: '#0a0c10',
-          });
-
-          // Draw real pixels onto the recording stream canvas
-          ctx.fillStyle = '#0a0c10';
-          ctx.fillRect(0, 0, width, height);
-
-          const scale = Math.min(width / capturedCanvas.width, height / capturedCanvas.height) * 0.96;
-          const x = (width - capturedCanvas.width * scale) / 2;
-          const y = (height - capturedCanvas.height * scale) / 2;
-
-          ctx.drawImage(capturedCanvas, x, y, capturedCanvas.width * scale, capturedCanvas.height * scale);
-        } catch (captureErr) {
-          console.warn(`Frame ${currentF} raster warning:`, captureErr);
-        }
-
-        setExportProgress(Math.round(((i + 1) / frameList.length) * 100));
-      }
-
-      // 4. Finalize recording and download genuine video file
-      recorder.stop();
-      const finalBlob = await recordPromise;
-
-      const sizeMB = (finalBlob.size / (1024 * 1024)).toFixed(2);
-      setRecordedFileSize(`${sizeMB} MB`);
-
-      const url = URL.createObjectURL(finalBlob);
-      setExportedUrl(url);
-      setExportProgress(100);
-      setIsExporting(false);
-
-      // Auto trigger download
-      const a = document.createElement('a');
-      a.href = url;
-      const now = new Date();
-      const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
-      a.download = `lawnchair-14-viewport-${timestamp}.webm`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (err: any) {
-      console.error('Export error:', err);
-      setErrorMsg(err.message || 'Export encountered an issue.');
-      setIsExporting(false);
-    }
+  const downloadSelectedVideo = () => {
+    const link = document.createElement('a');
+    link.href = videoByDuration[selectedDuration];
+    link.download = `lawnchair-14-showcase-${selectedDuration}s.webm`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   if (!isOpen) return null;
@@ -240,12 +105,6 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
           {/* Right Column: Settings & Controls */}
           <div className="flex flex-col justify-between space-y-4">
             <div className="space-y-3.5">
-              {errorMsg && (
-                <div className="p-3 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-300 text-xs flex items-center gap-2.5">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{errorMsg}</span>
-                </div>
-              )}
 
               {/* 1. Sequence Duration Selector */}
               <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
@@ -289,72 +148,25 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
                 </div>
                 <div className="p-2.5 rounded-2xl bg-white/5 border border-white/5 text-center">
                   <div className="text-white/40 text-[9px] uppercase font-bold">File Size</div>
-                  <div className="text-emerald-400 font-bold mt-0.5">{recordedFileSize || '~1-3 MB'}</div>
+                  <div className="text-emerald-400 font-bold mt-0.5">Ready</div>
                 </div>
               </div>
             </div>
 
             {/* Export Action */}
             <div className="pt-2 border-t border-white/10">
-              {isExporting ? (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-emerald-400 flex items-center gap-2">
-                      <Zap className="w-3.5 h-3.5 animate-pulse" />
-                      Capturing & Encoding Video Frames...
-                    </span>
-                    <span className="font-mono text-white/70">{exportProgress}%</span>
-                  </div>
-                  <div className="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-100"
-                      style={{ width: `${exportProgress}%` }}
-                    />
-                  </div>
-                </div>
-              ) : exportedUrl ? (
-                <div className="space-y-2">
-                  <button
-                    onClick={renderAndDownloadVideo}
-                    className="w-full py-3.5 px-5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 font-bold text-sm text-white flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-500/25"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>Download Video ({recordedFileSize})</span>
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={renderAndDownloadVideo}
-                  className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 font-bold text-sm text-white flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40"
-                >
-                  <Film className="w-4 h-4" />
-                  <span>Export Video ({selectedDuration}.0s Sequence)</span>
-                </button>
-              )}
+              <button
+                onClick={downloadSelectedVideo}
+                className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 font-bold text-sm text-white flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download Video ({selectedDuration}.0s Sequence)</span>
+              </button>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Frame Renderer Viewport (Active in DOM for valid pixel rendering) */}
-      <div
-        id="remotion-export-canvas-source"
-        style={{
-          position: 'fixed',
-          left: '-9999px',
-          top: '-9999px',
-          width: '450px',
-          height: '800px',
-          overflow: 'hidden',
-          backgroundColor: '#0a0c10',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          pointerEvents: 'none',
-        }}
-      >
-        <PhoneShowcaseVideo overrideFrame={exportFrame} />
-      </div>
     </div>
   );
 };
