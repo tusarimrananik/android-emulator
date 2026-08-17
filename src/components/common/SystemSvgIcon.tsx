@@ -5,17 +5,19 @@ interface SystemSvgIconProps {
   name: keyof typeof officialSystemIcons | string;
   size?: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const SystemSvgIcon: React.FC<SystemSvgIconProps> = ({
   name,
   size = 18,
   className = '',
+  style,
 }) => {
   const rawSvg = (officialSystemIcons as Record<string, string>)[name];
 
   if (!rawSvg) {
-    return <div className={`inline-block ${className}`} style={{ width: size, height: size }} />;
+    return <div className={`inline-block ${className}`} style={{ width: size, height: size, ...style }} />;
   }
 
   // Sanitize and adapt SVG to currentColor
@@ -44,6 +46,7 @@ export const SystemSvgIcon: React.FC<SystemSvgIconProps> = ({
       strokeLinecap="round"
       strokeLinejoin="round"
       className={`inline-block shrink-0 ${className}`}
+      style={style}
       dangerouslySetInnerHTML={{ __html: innerContent }}
     />
   );
