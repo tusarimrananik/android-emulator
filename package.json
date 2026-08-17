@@ -9,7 +9,7 @@
     "lint": "next lint",
     "build:remotion-css": "tailwindcss -i src/app/globals.css -o src/remotion/remotion.css --minify",
     "test:remotion-export": "node scripts/test-remotion-export.mjs",
-    "render:videos": "npm run build:remotion-css && mkdir -p public/videos && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-4s.webm --codec=vp8 --frames=0-239 --scale=0.5 --overwrite && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-7s.webm --codec=vp8 --scale=0.5 --overwrite"
+    "render:videos": "npm run build:remotion-css && mkdir -p public/videos && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-4s.webm --codec=vp9 --crf=18 --frames=0-239 --overwrite && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-7s.webm --codec=vp9 --crf=18 --overwrite"
   },
   "dependencies": {
     "@remotion/bundler": "^4.0.512",

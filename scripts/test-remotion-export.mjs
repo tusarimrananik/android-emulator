@@ -5,6 +5,7 @@ const remotionEntry = readFileSync(new URL('../src/remotion/index.ts', import.me
 const tailwindConfig = readFileSync(new URL('../tailwind.config.js', import.meta.url), 'utf8');
 const composition = readFileSync(new URL('../src/remotion/PhoneShowcaseVideo.tsx', import.meta.url), 'utf8');
 const root = readFileSync(new URL('../src/remotion/Root.tsx', import.meta.url), 'utf8');
+const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const remotionCssPath = new URL('../src/remotion/remotion.css', import.meta.url);
 const failures = [];
 
@@ -26,6 +27,10 @@ if (!composition.includes('const screenScale = 2')) {
 if (!root.includes('width={824}') || !root.includes('height={1830}')) {
   failures.push('Remotion composition does not use the exact 412:915 screen ratio');
 }
+const renderCommand = packageJson.scripts?.['render:videos'] ?? '';
+if (renderCommand.includes('--scale=0.5')) failures.push('video rendering still halves the composition resolution');
+if (!renderCommand.includes('--codec=vp9')) failures.push('video rendering does not use VP9');
+if (!renderCommand.includes('--crf=18')) failures.push('video rendering does not use high-quality CRF 18');
 if (!remotionEntry.includes("import './remotion.css'")) {
   failures.push('Remotion entry does not import precompiled Tailwind CSS');
 }
