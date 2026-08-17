@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"components\\\\controls\\\\RemotionVideoModal.tsx -> @remotion/player\":{\"id\":\"components\\\\controls\\\\RemotionVideoModal.tsx -> @remotion/player\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_remotion_player_dist_esm_index_mjs.js\"]}}"
