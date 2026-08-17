@@ -1,8 +1,31 @@
 import {readFileSync, existsSync, statSync} from 'node:fs';
 
 const modal = readFileSync(new URL('../src/components/controls/RemotionVideoModal.tsx', import.meta.url), 'utf8');
+const remotionEntry = readFileSync(new URL('../src/remotion/index.ts', import.meta.url), 'utf8');
+const tailwindConfig = readFileSync(new URL('../tailwind.config.js', import.meta.url), 'utf8');
+const composition = readFileSync(new URL('../src/remotion/PhoneShowcaseVideo.tsx', import.meta.url), 'utf8');
+const remotionCssPath = new URL('../src/remotion/remotion.css', import.meta.url);
 const failures = [];
 
+if (remotionEntry.includes("import '../app/globals.css'")) {
+  failures.push('Remotion entry imports raw Tailwind directives instead of compiled CSS');
+}
+if (!tailwindConfig.includes("./src/remotion/**/*.{js,ts,jsx,tsx,mdx}")) {
+  failures.push('Tailwind does not scan Remotion compositions for utility classes');
+}
+if (!composition.includes('const deviceScale = 1.8')) {
+  failures.push('Remotion device is not scaled to fill the portrait canvas');
+}
+if (!remotionEntry.includes("import './remotion.css'")) {
+  failures.push('Remotion entry does not import precompiled Tailwind CSS');
+}
+if (!existsSync(remotionCssPath)) {
+  failures.push('precompiled Remotion Tailwind CSS is missing');
+} else {
+  const remotionCss = readFileSync(remotionCssPath, 'utf8');
+  if (!remotionCss.includes('.grid-cols-4')) failures.push('compiled Remotion CSS lacks grid-cols-4');
+  if (!remotionCss.includes('.overflow-hidden')) failures.push('compiled Remotion CSS lacks overflow-hidden');
+}
 if (modal.includes("from 'html-to-image'")) failures.push('Remotion exporter still imports html-to-image');
 if (modal.includes('toCanvas(')) failures.push('Remotion exporter still rasterizes DOM frames in the browser');
 for (const duration of [4, 7]) {
