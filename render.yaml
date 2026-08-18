@@ -2,7 +2,7 @@ services:
   - type: web
     name: android-emulator-renderer
     runtime: node
-    plan: starter
+    plan: free
     region: singapore
     buildCommand: npm ci && npm run build:remotion-css && npx remotion browser ensure
     startCommand: npm run start:renderer
