@@ -27,10 +27,16 @@ if (!composition.includes('const screenScale = 2')) {
 if (!root.includes('width={824}') || !root.includes('height={1830}')) {
   failures.push('Remotion composition does not use the exact 412:915 screen ratio');
 }
+if (!root.includes('id="LongWorkflow"') || !root.includes('durationInFrames={1800}')) {
+  failures.push('30-second LongWorkflow composition is missing');
+}
 const renderCommand = packageJson.scripts?.['render:videos'] ?? '';
 if (renderCommand.includes('--scale=0.5')) failures.push('video rendering still halves the composition resolution');
 if (!renderCommand.includes('--codec=vp9')) failures.push('video rendering does not use VP9');
 if (!renderCommand.includes('--crf=18')) failures.push('video rendering does not use high-quality CRF 18');
+if (!renderCommand.includes('LongWorkflow public/videos/lawnchair-showcase-30s.webm')) {
+  failures.push('render command does not generate the 30-second workflow');
+}
 if (!remotionEntry.includes("import './remotion.css'")) {
   failures.push('Remotion entry does not import precompiled Tailwind CSS');
 }
@@ -43,7 +49,7 @@ if (!existsSync(remotionCssPath)) {
 }
 if (modal.includes("from 'html-to-image'")) failures.push('Remotion exporter still imports html-to-image');
 if (modal.includes('toCanvas(')) failures.push('Remotion exporter still rasterizes DOM frames in the browser');
-for (const duration of [4, 7]) {
+for (const duration of [4, 7, 30]) {
   const path = new URL(`../public/videos/lawnchair-showcase-${duration}s.webm`, import.meta.url);
   if (!existsSync(path)) failures.push(`missing pre-rendered ${duration}s video`);
   else if (statSync(path).size < 10_000) failures.push(`${duration}s video is unexpectedly small`);

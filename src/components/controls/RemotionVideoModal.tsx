@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
 import { PhoneShowcaseVideo } from '@/remotion/PhoneShowcaseVideo';
+import { LongWorkflowVideo } from '@/remotion/LongWorkflowVideo';
 import {
   Clapperboard,
   Download,
@@ -26,10 +27,11 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [selectedDuration, setSelectedDuration] = useState<4 | 7>(4); // Default 4 seconds
+  const [selectedDuration, setSelectedDuration] = useState<4 | 7 | 30>(4);
   const videoByDuration = {
     4: '/videos/lawnchair-showcase-4s.webm',
     7: '/videos/lawnchair-showcase-7s.webm',
+    30: '/videos/lawnchair-showcase-30s.webm',
   } as const;
 
   const downloadSelectedVideo = () => {
@@ -86,10 +88,10 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
           <div className="flex flex-col items-center justify-center">
             <div className="relative w-full max-w-[250px] aspect-[9/16] rounded-3xl overflow-hidden bg-[#0a0c10] border border-white/15 shadow-2xl flex items-center justify-center">
               <Player
-                component={PhoneShowcaseVideo}
+                component={selectedDuration === 30 ? LongWorkflowVideo : PhoneShowcaseVideo}
                 durationInFrames={selectedDuration * 60}
-                compositionWidth={1080}
-                compositionHeight={1920}
+                compositionWidth={824}
+                compositionHeight={1830}
                 fps={60}
                 style={{
                   width: '100%',
@@ -115,10 +117,11 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   {[
                     { dur: 4 as const, label: '4.0 Seconds (Fast)', sub: 'Opens Calculator ➔ 7×8=56 ➔ Closes' },
                     { dur: 7 as const, label: '7.0 Seconds (Full)', sub: 'Calculator + App Drawer Scroll' },
+                    { dur: 30 as const, label: '30 Seconds (Workflow)', sub: 'Drawer scroll + Calculator + Camera + Phone + Settings' },
                   ].map((opt) => (
                     <button
                       key={opt.dur}
