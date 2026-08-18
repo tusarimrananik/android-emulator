@@ -51,13 +51,11 @@ if (modal.includes("from 'html-to-image'")) failures.push('Remotion exporter sti
 if (modal.includes('toCanvas(')) failures.push('Remotion exporter still rasterizes DOM frames in the browser');
 for (const duration of [4, 7, 30]) {
   const path = new URL(`../public/videos/lawnchair-showcase-${duration}s.webm`, import.meta.url);
-  if (!existsSync(path)) failures.push(`missing pre-rendered ${duration}s video`);
-  else if (statSync(path).size < 10_000) failures.push(`${duration}s video is unexpectedly small`);
-  if (!modal.includes(`/videos/lawnchair-showcase-${duration}s.webm`)) {
-    failures.push(`modal does not map ${duration}s selection to its video`);
-  }
+  if (!existsSync(path)) failures.push(`missing fallback ${duration}s video`);
+  else if (statSync(path).size < 10_000) failures.push(`${duration}s fallback video is unexpectedly small`);
 }
-if (!modal.includes('downloadSelectedVideo')) failures.push('instant download handler is missing');
+if (!modal.includes("fetch('/api/renders'")) failures.push('real-time render job creation is missing');
+if (!modal.includes('Rendering ${Math.round(progress * 100)}%')) failures.push('real-time render progress UI is missing');
 
 if (failures.length) {
   console.error(failures.map((failure) => `FAIL: ${failure}`).join('\n'));

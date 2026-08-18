@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
@@ -28,20 +28,39 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   onClose,
 }) => {
   const [selectedDuration, setSelectedDuration] = useState<4 | 7 | 30>(4);
-  const videoByDuration = {
-    4: '/videos/lawnchair-showcase-4s.webm',
-    7: '/videos/lawnchair-showcase-7s.webm',
-    30: '/videos/lawnchair-showcase-30s.webm',
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [renderStatus, setRenderStatus] = useState<'idle' | 'queued' | 'rendering' | 'completed' | 'failed'>('idle');
+  const [progress, setProgress] = useState(0);
+  const [renderError, setRenderError] = useState<string | null>(null);
+
+  const workflows = {
+    4: [{type: 'home', duration: 1}, {type: 'openApp', app: 'calculator', duration: 2}, {type: 'tap', value: '7×8=', duration: 0.5}, {type: 'goHome', duration: 0.5}],
+    7: [{type: 'home', duration: 1}, {type: 'openApp', app: 'calculator', duration: 2}, {type: 'tap', value: '7×8=', duration: 1}, {type: 'goHome', duration: 1}, {type: 'openDrawer', duration: 1}, {type: 'scrollDrawer', duration: 1}],
+    30: [{type: 'home', duration: 3}, {type: 'openDrawer', duration: 2}, {type: 'scrollDrawer', duration: 4}, {type: 'openApp', app: 'calculator', duration: 4}, {type: 'tap', value: '12×8=', duration: 2}, {type: 'goHome', duration: 2}, {type: 'openApp', app: 'camera', duration: 4}, {type: 'goHome', duration: 1}, {type: 'openApp', app: 'phone', duration: 3}, {type: 'tap', value: '01712345678', duration: 2}, {type: 'goHome', duration: 1}, {type: 'openApp', app: 'settings', duration: 2}],
   } as const;
 
-  const downloadSelectedVideo = () => {
-    const link = document.createElement('a');
-    link.href = videoByDuration[selectedDuration];
-    link.download = `lawnchair-14-showcase-${selectedDuration}s.webm`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+  const startRealtimeRender = async () => {
+    setRenderError(null); setProgress(0); setRenderStatus('queued'); setJobId(null);
+    try {
+      const response = await fetch('/api/renders', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({fps: 60, actions: workflows[selectedDuration]})});
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not create render job');
+      setJobId(data.job.id); setRenderStatus(data.job.status);
+    } catch (error) { setRenderStatus('failed'); setRenderError(error instanceof Error ? error.message : 'Render failed'); }
   };
+
+  useEffect(() => {
+    if (!jobId || !['queued', 'rendering'].includes(renderStatus)) return;
+    const timer = window.setInterval(async () => {
+      try {
+        const response = await fetch(`/api/renders/${jobId}`, {cache: 'no-store'});
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Could not read render status');
+        setRenderStatus(data.job.status); setProgress(data.job.progress || 0);
+      } catch (error) { setRenderStatus('failed'); setRenderError(error instanceof Error ? error.message : 'Render failed'); }
+    }, 1500);
+    return () => window.clearInterval(timer);
+  }, [jobId, renderStatus]);
 
   if (!isOpen) return null;
 
@@ -159,12 +178,14 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
             {/* Export Action */}
             <div className="pt-2 border-t border-white/10">
               <button
-                onClick={downloadSelectedVideo}
+                onClick={renderStatus === 'completed' && jobId ? () => { window.location.href = `/api/renders/${jobId}/video`; } : startRealtimeRender}
+                disabled={renderStatus === 'queued' || renderStatus === 'rendering'}
                 className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 font-bold text-sm text-white flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40"
               >
                 <Download className="w-4 h-4" />
-                <span>Download Video ({selectedDuration}.0s Sequence)</span>
+                <span>{renderStatus === 'queued' ? 'Queued…' : renderStatus === 'rendering' ? `Rendering ${Math.round(progress * 100)}%` : renderStatus === 'completed' ? 'Download Generated Video' : `Render ${selectedDuration}.0s Video Now`}</span>
               </button>
+              {renderError && <p className="mt-2 text-xs text-red-300">{renderError}</p>}
             </div>
           </div>
         </div>

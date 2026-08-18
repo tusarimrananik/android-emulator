@@ -9,6 +9,8 @@
     "lint": "next lint",
     "build:remotion-css": "tailwindcss -i src/app/globals.css -o src/remotion/remotion.css --minify",
     "test:remotion-export": "node scripts/test-remotion-export.mjs",
+    "test:render-api": "node --test scripts/test-render-api.mjs",
+    "start:renderer": "node server/render-api.mjs",
     "render:videos": "npm run build:remotion-css && mkdir -p public/videos && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-4s.webm --codec=vp9 --crf=18 --frames=0-239 --overwrite && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-7s.webm --codec=vp9 --crf=18 --overwrite && remotion render src/remotion/index.ts LongWorkflow public/videos/lawnchair-showcase-30s.webm --codec=vp9 --crf=18 --overwrite"
   },
   "dependencies": {
