@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "build:remotion-css": "tailwindcss -i src/app/globals.css -o src/remotion/remotion.css --minify",
+    "build:renderer": "npm run build:remotion-css && node scripts/build-remotion-bundle.mjs",
     "test:remotion-export": "node scripts/test-remotion-export.mjs",
     "test:render-api": "node --test scripts/test-render-api.mjs",
     "start:renderer": "node server/render-api.mjs",

@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     region: singapore
-    buildCommand: npm ci && npm run build:remotion-css && npx remotion browser ensure
+    buildCommand: npm ci && npm run build:renderer && npx remotion browser ensure
     startCommand: npm run start:renderer
     healthCheckPath: /health
     autoDeploy: true

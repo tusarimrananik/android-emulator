@@ -53,3 +53,11 @@ test('Vercel UI uses server-side realtime render proxy instead of static downloa
   assert.equal(existsSync(new URL('../src/app/api/renders/[id]/route.ts', import.meta.url)), true);
   assert.equal(existsSync(new URL('../src/app/api/renders/[id]/video/route.ts', import.meta.url)), true);
 });
+
+test('production renderer reuses a build-time Remotion bundle', () => {
+  const server = readFileSync(new URL('../server/render-api.mjs', import.meta.url), 'utf8');
+  const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  assert.equal(server.includes("from '@remotion/bundler'"), false);
+  assert.equal(server.includes("'remotion-bundle'"), true);
+  assert.equal(packageJson.scripts['build:renderer'].includes('build-remotion-bundle.mjs'), true);
+});

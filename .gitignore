@@ -8,6 +8,7 @@ node_modules
 .next/
 .vercel/
 render-output/
+remotion-bundle/
 .pnp
 .pnp.js
 *.o

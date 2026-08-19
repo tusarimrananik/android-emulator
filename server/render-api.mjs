@@ -3,7 +3,6 @@ import {createReadStream, existsSync, mkdirSync, rmSync} from 'node:fs';
 import {stat} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {bundle} from '@remotion/bundler';
 import {renderMedia, selectComposition} from '@remotion/renderer';
 import {authorizeRequest, createJobStore, publicJob, validateRenderRequest} from './render-api-core.mjs';
 
@@ -18,15 +17,14 @@ mkdirSync(outputDir,{recursive:true});
 const store=createJobStore();
 const queue=[];
 let working=false;
-let serveUrlPromise;
+const serveUrl=path.join(root,'remotion-bundle');
+if(!existsSync(path.join(serveUrl,'index.html'))) throw new Error('Remotion bundle is missing. Run npm run build:renderer first.');
 
 const corsHeaders=(origin)=>({'access-control-allow-origin':allowedOrigin==='*'?'*':origin===allowedOrigin?origin:allowedOrigin,'access-control-allow-headers':'authorization, content-type','access-control-allow-methods':'GET, POST, OPTIONS','cache-control':'no-store'});
 const json=(res,status,body,origin)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8',...corsHeaders(origin)});res.end(JSON.stringify(body));};
 const readJson=async(req)=>{const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>256_000)throw new Error('request too large');chunks.push(chunk);}return JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}');};
 
-const getServeUrl=()=>serveUrlPromise??=(async()=>{console.log('[renderer] Bundling Remotion project...');const url=await bundle({entryPoint:path.join(root,'src/remotion/index.ts'),webpackOverride:(config)=>({...config,resolve:{...config.resolve,alias:{...(config.resolve?.alias||{}),'@':path.join(root,'src')}}})});console.log('[renderer] Bundle ready');return url;})();
-
-const processQueue=async()=>{if(working)return;working=true;while(queue.length){const id=queue.shift();const job=store.get(id);if(!job)continue;try{store.update(id,{status:'rendering',progress:0});const serveUrl=await getServeUrl();const inputProps={actions:job.request.actions};const composition=await selectComposition({serveUrl,id:'ApiWorkflow',inputProps});const outputPath=path.join(outputDir,`${id}.webm`);await renderMedia({serveUrl,composition,inputProps,codec:'vp9',crf:18,outputLocation:outputPath,onProgress:({progress})=>store.update(id,{progress:Math.max(0,Math.min(1,progress))})});store.update(id,{status:'completed',progress:1,outputPath});}catch(error){console.error('[renderer] Job failed',id,error);store.update(id,{status:'failed',error:error instanceof Error?error.message:'render failed'});}}working=false;};
+const processQueue=async()=>{if(working)return;working=true;while(queue.length){const id=queue.shift();const job=store.get(id);if(!job)continue;try{store.update(id,{status:'rendering',progress:0});const inputProps={actions:job.request.actions};const composition=await selectComposition({serveUrl,id:'ApiWorkflow',inputProps});const outputPath=path.join(outputDir,`${id}.webm`);await renderMedia({serveUrl,composition,inputProps,codec:'vp9',crf:18,outputLocation:outputPath,onProgress:({progress})=>store.update(id,{progress:Math.max(0,Math.min(1,progress))})});store.update(id,{status:'completed',progress:1,outputPath});}catch(error){console.error('[renderer] Job failed',id,error);store.update(id,{status:'failed',error:error instanceof Error?error.message:'render failed'});}}working=false;};
 const enqueue=(job)=>{queue.push(job.id);void processQueue();};
 
 const cleanup=()=>{const now=Date.now();for(const job of store.values()){if(now-Date.parse(job.updatedAt)<ttlMs)continue;if(job.outputPath&&existsSync(job.outputPath))rmSync(job.outputPath,{force:true});store.delete(job.id);}};
