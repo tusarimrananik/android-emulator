@@ -76,6 +76,12 @@ test('production renderer reuses a build-time Remotion bundle', () => {
   assert.equal(packageJson.scripts['build:renderer'].includes('build-remotion-bundle.mjs'), true);
 });
 
+test('renderer supports a loopback-only production bind address', () => {
+  const server = readFileSync(new URL('../server/render-api.mjs', import.meta.url), 'utf8');
+  assert.equal(server.includes("const host=process.env.HOST||'0.0.0.0'"), true);
+  assert.equal(server.includes('server.listen(port,host'), true);
+});
+
 test('renderer rejects a second request instead of queuing it', () => {
   const store = createJobStore();
   const active = store.create({actions: [{type: 'home', duration: 1}]});

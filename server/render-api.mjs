@@ -9,6 +9,7 @@ import {authorizeRequest, createJobStore, publicJob, validateRenderRequest} from
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const outputDir=process.env.RENDER_OUTPUT_DIR||path.join(root,'render-output');
 const port=Number(process.env.PORT||8787);
+const host=process.env.HOST||'0.0.0.0';
 const apiKey=process.env.RENDER_API_KEY||'';
 const allowedOrigin=process.env.ALLOWED_ORIGIN||'*';
 const ttlMs=Number(process.env.RENDER_TTL_MS||86400000);
@@ -36,5 +37,5 @@ const server=http.createServer(async(req,res)=>{const origin=req.headers.origin|
  }catch(error){const statusCode=Number(error?.statusCode)||400;return json(res,statusCode,{error:error instanceof Error?error.message:'bad request',...(error?.activeJobId?{activeJobId:error.activeJobId}:{})},origin);}
 });
 
-server.listen(port,'0.0.0.0',()=>console.log(`[renderer] Listening on 0.0.0.0:${port}`));
+server.listen(port,host,()=>console.log(`[renderer] Listening on ${host}:${port}`));
 const shutdown=()=>server.close(()=>process.exit(0));process.on('SIGTERM',shutdown);process.on('SIGINT',shutdown);
