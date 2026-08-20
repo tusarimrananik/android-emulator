@@ -30,7 +30,7 @@ export const RemotionRoot: React.FC = () => {
         fps={60}
         width={824}
         height={1830}
-        defaultProps={{ actions: [{ type: 'home', duration: 1 }] }}
+        defaultProps={{ actions: [{ type: 'home', duration: 1 }], fps: 30 }}
         calculateMetadata={calculateApiWorkflowMetadata}
       />
     </>

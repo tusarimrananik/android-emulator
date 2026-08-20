@@ -42,9 +42,9 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   const startRealtimeRender = async () => {
     setRenderError(null); setProgress(0); setRenderStatus('queued'); setJobId(null);
     try {
-      const response = await fetch('/api/renders', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({fps: 60, actions: workflows[selectedDuration]})});
+      const response = await fetch('/api/renders', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({fps: 30, actions: workflows[selectedDuration]})});
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Could not create render job');
+      if (!response.ok) throw new Error(response.status === 409 ? 'Another video is already rendering. Please wait for it to finish.' : data.error || 'Could not create render job');
       setJobId(data.job.id); setRenderStatus(data.job.status);
     } catch (error) { setRenderStatus('failed'); setRenderError(error instanceof Error ? error.message : 'Render failed'); }
   };

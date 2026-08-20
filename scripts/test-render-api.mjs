@@ -24,6 +24,12 @@ test('accepts a supported API workflow and calculates frames', () => {
   assert.equal(result.value.durationInFrames, 420);
 });
 
+test('30 FPS requests halve rendered frame count', () => {
+  const result = validateRenderRequest({fps: 30, actions: [{type: 'home', duration: 4}]});
+  assert.equal(result.ok, true);
+  assert.equal(result.value.durationInFrames, 120);
+});
+
 test('rejects unsupported actions and unsafe durations', () => {
   assert.equal(validateRenderRequest({actions: [{type: 'shell', command: 'rm -rf /'}]}).ok, false);
   assert.equal(validateRenderRequest({actions: [{type: 'home', duration: 301}]}).ok, false);
@@ -60,4 +66,21 @@ test('production renderer reuses a build-time Remotion bundle', () => {
   assert.equal(server.includes("from '@remotion/bundler'"), false);
   assert.equal(server.includes("'remotion-bundle'"), true);
   assert.equal(packageJson.scripts['build:renderer'].includes('build-remotion-bundle.mjs'), true);
+});
+
+test('renderer rejects a second request instead of queuing it', () => {
+  const store = createJobStore();
+  const active = store.create({actions: [{type: 'home', duration: 1}]});
+  assert.equal(store.getActive()?.status, 'queued');
+  assert.throws(
+    () => store.create({actions: [{type: 'home', duration: 1}]}),
+    (error) => error.message.includes('already in progress') && error.statusCode === 409 && error.activeJobId === active.id,
+  );
+});
+
+test('renderer uses the faster VP8 codec and never maintains a queue', () => {
+  const server = readFileSync(new URL('../server/render-api.mjs', import.meta.url), 'utf8');
+  assert.equal(server.includes("codec:'vp8'"), true);
+  assert.equal(server.includes('const queue=[]'), false);
+  assert.equal(server.includes('fps:job.request.fps'), true);
 });

@@ -42,6 +42,14 @@ GET /v1/renders/JOB_ID
 
 Statuses: `queued`, `rendering`, `completed`, `failed`. Progress ranges from `0` to `1`.
 
+Only one render may be active at a time. If a render is already queued or rendering, another `POST /v1/renders` request is rejected immediately with HTTP `409`:
+
+```json
+{"error":"A video render is already in progress","activeJobId":"uuid"}
+```
+
+The service does not maintain a waiting queue.
+
 ## Download
 
 ```http
@@ -62,7 +70,7 @@ Returns `video/webm` after completion.
 
 Supported apps: `calculator`, `camera`, `phone`, `settings`, `files`, `weather`, `clock`.
 
-Rules: 1–100 actions, 0.25–60 seconds per action, 300 seconds maximum, FPS 30 or 60. Rendering is queued one job at a time. Completed files expire after 24 hours by default.
+Rules: 1–100 actions, 0.25–60 seconds per action, 300 seconds maximum, FPS 30 or 60. The website uses 30 FPS for faster rendering; API clients may request 60 FPS when they accept the longer render time. Completed files expire after 24 hours by default.
 
 ## Health
 

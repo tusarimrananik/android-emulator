@@ -44,7 +44,17 @@ export const publicJob = (job) => {
 export const createJobStore = () => {
   const jobs = new Map();
   return {
+    getActive() {
+      return [...jobs.values()].find((job) => job.status === 'queued' || job.status === 'rendering') ?? null;
+    },
     create(request) {
+      const active = this.getActive();
+      if (active) {
+        const error = new Error('A video render is already in progress');
+        error.statusCode = 409;
+        error.activeJobId = active.id;
+        throw error;
+      }
       const now = new Date().toISOString();
       const job = {id: randomUUID(), status: 'queued', progress: 0, request, createdAt: now, updatedAt: now, outputPath: null, error: null};
       jobs.set(job.id, job);
