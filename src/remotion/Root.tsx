@@ -27,10 +27,10 @@ export const RemotionRoot: React.FC = () => {
         id="ApiWorkflow"
         component={ApiWorkflowVideo}
         durationInFrames={60}
-        fps={60}
-        width={824}
-        height={1830}
-        defaultProps={{ actions: [{ type: 'home', duration: 1 }], fps: 30 }}
+        fps={15}
+        width={412}
+        height={915}
+        defaultProps={{ actions: [{ type: 'home', duration: 1 }], fps: 15 }}
         calculateMetadata={calculateApiWorkflowMetadata}
       />
     </>

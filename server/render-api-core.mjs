@@ -18,8 +18,8 @@ export const validateRenderRequest = (body) => {
   if (!body || !Array.isArray(body.actions) || body.actions.length < 1 || body.actions.length > 100) {
     return {ok: false, error: 'actions must contain between 1 and 100 items'};
   }
-  const fps = body.fps ?? 60;
-  if (![30, 60].includes(fps)) return {ok: false, error: 'fps must be 30 or 60'};
+  const fps = body.fps ?? 15;
+  if (![15, 30, 60].includes(fps)) return {ok: false, error: 'fps must be 15, 30 or 60'};
   let totalSeconds = 0;
   const actions = [];
   for (const raw of body.actions) {
@@ -32,7 +32,7 @@ export const validateRenderRequest = (body) => {
     actions.push({type: raw.type, duration, ...(raw.app ? {app: raw.app} : {}), ...(raw.value ? {value: raw.value} : {})});
   }
   if (totalSeconds > 300) return {ok: false, error: 'workflow may not exceed 300 seconds'};
-  return {ok: true, value: {actions, fps, durationInFrames: Math.round(totalSeconds * fps), width: 824, height: 1830}};
+  return {ok: true, value: {actions, fps, durationInFrames: Math.round(totalSeconds * fps), width: 412, height: 915}};
 };
 
 export const publicJob = (job) => {

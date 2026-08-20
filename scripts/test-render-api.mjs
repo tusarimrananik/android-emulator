@@ -30,6 +30,14 @@ test('30 FPS requests halve rendered frame count', () => {
   assert.equal(result.value.durationInFrames, 120);
 });
 
+test('15 FPS requests render native 412x915 output with minimal frames', () => {
+  const result = validateRenderRequest({fps: 15, actions: [{type: 'home', duration: 4}]});
+  assert.equal(result.ok, true);
+  assert.equal(result.value.durationInFrames, 60);
+  assert.equal(result.value.width, 412);
+  assert.equal(result.value.height, 915);
+});
+
 test('rejects unsupported actions and unsafe durations', () => {
   assert.equal(validateRenderRequest({actions: [{type: 'shell', command: 'rm -rf /'}]}).ok, false);
   assert.equal(validateRenderRequest({actions: [{type: 'home', duration: 301}]}).ok, false);
@@ -80,7 +88,13 @@ test('renderer rejects a second request instead of queuing it', () => {
 
 test('renderer uses the faster VP8 codec and never maintains a queue', () => {
   const server = readFileSync(new URL('../server/render-api.mjs', import.meta.url), 'utf8');
+  const composition = readFileSync(new URL('../src/remotion/ApiWorkflowVideo.tsx', import.meta.url), 'utf8');
+  const modal = readFileSync(new URL('../src/components/controls/RemotionVideoModal.tsx', import.meta.url), 'utf8');
   assert.equal(server.includes("codec:'vp8'"), true);
   assert.equal(server.includes('const queue=[]'), false);
   assert.equal(server.includes('fps:job.request.fps'), true);
+  assert.equal(composition.includes("transform:'scale(2)'"), false);
+  assert.equal(composition.includes('width:412,height:915'), true);
+  assert.equal(modal.includes('JSON.stringify({fps: 15'), true);
+  assert.equal(composition.includes('if(cursor>=active.start) break'), true);
 });

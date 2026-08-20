@@ -70,7 +70,7 @@ Returns `video/webm` after completion.
 
 Supported apps: `calculator`, `camera`, `phone`, `settings`, `files`, `weather`, `clock`.
 
-Rules: 1–100 actions, 0.25–60 seconds per action, 300 seconds maximum, FPS 30 or 60. The website uses 30 FPS for faster rendering; API clients may request 60 FPS when they accept the longer render time. Completed files expire after 24 hours by default.
+Rules: 1–100 actions, 0.25–60 seconds per action, 300 seconds maximum, FPS 15, 30, or 60. The website uses native 412×915 output at 15 FPS for the fastest free-server rendering; API clients may request 30 or 60 FPS when they accept longer render times. Completed files expire after 24 hours by default.
 
 ## Health
 
