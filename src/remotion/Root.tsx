@@ -2,6 +2,7 @@ import React from 'react';
 import { Composition } from 'remotion';
 import { PhoneShowcaseVideo } from './PhoneShowcaseVideo';
 import { LongWorkflowVideo } from './LongWorkflowVideo';
+import { FacebookWorkflowVideo } from './FacebookWorkflowVideo';
 import { ApiWorkflowVideo, calculateApiWorkflowMetadata } from './ApiWorkflowVideo';
 
 export const RemotionRoot: React.FC = () => {
@@ -20,6 +21,14 @@ export const RemotionRoot: React.FC = () => {
         component={LongWorkflowVideo}
         durationInFrames={1800}
         fps={60}
+        width={824}
+        height={1830}
+      />
+      <Composition
+        id="FacebookWorkflow"
+        component={FacebookWorkflowVideo}
+        durationInFrames={600}
+        fps={30}
         width={824}
         height={1830}
       />

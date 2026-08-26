@@ -13,6 +13,7 @@
     "test:render-api": "node --test scripts/test-render-api.mjs",
     "start:renderer": "node server/render-api.mjs",
     "render:videos": "npm run build:remotion-css && mkdir -p public/videos && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-4s.webm --codec=vp9 --crf=18 --frames=0-239 --overwrite && remotion render src/remotion/index.ts DeviceViewport public/videos/lawnchair-showcase-7s.webm --codec=vp9 --crf=18 --overwrite && remotion render src/remotion/index.ts LongWorkflow public/videos/lawnchair-showcase-30s.webm --codec=vp9 --crf=18 --overwrite"
+    ,"render:facebook-video": "npm run build:remotion-css && mkdir -p public/videos && remotion render src/remotion/index.ts FacebookWorkflow public/videos/facebook-workflow-20s.webm --codec=vp9 --crf=18 --overwrite"
   },
   "dependencies": {
     "@remotion/bundler": "^4.0.512",

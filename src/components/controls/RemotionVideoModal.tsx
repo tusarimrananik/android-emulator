@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 
 import { PhoneShowcaseVideo } from '@/remotion/PhoneShowcaseVideo';
 import { LongWorkflowVideo } from '@/remotion/LongWorkflowVideo';
+import { FacebookWorkflowVideo } from '@/remotion/FacebookWorkflowVideo';
 import {
   Clapperboard,
   Download,
@@ -27,7 +28,7 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [selectedDuration, setSelectedDuration] = useState<4 | 7 | 30>(4);
+  const [selectedDuration, setSelectedDuration] = useState<4 | 7 | 30 | 'facebook'>(4);
   const [jobId, setJobId] = useState<string | null>(null);
   const [renderStatus, setRenderStatus] = useState<'idle' | 'queued' | 'rendering' | 'completed' | 'failed'>('idle');
   const [progress, setProgress] = useState(0);
@@ -40,6 +41,7 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   } as const;
 
   const startRealtimeRender = async () => {
+    if (selectedDuration === 'facebook') return;
     setRenderError(null); setProgress(0); setRenderStatus('queued'); setJobId(null);
     try {
       const response = await fetch('/api/renders', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({fps: 15, actions: workflows[selectedDuration]})});
@@ -47,6 +49,15 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
       if (!response.ok) throw new Error(response.status === 409 ? 'Another video is already rendering. Please wait for it to finish.' : data.error || 'Could not create render job');
       setJobId(data.job.id); setRenderStatus(data.job.status);
     } catch (error) { setRenderStatus('failed'); setRenderError(error instanceof Error ? error.message : 'Render failed'); }
+  };
+
+  const downloadSelectedVideo = () => {
+    const link = document.createElement('a');
+    link.href = '/videos/facebook-workflow-20s.webm';
+    link.download = 'facebook-workflow-20s.webm';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   useEffect(() => {
@@ -107,11 +118,11 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
           <div className="flex flex-col items-center justify-center">
             <div className="relative w-full max-w-[250px] aspect-[9/16] rounded-3xl overflow-hidden bg-[#0a0c10] border border-white/15 shadow-2xl flex items-center justify-center">
               <Player
-                component={selectedDuration === 30 ? LongWorkflowVideo : PhoneShowcaseVideo}
-                durationInFrames={selectedDuration * 60}
+                component={selectedDuration === 'facebook' ? FacebookWorkflowVideo : selectedDuration === 30 ? LongWorkflowVideo : PhoneShowcaseVideo}
+                durationInFrames={selectedDuration === 'facebook' ? 600 : selectedDuration * 60}
                 compositionWidth={824}
                 compositionHeight={1830}
-                fps={60}
+                fps={selectedDuration === 'facebook' ? 30 : 60}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -136,11 +147,12 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {[
                     { dur: 4 as const, label: '4.0 Seconds (Fast)', sub: 'Opens Calculator ➔ 7×8=56 ➔ Closes' },
                     { dur: 7 as const, label: '7.0 Seconds (Full)', sub: 'Calculator + App Drawer Scroll' },
                     { dur: 30 as const, label: '30 Seconds (Workflow)', sub: 'Drawer scroll + Calculator + Camera + Phone + Settings' },
+                    { dur: 'facebook' as const, label: '20 Seconds (Facebook)', sub: 'Open Facebook + scroll feed + visit tabs' },
                   ].map((opt) => (
                     <button
                       key={opt.dur}
@@ -162,7 +174,7 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
               <div className="grid grid-cols-3 gap-2 text-xs">
                 <div className="p-2.5 rounded-2xl bg-white/5 border border-white/5 text-center">
                   <div className="text-white/40 text-[9px] uppercase font-bold">Duration</div>
-                  <div className="text-white font-bold mt-0.5">{selectedDuration}.0s</div>
+                  <div className="text-white font-bold mt-0.5">{selectedDuration === 'facebook' ? '20.0s' : `${selectedDuration}.0s`}</div>
                 </div>
                 <div className="p-2.5 rounded-2xl bg-white/5 border border-white/5 text-center">
                   <div className="text-white/40 text-[9px] uppercase font-bold">Viewport</div>
@@ -178,12 +190,12 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
             {/* Export Action */}
             <div className="pt-2 border-t border-white/10">
               <button
-                onClick={renderStatus === 'completed' && jobId ? () => { window.location.href = `/api/renders/${jobId}/video`; } : startRealtimeRender}
-                disabled={renderStatus === 'queued' || renderStatus === 'rendering'}
+                onClick={selectedDuration === 'facebook' ? downloadSelectedVideo : renderStatus === 'completed' && jobId ? () => { window.location.href = `/api/renders/${jobId}/video`; } : startRealtimeRender}
+                disabled={selectedDuration !== 'facebook' && (renderStatus === 'queued' || renderStatus === 'rendering')}
                 className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 font-bold text-sm text-white flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40"
               >
                 <Download className="w-4 h-4" />
-                <span>{renderStatus === 'queued' ? 'Queued…' : renderStatus === 'rendering' ? `Rendering ${Math.round(progress * 100)}%` : renderStatus === 'completed' ? 'Download Generated Video' : `Render ${selectedDuration}.0s Video Now`}</span>
+                <span>{selectedDuration === 'facebook' ? 'Download Facebook Workflow' : renderStatus === 'queued' ? 'Queued…' : renderStatus === 'rendering' ? `Rendering ${Math.round(progress * 100)}%` : renderStatus === 'completed' ? 'Download Generated Video' : `Render ${selectedDuration}.0s Video Now`}</span>
               </button>
               {renderError && <p className="mt-2 text-xs text-red-300">{renderError}</p>}
             </div>
