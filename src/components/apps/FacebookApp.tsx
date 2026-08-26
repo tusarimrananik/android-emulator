@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import { Globe2, MoreHorizontal, Plus, Search, X } from 'lucide-react';
+import { FacebookProfile } from './FacebookProfile';
 
 type Tab = 'feed' | 'watch' | 'market' | 'dating' | 'notifications' | 'menu';
+type Screen = Tab | 'profile';
 
 const stories = [
   { name: 'Tạo tin', cover: '/facebook/user/lcd.webp', avatar: '/facebook/user/lcd.webp', own: true },
@@ -141,21 +143,22 @@ function Notifications() {
   return <div className="min-h-full bg-white text-black"><h2 className="px-4 py-3 text-2xl font-bold">Thông báo</h2>{notes.map((n,i)=><div key={n.n} className={`flex gap-3 px-4 py-3 ${i !== 1 ? 'bg-[#e7f3ff]' : ''}`}><img src={`/facebook/user/${n.a}`} alt="" className="h-14 w-14 rounded-full object-cover" loading="lazy" decoding="async"/><div className="flex-1 text-sm"><b>{n.n}</b> {n.t}<div className="mt-1 text-xs text-[#1877f2]">{i+1} giờ</div></div><MoreHorizontal size={20}/></div>)}</div>;
 }
 
-function MenuScreen() {
+function MenuScreen({ onOpenProfile }: { onOpenProfile: () => void }) {
   const items = [{n:'Bạn bè',i:'friends.png'},{n:'Kỷ niệm',i:'memory.png'},{n:'Đã lưu',i:'saved.png'},{n:'Marketplace',i:'market.png'},{n:'Video',i:'video.png'},{n:'Sự kiện',i:'event.png'},{n:'Chơi game',i:'game.png'},{n:'Nhóm',i:'group.png'}];
-  return <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><div className="my-3 flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm"><img src="/facebook/user/lcd.webp" alt="" className="h-12 w-12 rounded-full object-cover" decoding="async"/><div><div className="font-semibold">Lê Công Đắt</div><div className="text-xs text-zinc-500">Xem trang cá nhân của bạn</div></div></div><h3 className="mb-2 font-semibold">Tất cả lối tắt</h3><div className="grid grid-cols-2 gap-2">{items.map(item=><button key={item.n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-left text-[13px] font-semibold shadow-sm"><img src={`/facebook/menu/${item.i}`} alt="" className="h-7 w-7 object-contain" loading="lazy" decoding="async"/>{item.n}</button>)}</div></div>;
+  return <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><button onClick={onOpenProfile} className="my-3 flex w-full items-center gap-3 rounded-xl bg-white p-3 text-left shadow-sm"><img src="/facebook/user/lcd.webp" alt="Lê Công Đắt" className="h-12 w-12 rounded-full object-cover" decoding="async"/><div><div className="font-semibold">Lê Công Đắt</div><div className="text-xs text-zinc-500">Xem trang cá nhân của bạn</div></div></button><h3 className="mb-2 font-semibold">Tất cả lối tắt</h3><div className="grid grid-cols-2 gap-2">{items.map(item=><button key={item.n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-left text-[13px] font-semibold shadow-sm"><img src={`/facebook/menu/${item.i}`} alt="" className="h-7 w-7 object-contain" loading="lazy" decoding="async"/>{item.n}</button>)}</div></div>;
 }
 
 export const FacebookApp: React.FC = () => {
-  const [tab, setTab] = useState<Tab>('feed');
+  const [screen, setScreen] = useState<Screen>('feed');
+  const tab = screen === 'profile' ? 'menu' : screen;
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[#d8dadf] font-sans">
-      {tab === 'feed' && <TopBar />}
-      <nav className="grid h-[47px] shrink-0 grid-cols-6 border-b border-zinc-200 bg-white">
-        {nav.map((item) => <button key={item.id} aria-label={item.label} onClick={() => setTab(item.id)} className={`relative grid place-items-center ${tab === item.id ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#1877f2]' : ''}`}><img src={navAsset(tab === item.id ? item.active : item.normal)} alt="" className="h-[27px] w-[27px] object-contain"/></button>)}
-      </nav>
+      {screen !== 'profile' && tab === 'feed' && <TopBar />}
+      {screen !== 'profile' && <nav className="grid h-[47px] shrink-0 grid-cols-6 border-b border-zinc-200 bg-white">
+        {nav.map((item) => <button key={item.id} aria-label={item.label} onClick={() => setScreen(item.id)} className={`relative grid place-items-center ${tab === item.id ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#1877f2]' : ''}`}><img src={navAsset(tab === item.id ? item.active : item.normal)} alt="" className="h-[27px] w-[27px] object-contain"/></button>)}
+      </nav>}
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:none]">
-        {tab === 'feed' && <Feed />}{tab === 'watch' && <Watch />}{tab === 'market' && <Market />}{tab === 'dating' && <Dating />}{tab === 'notifications' && <Notifications />}{tab === 'menu' && <MenuScreen />}
+        {screen === 'profile' ? <FacebookProfile onBack={() => setScreen('menu')} /> : <>{tab === 'feed' && <Feed />}{tab === 'watch' && <Watch />}{tab === 'market' && <Market />}{tab === 'dating' && <Dating />}{tab === 'notifications' && <Notifications />}{tab === 'menu' && <MenuScreen onOpenProfile={() => setScreen('profile')} />}</>}
       </div>
     </div>
   );
