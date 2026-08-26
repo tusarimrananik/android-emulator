@@ -26,6 +26,7 @@ import {
   Disc3,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { FacebookApp } from '@/components/apps/FacebookApp';
 
 export const AppWindowModal: React.FC = () => {
   const { runningApp, closeRunningApp, settings } = useLawnchair();
@@ -88,7 +89,9 @@ export const AppWindowModal: React.FC = () => {
       {/* App Content Area */}
       <div className="flex-1 w-full overflow-y-auto no-scrollbar flex flex-col">
         {/* ================= CALCULATOR APP ================= */}
-        {runningApp.id === 'calculator' ? (
+        {runningApp.id === 'facebook' ? (
+          <FacebookApp />
+        ) : runningApp.id === 'calculator' ? (
           <div className="flex-1 flex flex-col justify-between p-4 pb-2">
             {/* Display */}
             <div className="flex-1 flex flex-col justify-end items-end px-4 py-6">

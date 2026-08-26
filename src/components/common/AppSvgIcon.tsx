@@ -78,6 +78,17 @@ export const AppSvgIcon: React.FC<AppSvgIconProps> = ({
   const rawSvg = (officialLawnicons as Record<string, string>)[appId];
   const brand = APP_BRAND_COLORS[appId] || { bg: '#1e88e5', fg: '#ffffff' };
 
+  if (appId === 'facebook') {
+    return (
+      <img
+        src="/app-icons/facebook.png"
+        alt="Facebook"
+        className={`object-cover shadow-md ${shapeClass} ${className}`}
+        style={{ width: size, height: size }}
+      />
+    );
+  }
+
   // 1. Themed Icons (Material You Monet monochrome dynamic styling)
   if (isThemed) {
     return (

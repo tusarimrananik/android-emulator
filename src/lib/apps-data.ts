@@ -268,6 +268,19 @@ export const INITIAL_APPS: AppItem[] = [
     iconType: 'svg',
   },
   {
+    id: 'facebook',
+    name: 'Facebook',
+    packageName: 'com.facebook.katana',
+    category: 'social',
+    iconColor: '#1877f2',
+    iconBg: '#ffffff',
+    iconType: 'svg',
+    shortcuts: [
+      { id: 'create_post', label: 'Create post', icon: 'edit-3' },
+      { id: 'search_facebook', label: 'Search Facebook', icon: 'search' },
+    ],
+  },
+  {
     id: 'github',
     name: 'GitHub',
     packageName: 'com.github.android',
