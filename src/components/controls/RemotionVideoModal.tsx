@@ -33,6 +33,7 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   const [renderStatus, setRenderStatus] = useState<'idle' | 'queued' | 'rendering' | 'completed' | 'failed'>('idle');
   const [progress, setProgress] = useState(0);
   const [renderError, setRenderError] = useState<string | null>(null);
+  const [facebookUrl, setFacebookUrl] = useState('');
 
   const workflows = {
     4: [{type: 'home', duration: 1}, {type: 'openApp', app: 'calculator', duration: 2}, {type: 'tap', value: '7×8=', duration: 0.5}, {type: 'goHome', duration: 0.5}],
@@ -44,7 +45,7 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
     setRenderError(null); setProgress(0); setRenderStatus('queued'); setJobId(null);
     try {
       const body = selectedDuration === 'facebook'
-        ? JSON.stringify({workflow: 'facebook'})
+        ? JSON.stringify({workflow: 'facebook', ...(facebookUrl.trim() ? {facebookUrl: facebookUrl.trim()} : {})})
         : JSON.stringify({fps: 15, actions: workflows[selectedDuration]});
       const response = await fetch('/api/renders', {method: 'POST', headers: {'content-type': 'application/json'}, body});
       const data = await response.json();
@@ -164,6 +165,28 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
                 </div>
               </div>
 
+              {/* Facebook URL Input */}
+              {selectedDuration === 'facebook' && (
+                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs">
+                    <span className="font-bold text-white flex items-center gap-1.5">
+                      🔗 Facebook Profile URL
+                    </span>
+                    <span className="text-white/40 text-[10px]">(optional)</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={facebookUrl}
+                    onChange={(e) => setFacebookUrl(e.target.value)}
+                    placeholder="https://facebook.com/username"
+                    className="w-full rounded-xl bg-white/10 border border-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-emerald-500/50 focus:bg-white/15 transition-colors"
+                  />
+                  <p className="text-[10px] text-white/30">
+                    Paste a Facebook profile link to render with real profile data (name, cover, avatar, bio, friends).
+                  </p>
+                </div>
+              )}
+
               {/* Specs Pills */}
               <div className="grid grid-cols-3 gap-2 text-xs">
                 <div className="p-2.5 rounded-2xl bg-white/5 border border-white/5 text-center">
@@ -189,7 +212,7 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
                 className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 font-bold text-sm text-white flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40"
               >
                 <Download className="w-4 h-4" />
-                <span>{renderStatus === 'queued' ? 'Queued…' : renderStatus === 'rendering' ? `Rendering ${Math.round(progress * 100)}%` : renderStatus === 'completed' ? 'Download Generated Video' : `Render ${selectedDuration === 'facebook' ? '20.0' : `${selectedDuration}.0`}s Video Now`}</span>
+                <span>{renderStatus === 'queued' ? 'Queued…' : renderStatus === 'rendering' ? (progress < 0.08 && selectedDuration === 'facebook' && facebookUrl.trim() ? `Scraping Facebook… ${Math.round(progress * 100)}%` : `Rendering ${Math.round(progress * 100)}%`) : renderStatus === 'completed' ? 'Download Generated Video' : `Render ${selectedDuration === 'facebook' ? '20.0' : `${selectedDuration}.0`}s Video Now`}</span>
               </button>
               {renderError && <p className="mt-2 text-xs text-red-300">{renderError}</p>}
             </div>

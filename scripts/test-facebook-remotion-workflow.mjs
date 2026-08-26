@@ -11,7 +11,7 @@ if (!root.includes('durationInFrames={600}')) failures.push('FacebookWorkflow mu
 if (!root.includes('fps={30}')) failures.push('FacebookWorkflow must be registered at 30 FPS');
 if (!modal.includes("'facebook'")) failures.push('Facebook workflow selector is missing');
 if (!modal.includes('FacebookWorkflowVideo')) failures.push('Facebook workflow preview mapping is missing');
-if (!modal.includes("JSON.stringify({workflow: 'facebook'})")) failures.push('Facebook workflow real-time render request is missing');
+if (!modal.includes("workflow: 'facebook'")) failures.push('Facebook workflow real-time render request is missing');
 if (modal.includes("'/videos/facebook-workflow-20s.webm'")) failures.push('Facebook workflow still uses a static video');
 if (modal.includes('downloadSelectedVideo')) failures.push('Facebook workflow still uses a static download handler');
 for (const duration of [4, 7, 30]) {

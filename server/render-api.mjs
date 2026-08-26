@@ -5,6 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {renderMedia, selectComposition} from '@remotion/renderer';
 import {authorizeRequest, createJobStore, publicJob, validateRenderRequest} from './render-api-core.mjs';
+import {scrapeFacebookProfile} from './scrape-facebook.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const outputDir=process.env.RENDER_OUTPUT_DIR||path.join(root,'render-output');
@@ -24,7 +25,25 @@ const corsHeaders=(origin)=>({'access-control-allow-origin':allowedOrigin==='*'?
 const json=(res,status,body,origin)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8',...corsHeaders(origin)});res.end(JSON.stringify(body));};
 const readJson=async(req)=>{const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>256_000)throw new Error('request too large');chunks.push(chunk);}return JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}');};
 
-const processJob=async(id)=>{if(working)return;const job=store.get(id);if(!job)return;working=true;try{store.update(id,{status:'rendering',progress:0});const inputProps=job.request.compositionId==='ApiWorkflow'?{actions:job.request.actions,fps:job.request.fps}:{};const composition=await selectComposition({serveUrl,id:job.request.compositionId,inputProps});const outputPath=path.join(outputDir,`${id}.webm`);await renderMedia({serveUrl,composition,inputProps,codec:'vp8',crf:10,outputLocation:outputPath,onProgress:({progress})=>store.update(id,{progress:Math.max(0,Math.min(1,progress))})});store.update(id,{status:'completed',progress:1,outputPath});}catch(error){console.error('[renderer] Job failed',id,error);store.update(id,{status:'failed',error:error instanceof Error?error.message:'render failed'});}finally{working=false;}};
+const processJob=async(id)=>{if(working)return;const job=store.get(id);if(!job)return;working=true;try{store.update(id,{status:'rendering',progress:0});
+
+// Scrape Facebook profile if URL provided
+let fbProfile = null;
+if (job.request.facebookUrl) {
+  try {
+    store.update(id, {progress: 0.02}); // Signal: scraping started
+    fbProfile = await scrapeFacebookProfile(job.request.facebookUrl);
+    store.update(id, {progress: 0.08}); // Signal: scraping done
+  } catch (scrapeError) {
+    console.error('[renderer] Facebook scrape failed', id, scrapeError);
+    store.update(id, {status: 'failed', error: `Facebook scrape failed: ${scrapeError.message}`});
+    working = false;
+    return;
+  }
+}
+
+const inputProps=job.request.compositionId==='ApiWorkflow'?{actions:job.request.actions,fps:job.request.fps}:(fbProfile ? {fbProfile} : {});
+const composition=await selectComposition({serveUrl,id:job.request.compositionId,inputProps});const outputPath=path.join(outputDir,`${id}.webm`);await renderMedia({serveUrl,composition,inputProps,codec:'vp8',crf:10,outputLocation:outputPath,onProgress:({progress})=>store.update(id,{progress:Math.max(0.08,Math.min(1,progress))})});store.update(id,{status:'completed',progress:1,outputPath});}catch(error){console.error('[renderer] Job failed',id,error);store.update(id,{status:'failed',error:error instanceof Error?error.message:'render failed'});}finally{working=false;}};
 
 const cleanup=()=>{const now=Date.now();for(const job of store.values()){if(now-Date.parse(job.updatedAt)<ttlMs)continue;if(job.outputPath&&existsSync(job.outputPath))rmSync(job.outputPath,{force:true});store.delete(job.id);}};
 setInterval(cleanup,Math.min(ttlMs,3600000)).unref();

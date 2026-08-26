@@ -17,6 +17,11 @@ export const authorizeRequest = (authorization, apiKey) => {
 export const validateRenderRequest = (body) => {
   if (body?.workflow !== undefined) {
     if (body.workflow !== 'facebook') return {ok: false, error: `unsupported workflow: ${body.workflow}`};
+    const facebookUrl = body.facebookUrl || null;
+    if (facebookUrl && typeof facebookUrl !== 'string') return {ok: false, error: 'facebookUrl must be a string'};
+    if (facebookUrl && !/^(https?:\/\/)?(www\.|m\.|mbasic\.|web\.)?(facebook\.com|fb\.com)\/[a-zA-Z0-9.?]+/.test(facebookUrl)) {
+      return {ok: false, error: 'Invalid Facebook URL. Example: https://facebook.com/username'};
+    }
     return {
       ok: true,
       value: {
@@ -27,6 +32,7 @@ export const validateRenderRequest = (body) => {
         durationInFrames: 600,
         width: 824,
         height: 1830,
+        facebookUrl,
       },
     };
   }

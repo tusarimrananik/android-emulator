@@ -123,7 +123,7 @@ test('renderer uses the faster VP8 codec and never maintains a queue', () => {
 
 test('Facebook UI requests real-time rendering and has no static video download', () => {
   const modal = readFileSync(new URL('../src/components/controls/RemotionVideoModal.tsx', import.meta.url), 'utf8');
-  assert.equal(modal.includes("JSON.stringify({workflow: 'facebook'})"), true);
+  assert.equal(modal.includes("workflow: 'facebook'"), true);
   assert.equal(modal.includes("'/videos/facebook-workflow-20s.webm'"), false);
   assert.equal(modal.includes('downloadSelectedVideo'), false);
 });

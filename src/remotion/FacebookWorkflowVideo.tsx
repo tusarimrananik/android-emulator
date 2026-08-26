@@ -16,9 +16,27 @@ import {Globe2, MoreHorizontal, Plus, Search, X} from 'lucide-react';
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const asset = (path: string) => staticFile(path);
 
-type FbTab = 'feed' | 'watch' | 'market' | 'notifications' | 'menu';
+type FbTab = 'feed' | 'watch' | 'market' | 'notifications' | 'menu' | 'profile';
 
-const tabForFrame = (frame: number): FbTab => {
+type FbProfileData = {
+  profileName: string;
+  coverPicture: string | null;
+  profilePicture: string | null;
+  bio: string | null;
+  friendsCount: string | null;
+  friends: {name: string; avatar: string}[];
+};
+
+const tabForFrame = (frame: number, hasFbProfile: boolean): FbTab => {
+  if (hasFbProfile) {
+    // With profile: feed → watch → market → menu → profile → feed
+    if (frame >= 510) return 'feed';
+    if (frame >= 430) return 'profile';
+    if (frame >= 390) return 'menu';
+    if (frame >= 330) return 'market';
+    if (frame >= 270) return 'watch';
+    return 'feed';
+  }
   if (frame >= 510) return 'feed';
   if (frame >= 450) return 'menu';
   if (frame >= 390) return 'notifications';
@@ -71,15 +89,65 @@ const Market: React.FC = () => <div className="min-h-full bg-white p-3 text-blac
 const Notifications: React.FC = () => <div className="min-h-full bg-white text-black"><h2 className="p-4 text-2xl font-bold">Thông báo</h2>{[['Doraemon','doraemon.webp'],['GOAL Vietnam','goal.webp'],['Khánh Vy','khanhvy.webp']].map(([n,a],i)=><div key={n} className={`flex gap-3 p-4 ${i!==1?'bg-[#e7f3ff]':''}`}><img src={asset(`/facebook/user/${a}`)} className="h-14 w-14 rounded-full object-cover" alt=""/><div className="text-sm"><b>{n}</b> đã thêm một nội dung mới.<div className="text-xs text-[#1877f2]">{i+1} giờ</div></div></div>)}</div>;
 const MenuScreen: React.FC = () => <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><div className="my-3 flex items-center gap-3 rounded-xl bg-white p-3"><img src={asset('/facebook/user/lcd.webp')} className="h-12 w-12 rounded-full object-cover" alt=""/><b>Lê Công Đắt</b></div><div className="grid grid-cols-2 gap-2">{[['Bạn bè','friends.png'],['Kỷ niệm','memory.png'],['Đã lưu','saved.png'],['Marketplace','market.png'],['Video','video.png'],['Sự kiện','event.png']].map(([n,i])=><div key={n} className="flex items-center gap-3 rounded-xl bg-white p-3 font-semibold"><img src={asset(`/facebook/menu/${i}`)} className="h-7 w-7" alt=""/>{n}</div>)}</div></div>;
 
-const FacebookScreen: React.FC<{frame:number}> = ({frame}) => {const tab=tabForFrame(frame);return <div className="flex h-full flex-col overflow-hidden bg-[#d8dadf]">{tab==='feed'&&<TopBar/>}<FacebookNav tab={tab}/><div className="min-h-0 flex-1 overflow-hidden">{tab==='feed'&&<Feed frame={frame}/>} {tab==='watch'&&<Watch/>}{tab==='market'&&<Market/>}{tab==='notifications'&&<Notifications/>}{tab==='menu'&&<MenuScreen/>}</div></div>};
+const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
+  const scroll = interpolate(frame, [440, 500], [0, -400], clamp);
+  return (
+    <div className="min-h-full bg-[#f0f2f5] text-black" style={{transform: `translateY(${scroll}px)`}}>
+      {/* Cover */}
+      <div className="relative h-[200px] w-full bg-zinc-300">
+        {fbProfile.coverPicture && <img src={fbProfile.coverPicture} className="h-full w-full object-cover" alt="" />}
+        {/* Avatar overlay */}
+        <div className="absolute -bottom-[40px] left-4">
+          <div className="h-[100px] w-[100px] rounded-full border-4 border-white bg-zinc-200 overflow-hidden">
+            {fbProfile.profilePicture && <img src={fbProfile.profilePicture} className="h-full w-full object-cover" alt="" />}
+          </div>
+        </div>
+      </div>
 
-export const FacebookWorkflowVideo: React.FC = () => {
+      {/* Name & bio */}
+      <div className="bg-white px-4 pt-[50px] pb-3">
+        <h1 className="text-[22px] font-bold">{fbProfile.profileName || 'Facebook User'}</h1>
+        {fbProfile.bio && <p className="text-[14px] text-zinc-600 mt-1">{fbProfile.bio}</p>}
+        {fbProfile.friendsCount && <p className="text-[13px] text-zinc-500 mt-1">{fbProfile.friendsCount} bạn bè</p>}
+
+        {/* Action buttons */}
+        <div className="flex gap-2 mt-3">
+          <div className="flex-1 rounded-lg bg-[#1877f2] py-2 text-center text-[14px] font-semibold text-white">+ Thêm vào tin</div>
+          <div className="flex-1 rounded-lg bg-zinc-200 py-2 text-center text-[14px] font-semibold">Chỉnh sửa</div>
+        </div>
+      </div>
+
+      {/* Friends grid */}
+      {fbProfile.friends.length > 0 && (
+        <div className="mt-2 bg-white p-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-[18px] font-bold">Bạn bè</h3>
+            <span className="text-[14px] text-[#1877f2]">Xem tất cả bạn bè</span>
+          </div>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {fbProfile.friends.slice(0, 6).map((f, i) => (
+              <div key={i}>
+                <img src={f.avatar} className="aspect-square w-full rounded-lg object-cover" alt="" />
+                <p className="mt-1 text-[12px] font-medium truncate">{f.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const FacebookScreen: React.FC<{frame:number; fbProfile?: FbProfileData}> = ({frame, fbProfile}) => {const tab=tabForFrame(frame, !!fbProfile);return <div className="flex h-full flex-col overflow-hidden bg-[#d8dadf]">{tab==='feed'&&<TopBar/>}{tab!=='profile'&&<FacebookNav tab={tab}/>}<div className="min-h-0 flex-1 overflow-hidden">{tab==='feed'&&<Feed frame={frame}/>} {tab==='watch'&&<Watch/>}{tab==='market'&&<Market/>}{tab==='notifications'&&<Notifications/>}{tab==='menu'&&<MenuScreen/>}{tab==='profile'&&fbProfile&&<ProfileScreen fbProfile={fbProfile} frame={frame}/>}</div></div>};
+
+export const FacebookWorkflowVideo: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile: fbProfileProp}) => {
   const frame=useCurrentFrame(); const {fps}=useVideoConfig();
+  const fbProfile = fbProfileProp || (typeof window !== 'undefined' && (window as any).__REMOTION_INPUT_PROPS?.fbProfile) || undefined;
   const drawerVisible=frame>=45&&frame<120;
   const drawerOpen=spring({frame:frame-45,fps,config:{damping:18,stiffness:125}});
   const drawerScroll=interpolate(frame,[70,112],[0,-430],clamp);
   const facebookVisible=frame>=120;
   const appOpen=spring({frame:frame-120,fps,config:{damping:18,stiffness:125}});
   const appScale=interpolate(appOpen,[0,1],[.18,1],clamp);
-  return <LawnchairProvider><AbsoluteFill style={{background:'#0a0c10',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:'scale(2)',transformOrigin:'center'}}><DeviceFrame isFrameEnabled={false}><div className="relative flex h-full w-full flex-col overflow-hidden bg-black text-white"><div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage:`url(${WALLPAPERS[0].url})`,filter:facebookVisible?'brightness(.55) blur(3px)':'none'}}/><div className="relative z-20"><StatusBar darkIcons={false}/></div><div className="relative z-10 flex flex-1 flex-col justify-between px-4 pb-2 pt-4"><AtAGlance/><div className="grid grid-cols-4 gap-x-2 gap-y-6 py-6">{INITIAL_APPS.slice(5,17).map(a=><div key={a.id} className="flex flex-col items-center gap-1"><AppSvgIcon appId={a.id} isThemed size={54}/><span className="max-w-[70px] truncate text-[11px]">{a.name}</span></div>)}</div><Dock/></div><div className="relative z-20"><NavigationBar dark={false}/></div>{drawerVisible&&<div style={{transform:`translateY(${interpolate(drawerOpen,[0,1],[915,0],clamp)}px)`}} className="absolute inset-0 z-40 overflow-hidden rounded-[40px] bg-[#121418]/[.98] p-4 pt-10"><div className="mb-5 flex h-12 items-center gap-3 rounded-full bg-white/10 px-4"><Search size={17}/><span className="text-xs text-white/50">Search apps</span></div><div className="h-[790px] overflow-hidden"><div style={{transform:`translateY(${drawerScroll}px)`}} className="grid grid-cols-4 gap-x-2 gap-y-7">{INITIAL_APPS.map(a=><div key={a.id} className={`flex h-[78px] flex-col items-center gap-1 ${a.id==='facebook'&&frame>100?'scale-110':''}`}>{a.id==='facebook'?<img src={asset('/app-icons/facebook.png')} className="h-[50px] w-[50px] rounded-full object-cover" alt="Facebook"/>:<AppSvgIcon appId={a.id} isThemed size={50}/>}<span className="max-w-[68px] truncate text-[10px]">{a.name}</span></div>)}</div></div></div>}{facebookVisible&&<div style={{transform:`scale(${appScale})`,transformOrigin:'50% 75%'}} className="absolute inset-0 z-50 flex flex-col overflow-hidden rounded-[40px] bg-white"><StatusBar darkIcons={true}/><div className="min-h-0 flex-1"><FacebookScreen frame={frame}/></div><NavigationBar dark={true}/></div>}</div></DeviceFrame></div></AbsoluteFill></LawnchairProvider>;
+  return <LawnchairProvider><AbsoluteFill style={{background:'#0a0c10',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:'scale(2)',transformOrigin:'center'}}><DeviceFrame isFrameEnabled={false}><div className="relative flex h-full w-full flex-col overflow-hidden bg-black text-white"><div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage:`url(${WALLPAPERS[0].url})`,filter:facebookVisible?'brightness(.55) blur(3px)':'none'}}/><div className="relative z-20"><StatusBar darkIcons={false}/></div><div className="relative z-10 flex flex-1 flex-col justify-between px-4 pb-2 pt-4"><AtAGlance/><div className="grid grid-cols-4 gap-x-2 gap-y-6 py-6">{INITIAL_APPS.slice(5,17).map(a=><div key={a.id} className="flex flex-col items-center gap-1"><AppSvgIcon appId={a.id} isThemed size={54}/><span className="max-w-[70px] truncate text-[11px]">{a.name}</span></div>)}</div><Dock/></div><div className="relative z-20"><NavigationBar dark={false}/></div>{drawerVisible&&<div style={{transform:`translateY(${interpolate(drawerOpen,[0,1],[915,0],clamp)}px)`}} className="absolute inset-0 z-40 overflow-hidden rounded-[40px] bg-[#121418]/[.98] p-4 pt-10"><div className="mb-5 flex h-12 items-center gap-3 rounded-full bg-white/10 px-4"><Search size={17}/><span className="text-xs text-white/50">Search apps</span></div><div className="h-[790px] overflow-hidden"><div style={{transform:`translateY(${drawerScroll}px)`}} className="grid grid-cols-4 gap-x-2 gap-y-7">{INITIAL_APPS.map(a=><div key={a.id} className={`flex h-[78px] flex-col items-center gap-1 ${a.id==='facebook'&&frame>100?'scale-110':''}`}>{a.id==='facebook'?<img src={asset('/app-icons/facebook.png')} className="h-[50px] w-[50px] rounded-full object-cover" alt="Facebook"/>:<AppSvgIcon appId={a.id} isThemed size={50}/>}<span className="max-w-[68px] truncate text-[10px]">{a.name}</span></div>)}</div></div></div>}{facebookVisible&&<div style={{transform:`scale(${appScale})`,transformOrigin:'50% 75%'}} className="absolute inset-0 z-50 flex flex-col overflow-hidden rounded-[40px] bg-white"><StatusBar darkIcons={true}/><div className="min-h-0 flex-1"><FacebookScreen frame={frame} fbProfile={fbProfile}/></div><NavigationBar dark={true}/></div>}</div></DeviceFrame></div></AbsoluteFill></LawnchairProvider>;
 };
