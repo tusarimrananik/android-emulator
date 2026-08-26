@@ -15,6 +15,21 @@ export const authorizeRequest = (authorization, apiKey) => {
 };
 
 export const validateRenderRequest = (body) => {
+  if (body?.workflow !== undefined) {
+    if (body.workflow !== 'facebook') return {ok: false, error: `unsupported workflow: ${body.workflow}`};
+    return {
+      ok: true,
+      value: {
+        workflow: 'facebook',
+        compositionId: 'FacebookWorkflow',
+        actions: [],
+        fps: 30,
+        durationInFrames: 600,
+        width: 824,
+        height: 1830,
+      },
+    };
+  }
   if (!body || !Array.isArray(body.actions) || body.actions.length < 1 || body.actions.length > 100) {
     return {ok: false, error: 'actions must contain between 1 and 100 items'};
   }
@@ -32,7 +47,7 @@ export const validateRenderRequest = (body) => {
     actions.push({type: raw.type, duration, ...(raw.app ? {app: raw.app} : {}), ...(raw.value ? {value: raw.value} : {})});
   }
   if (totalSeconds > 300) return {ok: false, error: 'workflow may not exceed 300 seconds'};
-  return {ok: true, value: {actions, fps, durationInFrames: Math.round(totalSeconds * fps), width: 412, height: 915}};
+  return {ok: true, value: {compositionId: 'ApiWorkflow', actions, fps, durationInFrames: Math.round(totalSeconds * fps), width: 412, height: 915}};
 };
 
 export const publicJob = (job) => {

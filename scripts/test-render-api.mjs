@@ -38,6 +38,21 @@ test('15 FPS requests render native 412x915 output with minimal frames', () => {
   assert.equal(result.value.height, 915);
 });
 
+test('accepts the Facebook workflow as a real-time 20-second render', () => {
+  const result = validateRenderRequest({workflow: 'facebook'});
+  assert.equal(result.ok, true);
+  assert.equal(result.value.workflow, 'facebook');
+  assert.equal(result.value.compositionId, 'FacebookWorkflow');
+  assert.equal(result.value.durationInFrames, 600);
+  assert.equal(result.value.fps, 30);
+  assert.equal(result.value.width, 824);
+  assert.equal(result.value.height, 1830);
+});
+
+test('rejects unknown named workflows', () => {
+  assert.equal(validateRenderRequest({workflow: 'unknown'}).ok, false);
+});
+
 test('rejects unsupported actions and unsafe durations', () => {
   assert.equal(validateRenderRequest({actions: [{type: 'shell', command: 'rm -rf /'}]}).ok, false);
   assert.equal(validateRenderRequest({actions: [{type: 'home', duration: 301}]}).ok, false);
@@ -103,4 +118,12 @@ test('renderer uses the faster VP8 codec and never maintains a queue', () => {
   assert.equal(composition.includes('width:412,height:915'), true);
   assert.equal(modal.includes('JSON.stringify({fps: 15'), true);
   assert.equal(composition.includes('if(cursor>=active.start) break'), true);
+  assert.equal(server.includes('job.request.compositionId'), true);
+});
+
+test('Facebook UI requests real-time rendering and has no static video download', () => {
+  const modal = readFileSync(new URL('../src/components/controls/RemotionVideoModal.tsx', import.meta.url), 'utf8');
+  assert.equal(modal.includes("JSON.stringify({workflow: 'facebook'})"), true);
+  assert.equal(modal.includes("'/videos/facebook-workflow-20s.webm'"), false);
+  assert.equal(modal.includes('downloadSelectedVideo'), false);
 });

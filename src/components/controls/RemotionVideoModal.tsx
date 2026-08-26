@@ -41,24 +41,18 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
   } as const;
 
   const startRealtimeRender = async () => {
-    if (selectedDuration === 'facebook') return;
     setRenderError(null); setProgress(0); setRenderStatus('queued'); setJobId(null);
     try {
-      const response = await fetch('/api/renders', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({fps: 15, actions: workflows[selectedDuration]})});
+      const body = selectedDuration === 'facebook'
+        ? JSON.stringify({workflow: 'facebook'})
+        : JSON.stringify({fps: 15, actions: workflows[selectedDuration]});
+      const response = await fetch('/api/renders', {method: 'POST', headers: {'content-type': 'application/json'}, body});
       const data = await response.json();
       if (!response.ok) throw new Error(response.status === 409 ? 'Another video is already rendering. Please wait for it to finish.' : data.error || 'Could not create render job');
       setJobId(data.job.id); setRenderStatus(data.job.status);
     } catch (error) { setRenderStatus('failed'); setRenderError(error instanceof Error ? error.message : 'Render failed'); }
   };
 
-  const downloadSelectedVideo = () => {
-    const link = document.createElement('a');
-    link.href = '/videos/facebook-workflow-20s.webm';
-    link.download = 'facebook-workflow-20s.webm';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  };
 
   useEffect(() => {
     if (!jobId || !['queued', 'rendering'].includes(renderStatus)) return;
@@ -190,12 +184,12 @@ export const RemotionVideoModal: React.FC<RemotionVideoModalProps> = ({
             {/* Export Action */}
             <div className="pt-2 border-t border-white/10">
               <button
-                onClick={selectedDuration === 'facebook' ? downloadSelectedVideo : renderStatus === 'completed' && jobId ? () => { window.location.href = `/api/renders/${jobId}/video`; } : startRealtimeRender}
-                disabled={selectedDuration !== 'facebook' && (renderStatus === 'queued' || renderStatus === 'rendering')}
+                onClick={renderStatus === 'completed' && jobId ? () => { window.location.href = `/api/renders/${jobId}/video`; } : startRealtimeRender}
+                disabled={renderStatus === 'queued' || renderStatus === 'rendering'}
                 className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 font-bold text-sm text-white flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40"
               >
                 <Download className="w-4 h-4" />
-                <span>{selectedDuration === 'facebook' ? 'Download Facebook Workflow' : renderStatus === 'queued' ? 'Queued…' : renderStatus === 'rendering' ? `Rendering ${Math.round(progress * 100)}%` : renderStatus === 'completed' ? 'Download Generated Video' : `Render ${selectedDuration}.0s Video Now`}</span>
+                <span>{renderStatus === 'queued' ? 'Queued…' : renderStatus === 'rendering' ? `Rendering ${Math.round(progress * 100)}%` : renderStatus === 'completed' ? 'Download Generated Video' : `Render ${selectedDuration === 'facebook' ? '20.0' : `${selectedDuration}.0`}s Video Now`}</span>
               </button>
               {renderError && <p className="mt-2 text-xs text-red-300">{renderError}</p>}
             </div>
