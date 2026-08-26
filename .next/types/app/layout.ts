@@ -1,4 +1,4 @@
-// File: C:\Users\Anik\Desktop\android\src\app\layout.tsx
+// File: /root/android-emulator-blush/src/app/layout.tsx
 import * as entry from '../../../src/app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

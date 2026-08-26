@@ -8,42 +8,42 @@ type Tab = 'feed' | 'watch' | 'market' | 'dating' | 'notifications' | 'menu';
 type Screen = Tab | 'profile';
 
 const stories = [
-  { name: 'Tạo tin', cover: '/facebook/user/lcd.webp', avatar: '/facebook/user/lcd.webp', own: true },
+  { name: 'Create Story', cover: '/facebook/user/lcd.webp', avatar: '/facebook/user/lcd.webp', own: true },
   { name: 'Doraemon', cover: '/facebook/story/1.webp', avatar: '/facebook/user/doraemon.webp' },
-  { name: 'Sách Cũ Ngọc', cover: '/facebook/story/2.webp', avatar: '/facebook/user/sachcungoc.webp' },
+  { name: 'Old Books', cover: '/facebook/story/2.webp', avatar: '/facebook/user/sachcungoc.webp' },
   { name: 'VAFFC', cover: '/facebook/story/3.webp', avatar: '/facebook/user/vaffc.webp' },
 ];
 
 const posts = [
   {
-    user: 'Đài Phát Thanh.',
+    user: 'Radio Station.',
     avatar: '/facebook/user/daiphatthanh.webp',
-    time: '16 giờ',
-    text: 'Rap Việt Mùa 3 (2023) đã tìm ra Top 9 bước vào Chung Kết, hứa hẹn một trận đại chiến cực căng.',
+    time: '16h',
+    text: 'Rap Viet Season 3 (2023) has found the Top 9 advancing to the Finals, promising an intense showdown.',
     image: '/facebook/post/1.webp',
     reactions: '10.845',
-    comments: '902 bình luận',
-    shares: '98 lượt chia sẻ',
+    comments: '902 comments',
+    shares: '98 shares',
   },
   {
     user: 'GOAL Vietnam',
     avatar: '/facebook/user/goal.webp',
-    time: '3 phút',
+    time: '3m',
     verified: true,
-    text: '✅ 10 năm cống hiến cho bóng đá trẻ Việt Nam\n✅ Người đầu tiên đưa Việt Nam tham dự World Cup ở cấp độ U20 🌏🇻🇳\n✅ Giành danh hiệu đầu tiên cùng U23 Việt Nam tại giải U23 Đông Nam Á 2023 🏆',
+    text: '✅ 10 years dedicated to Vietnamese youth football\n✅ First to lead Vietnam to the U20 World Cup 🌏🇻🇳\n✅ Won the first title with U23 Vietnam at the 2023 Southeast Asian U23 Championship 🏆',
     image: '/facebook/post/2.webp',
     reactions: '187',
-    comments: '5 bình luận',
-    shares: '4 lượt chia sẻ',
+    comments: '5 comments',
+    shares: '4 shares',
   },
 ];
 
 const nav = [
-  { id: 'feed' as const, normal: 'home.png', active: 'home-active.png', label: 'Trang chủ' },
+  { id: 'feed' as const, normal: 'home.png', active: 'home-active.png', label: 'Home' },
   { id: 'watch' as const, normal: 'watch.png', active: 'watch-active.png', label: 'Video' },
   { id: 'market' as const, normal: 'marketplace.png', active: 'marketplace-active.png', label: 'Marketplace' },
-  { id: 'dating' as const, normal: 'dating.webp', active: 'dating-active.webp', label: 'Hẹn hò' },
-  { id: 'notifications' as const, normal: 'noti.webp', active: 'noti-active.webp', label: 'Thông báo' },
+  { id: 'dating' as const, normal: 'dating.webp', active: 'dating-active.webp', label: 'Dating' },
+  { id: 'notifications' as const, normal: 'noti.webp', active: 'noti-active.webp', label: 'Notifications' },
   { id: 'menu' as const, normal: 'menu.png', active: 'menu-active.png', label: 'Menu' },
 ];
 
@@ -68,14 +68,14 @@ function Composer() {
   return (
     <div className="bg-white text-black">
       <div className="flex items-center gap-3 px-3 py-3">
-        <img src="/facebook/user/lcd.webp" alt="Lê Công Đắt" className="h-11 w-11 rounded-full object-cover" decoding="async" />
-        <div className="flex-1 rounded-full border border-zinc-300 px-4 py-2.5 text-[14px]">Bạn đang nghĩ gì?</div>
+        <img src="/facebook/user/lcd.webp" alt="Profile" className="h-11 w-11 rounded-full object-cover" decoding="async" />
+        <div className="flex-1 rounded-full border border-zinc-300 px-4 py-2.5 text-[14px]">What's on your mind?</div>
         <img src="/facebook/friend.png" alt="" className="h-6 w-6 object-contain" />
       </div>
       <div className="grid grid-cols-3 border-t border-zinc-200 text-[13px] font-medium">
-        <button className="flex items-center justify-center gap-2 py-2.5"><span className="text-lg text-red-500">▣</span>Phát trực tiếp</button>
-        <button className="flex items-center justify-center gap-2 border-x border-zinc-200 py-2.5"><span className="text-lg text-green-500">▧</span>Ảnh</button>
-        <button className="flex items-center justify-center gap-2 py-2.5"><span className="text-lg text-purple-500">☺</span>Cảm xúc</button>
+        <button className="flex items-center justify-center gap-2 py-2.5"><span className="text-lg text-red-500">▣</span>Live</button>
+        <button className="flex items-center justify-center gap-2 border-x border-zinc-200 py-2.5"><span className="text-lg text-green-500">▧</span>Photo</button>
+        <button className="flex items-center justify-center gap-2 py-2.5"><span className="text-lg text-purple-500">☺</span>Feeling</button>
       </div>
     </div>
   );
@@ -89,7 +89,7 @@ function Stories() {
           <img src={story.cover} alt="" className={`w-full object-cover ${story.own ? 'h-[125px]' : 'h-full'}`} decoding="async" />
           {!story.own && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />}
           {story.own ? (
-            <><div className="absolute left-1/2 top-[106px] grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border-[3px] border-white bg-[#1877f2] text-white"><Plus size={23} /></div><div className="absolute bottom-2 w-full text-center text-[12px] font-semibold text-black">Tạo tin</div></>
+            <><div className="absolute left-1/2 top-[106px] grid h-10 w-10 -translate-x-1/2 place-items-center rounded-full border-[3px] border-white bg-[#1877f2] text-white"><Plus size={23} /></div><div className="absolute bottom-2 w-full text-center text-[12px] font-semibold text-black">Create Story</div></>
           ) : (
             <><img src={story.avatar} alt="" className="absolute left-2 top-2 h-10 w-10 rounded-full border-[3px] border-[#1877f2] object-cover" decoding="async" /><div className="absolute bottom-2 left-2 right-1 text-[12px] font-semibold leading-tight text-white">{story.name}</div></>
           )}
@@ -117,9 +117,9 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
         <div>{post.comments} · {post.shares}</div>
       </div>
       <div className="mx-3 grid grid-cols-3 border-t border-zinc-200 text-[13px] font-semibold text-zinc-600">
-        <button onClick={() => setLiked(!liked)} className={`flex items-center justify-center gap-2 py-2.5 ${liked ? 'text-[#1877f2]' : ''}`}><img src="/facebook/like.png" alt="" className="h-5 w-5"/>Thích</button>
-        <button className="flex items-center justify-center gap-2 py-2.5"><img src="/facebook/comment.png" alt="" className="h-5 w-5"/>Bình luận</button>
-        <button className="flex items-center justify-center gap-2 py-2.5"><img src="/facebook/share.png" alt="" className="h-5 w-5"/>Chia sẻ</button>
+        <button onClick={() => setLiked(!liked)} className={`flex items-center justify-center gap-2 py-2.5 ${liked ? 'text-[#1877f2]' : ''}`}><img src="/facebook/like.png" alt="" className="h-5 w-5"/>Like</button>
+        <button className="flex items-center justify-center gap-2 py-2.5"><img src="/facebook/comment.png" alt="" className="h-5 w-5"/>Comment</button>
+        <button className="flex items-center justify-center gap-2 py-2.5"><img src="/facebook/share.png" alt="" className="h-5 w-5"/>Share</button>
       </div>
     </article>
   );
@@ -128,24 +128,24 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
 function Feed() { return <><Composer /><Stories />{posts.map((post) => <PostCard key={post.user} post={post} />)}</>; }
 
 function Watch() {
-  return <div className="min-h-full bg-white p-3 text-black"><div className="flex items-center justify-between"><h2 className="text-2xl font-bold">Video</h2><Search size={22}/></div><div className="mt-4 overflow-hidden rounded-xl border"><img src="/facebook/post/3.webp" alt="" className="aspect-video w-full object-cover" loading="lazy" decoding="async"/><div className="p-3"><div className="font-semibold">GOAL Vietnam</div><p className="mt-1 text-sm">Video mới dành cho bạn · Đang thịnh hành</p></div></div></div>;
+  return <div className="min-h-full bg-white p-3 text-black"><div className="flex items-center justify-between"><h2 className="text-2xl font-bold">Video</h2><Search size={22}/></div><div className="mt-4 overflow-hidden rounded-xl border"><img src="/facebook/post/3.webp" alt="" className="aspect-video w-full object-cover" loading="lazy" decoding="async"/><div className="p-3"><div className="font-semibold">GOAL Vietnam</div><p className="mt-1 text-sm">New videos for you · Trending</p></div></div></div>;
 }
 
 function Market() {
   const products = ['/facebook/post/1.webp','/facebook/post/2.webp','/facebook/post/3.webp','/facebook/story/4.webp'];
-  return <div className="min-h-full bg-white p-3 text-black"><div className="flex items-center justify-between"><h2 className="text-2xl font-bold">Marketplace</h2><Search size={22}/></div><div className="my-3 grid grid-cols-2 gap-2"><button className="rounded-full bg-zinc-200 py-2 text-sm font-semibold">Bán</button><button className="rounded-full bg-zinc-200 py-2 text-sm font-semibold">Danh mục</button></div><h3 className="mb-3 font-semibold">Gợi ý hôm nay</h3><div className="grid grid-cols-2 gap-2">{products.map((src,i)=><div key={src}><img src={src} alt="" className="aspect-square w-full rounded-lg object-cover" loading="lazy" decoding="async"/><div className="mt-1 text-sm font-semibold">{[250000,480000,150000,320000][i].toLocaleString('vi-VN')} ₫</div></div>)}</div></div>;
+  return <div className="min-h-full bg-white p-3 text-black"><div className="flex items-center justify-between"><h2 className="text-2xl font-bold">Marketplace</h2><Search size={22}/></div><div className="my-3 grid grid-cols-2 gap-2"><button className="rounded-full bg-zinc-200 py-2 text-sm font-semibold">Sell</button><button className="rounded-full bg-zinc-200 py-2 text-sm font-semibold">Categories</button></div><h3 className="mb-3 font-semibold">Today's picks</h3><div className="grid grid-cols-2 gap-2">{products.map((src,i)=><div key={src}><img src={src} alt="" className="aspect-square w-full rounded-lg object-cover" loading="lazy" decoding="async"/><div className="mt-1 text-sm font-semibold">{[250000,480000,150000,320000][i].toLocaleString('en-US')} $</div></div>)}</div></div>;
 }
 
-function Dating() { return <div className="flex min-h-full flex-col items-center justify-center bg-white p-8 text-center text-black"><div className="mb-4 text-6xl">❤</div><h2 className="text-2xl font-bold text-[#1877f2]">Facebook Dating</h2><p className="mt-2 text-sm text-zinc-600">Kết nối với những người có cùng sở thích với bạn.</p><button className="mt-5 rounded-lg bg-[#1877f2] px-6 py-2.5 font-semibold text-white">Bắt đầu</button></div>; }
+function Dating() { return <div className="flex min-h-full flex-col items-center justify-center bg-white p-8 text-center text-black"><div className="mb-4 text-6xl">❤</div><h2 className="text-2xl font-bold text-[#1877f2]">Facebook Dating</h2><p className="mt-2 text-sm text-zinc-600">Connect with people who share your interests.</p><button className="mt-5 rounded-lg bg-[#1877f2] px-6 py-2.5 font-semibold text-white">Get Started</button></div>; }
 
 function Notifications() {
-  const notes = [{n:'Doraemon',t:'đã thêm một tin mới.',a:'doraemon.webp'},{n:'GOAL Vietnam',t:'đã đăng một ảnh mới.',a:'goal.webp'},{n:'Khánh Vy',t:'đã nhắc đến bạn trong một bình luận.',a:'khanhvy.webp'}];
-  return <div className="min-h-full bg-white text-black"><h2 className="px-4 py-3 text-2xl font-bold">Thông báo</h2>{notes.map((n,i)=><div key={n.n} className={`flex gap-3 px-4 py-3 ${i !== 1 ? 'bg-[#e7f3ff]' : ''}`}><img src={`/facebook/user/${n.a}`} alt="" className="h-14 w-14 rounded-full object-cover" loading="lazy" decoding="async"/><div className="flex-1 text-sm"><b>{n.n}</b> {n.t}<div className="mt-1 text-xs text-[#1877f2]">{i+1} giờ</div></div><MoreHorizontal size={20}/></div>)}</div>;
+  const notes = [{n:'Doraemon',t:'added a new story.',a:'doraemon.webp'},{n:'GOAL Vietnam',t:'posted a new photo.',a:'goal.webp'},{n:'Khánh Vy',t:'mentioned you in a comment.',a:'khanhvy.webp'}];
+  return <div className="min-h-full bg-white text-black"><h2 className="px-4 py-3 text-2xl font-bold">Notifications</h2>{notes.map((n,i)=><div key={n.n} className={`flex gap-3 px-4 py-3 ${i !== 1 ? 'bg-[#e7f3ff]' : ''}`}><img src={`/facebook/user/${n.a}`} alt="" className="h-14 w-14 rounded-full object-cover" loading="lazy" decoding="async"/><div className="flex-1 text-sm"><b>{n.n}</b> {n.t}<div className="mt-1 text-xs text-[#1877f2]">{i+1} h ago</div></div><MoreHorizontal size={20}/></div>)}</div>;
 }
 
 function MenuScreen({ onOpenProfile }: { onOpenProfile: () => void }) {
-  const items = [{n:'Bạn bè',i:'friends.png'},{n:'Kỷ niệm',i:'memory.png'},{n:'Đã lưu',i:'saved.png'},{n:'Marketplace',i:'market.png'},{n:'Video',i:'video.png'},{n:'Sự kiện',i:'event.png'},{n:'Chơi game',i:'game.png'},{n:'Nhóm',i:'group.png'}];
-  return <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><button onClick={onOpenProfile} className="my-3 flex w-full items-center gap-3 rounded-xl bg-white p-3 text-left shadow-sm"><img src="/facebook/user/lcd.webp" alt="Lê Công Đắt" className="h-12 w-12 rounded-full object-cover" decoding="async"/><div><div className="font-semibold">Lê Công Đắt</div><div className="text-xs text-zinc-500">Xem trang cá nhân của bạn</div></div></button><h3 className="mb-2 font-semibold">Tất cả lối tắt</h3><div className="grid grid-cols-2 gap-2">{items.map(item=><button key={item.n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-left text-[13px] font-semibold shadow-sm"><img src={`/facebook/menu/${item.i}`} alt="" className="h-7 w-7 object-contain" loading="lazy" decoding="async"/>{item.n}</button>)}</div></div>;
+  const items = [{n:'Friends',i:'friends.png'},{n:'Memories',i:'memory.png'},{n:'Saved',i:'saved.png'},{n:'Marketplace',i:'market.png'},{n:'Video',i:'video.png'},{n:'Events',i:'event.png'},{n:'Gaming',i:'game.png'},{n:'Groups',i:'group.png'}];
+  return <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><button onClick={onOpenProfile} className="my-3 flex w-full items-center gap-3 rounded-xl bg-white p-3 text-left shadow-sm"><img src="/facebook/user/lcd.webp" alt="Profile" className="h-12 w-12 rounded-full object-cover" decoding="async"/><div><div className="font-semibold">Lê Công Đắt</div><div className="text-xs text-zinc-500">See your profile</div></div></button><h3 className="mb-2 font-semibold">All shortcuts</h3><div className="grid grid-cols-2 gap-2">{items.map(item=><button key={item.n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-left text-[13px] font-semibold shadow-sm"><img src={`/facebook/menu/${item.i}`} alt="" className="h-7 w-7 object-contain" loading="lazy" decoding="async"/>{item.n}</button>)}</div></div>;
 }
 
 export const FacebookApp: React.FC = () => {

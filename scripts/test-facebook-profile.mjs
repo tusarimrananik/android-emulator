@@ -12,7 +12,7 @@ if (!app.includes('onOpenProfile')) failures.push('Menu profile navigation is mi
 if (!app.includes("screen === 'profile'")) failures.push('profile screen rendering is missing');
 if (!profile.includes('Lê Công Đắt')) failures.push('source profile name is missing');
 if (!profile.includes('I am Dat')) failures.push('source profile bio is missing');
-for (const label of ['Thêm vào tin', 'Chỉnh sửa trang cá nhân', 'Chi tiết', 'Sở thích', 'Tin nổi bật', 'Bạn bè', 'Bài viết']) {
+for (const label of ['Add to story', 'Edit profile', 'Details', 'Interests', 'Featured', 'Friends', 'Posts']) {
   if (!profile.includes(label)) failures.push(`source profile section is missing: ${label}`);
 }
 for (const asset of [
