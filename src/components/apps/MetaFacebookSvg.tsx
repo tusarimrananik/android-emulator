@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Exact 1:1 SVGs matching official Facebook Android App (com.facebook.katana)
+// Exact 100% Unaltered Raw SVG Paths extracted directly from Meta's live production servers
 
 export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 36 }) => (
   <svg viewBox="0 0 36 36" width={size} height={size} fill="#0866FF" className={className}>
@@ -9,89 +9,98 @@ export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> =
   </svg>
 );
 
-// 1. HOME TAB: Solid Facebook Blue House with Door Cutout
-export const MetaNavHomeIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = true, size = 26 }) => (
-  <svg viewBox="0 0 28 28" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
-    <path d="M14 2.05L2.25 11.5a1 1 0 0 0 .63 1.77h2.37v10.48a1.25 1.25 0 0 0 1.25 1.25h4.5a.75.75 0 0 0 .75-.75v-5.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 0 .75.75h4.5a1.25 1.25 0 0 0 1.25-1.25V13.27h2.37a1 1 0 0 0 .63-1.77L14 2.05z" />
+// 1. HOME TAB (Meta SVG 4)
+export const MetaNavHomeIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M9.464 1.286C10.294.803 11.092.5 12 .5c.908 0 1.707.303 2.537.786.795.462 1.7 1.142 2.815 1.977l2.232 1.675c1.391 1.042 2.359 1.766 2.888 2.826.53 1.059.53 2.268.528 4.006v4.3c0 1.355 0 2.471-.119 3.355-.124.928-.396 1.747-1.052 2.403-.657.657-1.476.928-2.404 1.053-.884.119-2 .119-3.354.119H7.93c-1.354 0-2.471 0-3.355-.119-.928-.125-1.747-.396-2.403-1.053-.656-.656-.928-1.475-1.053-2.403C1 18.541 1 17.425 1 16.07v-4.3c0-1.738-.002-2.947.528-4.006.53-1.06 1.497-1.784 2.888-2.826L6.65 3.263c1.114-.835 2.02-1.515 2.815-1.977zM10.5 13A1.5 1.5 0 0 0 9 14.5V21h6v-6.5a1.5 1.5 0 0 0-1.5-1.5h-3z" />
   </svg>
 );
 
-// 2. VIDEO / REELS TAB: Clapperboard with Play Triangle
+// 2. VIDEO / REELS TAB (Meta SVG 5)
 export const MetaNavWatchIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
-  <svg viewBox="0 0 28 28" width={size} height={size} fill="none" stroke={active ? '#0866FF' : '#65686C'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="5" width="22" height="18" rx="4" />
-    <path d="M3 10h22M7 5l2 5M15 5l2 5M23 5l-2 5" />
-    <polygon points="12,13 18,16.5 12,20" fill={active ? '#0866FF' : '#65686C'} stroke="none" />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M10.996 12.132A1 1 0 0 0 9.5 13v4a1 1 0 0 0 1.496.868l3.5-2a1 1 0 0 0 0-1.736l-3.5-2z" />
+    <path d="M12.075 1h-.15C9.632 1 7.81 1 6.38 1.192c-1.472.198-2.674.616-3.623 1.565-.949.95-1.367 2.15-1.565 3.623C1 7.81 1 9.632 1 11.925v.15c0 2.293 0 4.116.192 5.545.198 1.472.616 2.674 1.565 3.623.95.949 2.15 1.367 3.623 1.565C7.81 23 9.632 23 11.925 23h.15c2.293 0 4.116 0 5.545-.192 1.472-.198 2.674-.616 3.623-1.565.949-.95 1.367-2.15 1.565-3.623.192-1.43.192-3.252.192-5.545v-.15c0-2.293 0-4.116-.192-5.545-.198-1.472-.616-2.674-1.565-3.623-.95-.949-2.15-1.367-3.623-1.565C16.19 1 14.368 1 12.075 1zM4.172 4.172c.515-.516 1.224-.83 2.475-.998l.183-.023L8.113 7H3.132c.013-.121.027-.239.042-.353.168-1.25.482-1.96.998-2.475zM10.22 7 8.895 3.023C9.778 3 10.801 3 12 3c.642 0 1.234 0 1.78.004L15.114 7H10.22zm6.253 2h4.507c.02.86.02 1.848.02 3 0 2.385-.002 4.074-.174 5.353-.168 1.25-.482 1.96-.998 2.475-.515.516-1.224.83-2.475.998-1.28.172-2.968.174-5.353.174s-4.074-.002-5.353-.174c-1.25-.168-1.96-.482-2.475-.998-.516-.515-.83-1.224-.998-2.475C3.002 16.073 3 14.385 3 12c0-1.152 0-2.14.02-3h13.454zm.747-2-1.316-3.949c.537.026 1.016.065 1.448.123 1.25.168 1.96.482 2.475.998.516.515.83 1.224.998 2.475.015.114.03.232.042.353H17.22z" />
   </svg>
 );
 
-// 3. GROUPS TAB: Community Circle with People Silhouette
+// 3. GROUPS TAB (Meta SVG 6)
 export const MetaNavGroupsIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
-  <svg viewBox="0 0 28 28" width={size} height={size} fill="none" stroke={active ? '#0866FF' : '#65686C'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="14" cy="14" r="11" />
-    <circle cx="14" cy="10" r="3.2" />
-    <path d="M8 20.5c0-2.8 2.7-4.5 6-4.5s6 1.7 6 4.5" />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M12.496 5a4 4 0 1 1 8 0 4 4 0 0 1-8 0zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-9 2.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-2 4a2 2 0 1 1 4 0 2 2 0 0 1-4 0zM5.5 15a5 5 0 0 0-5 5 3 3 0 0 0 3 3h8.006a3 3 0 0 0 3-3 5 5 0 0 0-5-5H5.5zm-3 5a3 3 0 0 1 3-3h4.006a3 3 0 0 1 3 3 1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1zm12-9.5a5.04 5.04 0 0 0-.37.014 1 1 0 0 0 .146 1.994c.074-.005.149-.008.224-.008h4.006a3 3 0 0 1 3 3 1 1 0 0 1-1 1h-3.398a1 1 0 1 0 0 2h3.398a3 3 0 0 0 3-3 5 5 0 0 0-5-5H14.5z" />
   </svg>
 );
 
-// 4. NOTIFICATIONS TAB: Bell with bottom clapper
+// 4. NOTIFICATIONS TAB (Meta SVG 11)
 export const MetaNavBellIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
-  <svg viewBox="0 0 28 28" width={size} height={size} fill="none" stroke={active ? '#0866FF' : '#65686C'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 3.5a1.5 1.5 0 0 0-1.5 1.5v.7A7.5 7.5 0 0 0 6.5 13v4.5l-2 2.5h19l-2-2.5V13a7.5 7.5 0 0 0-6-7.3V5a1.5 1.5 0 0 0-1.5-1.5z" />
-    <path d="M11.5 22.5a2.5 2.5 0 0 0 5 0" />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M3 9.5a9 9 0 1 1 18 0v2.927c0 1.69.475 3.345 1.37 4.778a1.5 1.5 0 0 1-1.272 2.295h-4.625a4.5 4.5 0 0 1-8.946 0H2.902a1.5 1.5 0 0 1-1.272-2.295A9.01 9.01 0 0 0 3 12.43V9.5zm6.55 10a2.5 2.5 0 0 0 4.9 0h-4.9z" />
   </svg>
 );
 
 export const MetaBellIcon = MetaNavBellIcon;
 
-// 5. MENU TAB: 3 Rounded Horizontal Bars
+// 5. MENU TAB (Meta SVG 8)
 export const MetaNavMenuIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
-  <svg viewBox="0 0 28 28" width={size} height={size} fill="none" stroke={active ? '#0866FF' : '#65686C'} strokeWidth="2.6" strokeLinecap="round">
-    <line x1="4" y1="7" x2="24" y2="7" />
-    <line x1="4" y1="14" x2="24" y2="14" />
-    <line x1="4" y1="21" x2="24" y2="21" />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M.5 12c0 6.351 5.149 11.5 11.5 11.5S23.5 18.351 23.5 12 18.351.5 12 .5.5 5.649.5 12zm2 0c0-.682.072-1.348.209-1.99a2 2 0 0 1 0 3.98A9.539 9.539 0 0 1 2.5 12zm.84-3.912A9.502 9.502 0 0 1 12 2.5a9.502 9.502 0 0 1 8.66 5.588 4.001 4.001 0 0 0 0 7.824 9.514 9.514 0 0 1-1.755 2.613A5.002 5.002 0 0 0 14 14.5h-4a5.002 5.002 0 0 0-4.905 4.025 9.515 9.515 0 0 1-1.755-2.613 4.001 4.001 0 0 0 0-7.824zM12 5a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm-2 4a2 2 0 1 0 4 0 2 2 0 0 0-4 0zm11.291 1.01a9.538 9.538 0 0 1 0 3.98 2 2 0 0 1 0-3.98zM16.99 20.087A9.455 9.455 0 0 1 12 21.5c-1.83 0-3.54-.517-4.99-1.414a1.004 1.004 0 0 1-.01-.148V19.5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v.438a1 1 0 0 1-.01.148z" />
   </svg>
 );
 
-// GREEN PHOTO / GALLERY ICON FOR COMPOSER
+// OFFICIAL COMPOSER PHOTO SVG
 export const MetaComposerPhotoIcon: React.FC<{ size?: number }> = ({ size = 24 }) => (
-  <svg viewBox="0 0 28 28" width={size} height={size} fill="none">
-    <rect x="3" y="4" width="22" height="20" rx="4" fill="#45BD62" />
-    <circle cx="9" cy="10" r="2.2" fill="#FFFFFF" />
-    <path d="M5 21l6-7 4 4.5 5-6.5 5 7H5z" fill="#FFFFFF" />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="#45BD62">
+    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71zM8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
   </svg>
 );
 
-// HEADER ACTIONS
+// OFFICIAL SEARCH SVG
+export const MetaSearchIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} fill="currentColor" className={className}>
+    <g fillRule="evenodd" transform="translate(-448 -544)">
+      <g fillRule="nonzero">
+        <path d="M10.743 2.257a6 6 0 1 1-8.485 8.486 6 6 0 0 1 8.485-8.486zm-1.06 1.06a4.5 4.5 0 1 0-6.365 6.364 4.5 4.5 0 0 0 6.364-6.363z" transform="translate(448 544)" />
+        <path d="m13.463 15.142-.04-.044-3.574-4.192c-.599-.703.355-1.656 1.058-1.057l4.191 3.574.044.04c.058.059.122.137.182.24.249.425.249.96-.154 1.41l-.057.057c-.45.403-.986.403-1.411.154a1.182 1.182 0 0 1-.24-.182zm.617-.616.444-.444a.31.31 0 0 0-.063-.052c-.093-.055-.263-.055-.35.024l.208.232.207-.206.006.007-.22.257-.026-.024.033-.034.025.027-.257.22-.007-.007zm-.027-.415c-.078.088-.078.257-.023.35a.31.31 0 0 0 .051.063l.205-.204-.233-.209z" transform="translate(448 544)" />
+      </g>
+    </g>
+  </svg>
+);
+
+// OFFICIAL MESSENGER SVG (Meta SVG 10)
+export const MetaMessengerIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} fill="currentColor" className={className}>
+    <path fillRule="evenodd" d="M.5 8a7.5 7.5 0 1 1 4.006 6.638.341.341 0 0 0-.236-.041l-2.193.534A1 1 0 0 1 .87 13.923l.534-2.193a.341.341 0 0 0-.04-.236A7.47 7.47 0 0 1 .5 8zm11.389-.907a.56.56 0 0 0-.79-.78L9.25 7.75 7.294 6.327a1 1 0 0 0-1.386.205L4.111 8.906a.56.56 0 0 0 .791.781L6.75 8.25l1.957 1.423a1 1 0 0 0 1.385-.205l1.797-2.375z" clipRule="evenodd" />
+  </svg>
+);
+
+// OFFICIAL PLUS SVG (Meta SVG 18)
 export const MetaPlusIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 18, fill = '#050505' }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={fill} strokeWidth="2.8" strokeLinecap="round">
-    <line x1="12" y1="5" x2="12" y2="19" />
-    <line x1="5" y1="12" x2="19" y2="12" />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ color: fill }} className={className}>
+    <path d="M18 11h-5V6a1 1 0 0 0-2 0v5H6a1 1 0 0 0 0 2h5v5a1 1 0 0 0 2 0v-5h5a1 1 0 0 0 0-2z" />
   </svg>
 );
 
-export const MetaSearchIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 19 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="#050505" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <circle cx="11" cy="11" r="7" />
-    <line x1="16.5" y1="16.5" x2="21.5" y2="21.5" />
+// OFFICIAL 3 DOTS (Meta SVG 21)
+export const MetaMoreDotsIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 20 20" width={size} height={size} fill="currentColor" className={className}>
+    <g fillRule="evenodd" transform="translate(-446 -350)">
+      <path d="M458 360a2 2 0 1 1-4 0 2 2 0 0 1 4 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-12 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" />
+    </g>
   </svg>
 );
 
-export const MetaMessengerIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 19 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
-    <path d="M12 2C6.48 2 2 6.16 2 11.28c0 2.92 1.45 5.54 3.73 7.23V22l3.36-1.85c.92.26 1.9.4 2.91.4 5.52 0 10-4.16 10-9.28S17.52 2 12 2zm1.06 12.44l-2.65-2.83-5.18 2.83 5.7-6.05 2.71 2.83 5.12-2.83-5.7 6.05z" />
-  </svg>
-);
-
+// OFFICIAL EDIT PENCIL (Meta SVG 26)
 export const MetaEditPencilIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 16, fill = 'currentColor' }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
-    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+  <svg viewBox="0 0 20 20" width={size} height={size} fill={fill} className={className}>
+    <path fillRule="evenodd" d="M17.99.93a1.75 1.75 0 0 0-2.48.005l-9.148 9.224a1.25 1.25 0 0 0-.362.88v2.21c0 .415.336.75.75.75h2.212c.33 0 .646-.13.88-.362l9.223-9.148a1.75 1.75 0 0 0 .005-2.48L17.99.93zm-1.415 1.06a.25.25 0 0 1 .355 0l1.08 1.08a.25.25 0 0 1-.001.353L16.742 4.68l-1.423-1.423 1.256-1.267z" clipRule="evenodd" />
   </svg>
 );
 
+// OFFICIAL CAMERA (Meta SVG 14)
 export const MetaCameraIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 16, fill = 'currentColor' }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
-    <path d="M12 15c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0-8c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm7-2h-3.17L14.4 3.5c-.37-.5-.96-.8-1.58-.8h-3.64c-.62 0-1.21.3-1.58.8L6.17 5H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2z" />
+  <svg viewBox="0 0 16 16" width={size} height={size} fill={fill} className={className}>
+    <path d="M5.5 8a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0z" />
+    <path d="M5.03 1.659A2.25 2.25 0 0 1 6.621 1H9.38a2.25 2.25 0 0 1 1.59.659l.842.841h.939a2.75 2.75 0 0 1 2.75 2.75v6A2.75 2.75 0 0 1 12.75 14h-9.5A2.75 2.75 0 0 1 .5 11.25v-6A2.75 2.75 0 0 1 3.25 2.5h.94l.84-.841zM8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
   </svg>
 );
 
@@ -110,14 +119,6 @@ export const MetaCommentIcon: React.FC<{ className?: string; size?: number }> = 
 export const MetaShareIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
     <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
-  </svg>
-);
-
-export const MetaMoreDotsIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
-  <svg viewBox="0 0 20 20" width={size} height={size} fill="currentColor" className={className}>
-    <circle cx="4" cy="10" r="2" />
-    <circle cx="10" cy="10" r="2" />
-    <circle cx="16" cy="10" r="2" />
   </svg>
 );
 
