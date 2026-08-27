@@ -49,7 +49,7 @@ const nav = [
 
 const navAsset = (file: string) => `/facebook/nav/${file}`;
 
-function TopBar() {
+function TopBar({ onOpenProfile }: { onOpenProfile?: () => void }) {
   return (
     <div className="flex h-[58px] shrink-0 items-center justify-between bg-white px-3 text-black">
       <div className="flex items-center gap-1">
@@ -57,19 +57,27 @@ function TopBar() {
         <div className="text-[27px] font-bold tracking-[-1.2px] text-[#1877f2]">facebook</div>
       </div>
       <div className="flex gap-2">
-        <button className="grid h-9 w-9 place-items-center rounded-full bg-black/10"><img src="/facebook/search.png" alt="Search" className="h-[21px] w-[21px]" /></button>
-        <button className="grid h-9 w-9 place-items-center rounded-full bg-black/10"><img src="/facebook/message.png" alt="Messenger" className="h-[22px] w-[22px]" /></button>
+        <button className="grid h-9 w-9 place-items-center rounded-full bg-black/10">
+          <img src="/facebook/search.png" alt="Search" className="h-[21px] w-[21px]" />
+        </button>
+        <button className="grid h-9 w-9 place-items-center rounded-full bg-black/10">
+          <img src="/facebook/message.png" alt="Messenger" className="h-[22px] w-[22px]" />
+        </button>
       </div>
     </div>
   );
 }
 
-function Composer() {
+function Composer({ onOpenProfile }: { onOpenProfile: () => void }) {
   return (
     <div className="bg-white text-black">
       <div className="flex items-center gap-3 px-3 py-3">
-        <img src="/facebook/user/lcd.webp" alt="Profile" className="h-11 w-11 rounded-full object-cover" decoding="async" />
-        <div className="flex-1 rounded-full border border-zinc-300 px-4 py-2.5 text-[14px]">What's on your mind?</div>
+        <button onClick={onOpenProfile} type="button">
+          <img src="/facebook/user/lcd.webp" alt="Profile" className="h-11 w-11 rounded-full object-cover" decoding="async" />
+        </button>
+        <div onClick={onOpenProfile} className="flex-1 cursor-pointer rounded-full border border-zinc-300 px-4 py-2.5 text-[14px] text-zinc-500">
+          What&apos;s on your mind?
+        </div>
         <img src="/facebook/friend.png" alt="" className="h-6 w-6 object-contain" />
       </div>
       <div className="grid grid-cols-3 border-t border-zinc-200 text-[13px] font-medium">
@@ -81,11 +89,15 @@ function Composer() {
   );
 }
 
-function Stories() {
+function Stories({ onOpenProfile }: { onOpenProfile: () => void }) {
   return (
     <div className="mt-2 flex gap-2 overflow-x-auto bg-white px-3 py-3 [scrollbar-width:none]">
       {stories.map((story) => (
-        <button key={story.name} className="relative h-[180px] w-[104px] shrink-0 overflow-hidden rounded-xl border border-black/10 bg-white text-left shadow-sm">
+        <button
+          key={story.name}
+          onClick={story.own ? onOpenProfile : undefined}
+          className="relative h-[180px] w-[104px] shrink-0 overflow-hidden rounded-xl border border-black/10 bg-white text-left shadow-sm active:scale-95 transition-transform"
+        >
           <img src={story.cover} alt="" className={`w-full object-cover ${story.own ? 'h-[125px]' : 'h-full'}`} decoding="async" />
           {!story.own && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />}
           {story.own ? (
@@ -125,7 +137,15 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
   );
 }
 
-function Feed() { return <><Composer /><Stories />{posts.map((post) => <PostCard key={post.user} post={post} />)}</>; }
+function Feed({ onOpenProfile }: { onOpenProfile: () => void }) {
+  return (
+    <>
+      <Composer onOpenProfile={onOpenProfile} />
+      <Stories onOpenProfile={onOpenProfile} />
+      {posts.map((post) => <PostCard key={post.user} post={post} />)}
+    </>
+  );
+}
 
 function Watch() {
   return <div className="min-h-full bg-white p-3 text-black"><div className="flex items-center justify-between"><h2 className="text-2xl font-bold">Video</h2><Search size={22}/></div><div className="mt-4 overflow-hidden rounded-xl border"><img src="/facebook/post/3.webp" alt="" className="aspect-video w-full object-cover" loading="lazy" decoding="async"/><div className="p-3"><div className="font-semibold">GOAL Vietnam</div><p className="mt-1 text-sm">New videos for you · Trending</p></div></div></div>;
@@ -145,7 +165,27 @@ function Notifications() {
 
 function MenuScreen({ onOpenProfile }: { onOpenProfile: () => void }) {
   const items = [{n:'Friends',i:'friends.png'},{n:'Memories',i:'memory.png'},{n:'Saved',i:'saved.png'},{n:'Marketplace',i:'market.png'},{n:'Video',i:'video.png'},{n:'Events',i:'event.png'},{n:'Gaming',i:'game.png'},{n:'Groups',i:'group.png'}];
-  return <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><button onClick={onOpenProfile} className="my-3 flex w-full items-center gap-3 rounded-xl bg-white p-3 text-left shadow-sm"><img src="/facebook/user/lcd.webp" alt="Profile" className="h-12 w-12 rounded-full object-cover" decoding="async"/><div><div className="font-semibold">Lê Công Đắt</div><div className="text-xs text-zinc-500">See your profile</div></div></button><h3 className="mb-2 font-semibold">All shortcuts</h3><div className="grid grid-cols-2 gap-2">{items.map(item=><button key={item.n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-left text-[13px] font-semibold shadow-sm"><img src={`/facebook/menu/${item.i}`} alt="" className="h-7 w-7 object-contain" loading="lazy" decoding="async"/>{item.n}</button>)}</div></div>;
+  return (
+    <div className="min-h-full bg-[#f0f2f5] p-3 text-black">
+      <h2 className="text-2xl font-bold">Menu</h2>
+      <button onClick={onOpenProfile} className="my-3 flex w-full items-center gap-3 rounded-xl bg-white p-3 text-left shadow-sm active:bg-zinc-100 transition-colors">
+        <img src="/facebook/user/lcd.webp" alt="Profile" className="h-12 w-12 rounded-full object-cover" decoding="async"/>
+        <div>
+          <div className="font-semibold text-base">Lê Công Đắt</div>
+          <div className="text-xs text-zinc-500">See your profile</div>
+        </div>
+      </button>
+      <h3 className="mb-2 font-semibold">All shortcuts</h3>
+      <div className="grid grid-cols-2 gap-2">
+        {items.map(item=>(
+          <button key={item.n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-left text-[13px] font-semibold shadow-sm active:bg-zinc-50 transition-colors">
+            <img src={`/facebook/menu/${item.i}`} alt="" className="h-7 w-7 object-contain" loading="lazy" decoding="async"/>
+            {item.n}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export const FacebookApp: React.FC = () => {
@@ -153,12 +193,12 @@ export const FacebookApp: React.FC = () => {
   const tab = screen === 'profile' ? 'menu' : screen;
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[#d8dadf] font-sans">
-      {screen !== 'profile' && tab === 'feed' && <TopBar />}
+      {screen !== 'profile' && tab === 'feed' && <TopBar onOpenProfile={() => setScreen('profile')} />}
       {screen !== 'profile' && <nav className="grid h-[47px] shrink-0 grid-cols-6 border-b border-zinc-200 bg-white">
         {nav.map((item) => <button key={item.id} aria-label={item.label} onClick={() => setScreen(item.id)} className={`relative grid place-items-center ${tab === item.id ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#1877f2]' : ''}`}><img src={navAsset(tab === item.id ? item.active : item.normal)} alt="" className="h-[27px] w-[27px] object-contain"/></button>)}
       </nav>}
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:none]">
-        {screen === 'profile' ? <FacebookProfile onBack={() => setScreen('menu')} /> : <>{tab === 'feed' && <Feed />}{tab === 'watch' && <Watch />}{tab === 'market' && <Market />}{tab === 'dating' && <Dating />}{tab === 'notifications' && <Notifications />}{tab === 'menu' && <MenuScreen onOpenProfile={() => setScreen('profile')} />}</>}
+        {screen === 'profile' ? <FacebookProfile onBack={() => setScreen('menu')} /> : <>{tab === 'feed' && <Feed onOpenProfile={() => setScreen('profile')} />}{tab === 'watch' && <Watch />}{tab === 'market' && <Market />}{tab === 'dating' && <Dating />}{tab === 'notifications' && <Notifications />}{tab === 'menu' && <MenuScreen onOpenProfile={() => setScreen('profile')} />}</>}
       </div>
     </div>
   );
