@@ -11,7 +11,7 @@ import {Dock} from '@/components/home/Dock';
 import {AppSvgIcon} from '@/components/common/AppSvgIcon';
 import {INITIAL_APPS} from '@/lib/apps-data';
 import {WALLPAPERS} from '@/lib/wallpapers-data';
-import {Globe2, MoreHorizontal, Plus, Search, X, Camera, Edit2, ArrowLeft, GraduationCap, MapPin, Radio, ThumbsUp, MessageCircle, Share2} from 'lucide-react';
+import {Globe2, MoreHorizontal, Plus, Search, X, Camera, Edit2, UserPlus, Grid, MessageCircle, Bell} from 'lucide-react';
 
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const asset = (path: string) => staticFile(path);
@@ -56,7 +56,7 @@ const fbNav = [
 const FacebookNav: React.FC<{tab: FbTab}> = ({tab}) => (
   <div className="grid h-[48px] shrink-0 grid-cols-5 border-b border-zinc-200 bg-white">
     {fbNav.map(([id, normal, active]) => (
-      <div key={id} className={`relative grid place-items-center ${tab === id ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[70%] after:rounded-full after:bg-[#1877f2]' : ''}`}>
+      <div key={id} className={`relative grid place-items-center ${tab === id ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[70%] after:rounded-full after:bg-[#0866FF]' : ''}`}>
         <img src={asset(`/facebook/nav/${tab === id ? active : normal}`)} className="h-[27px] w-[27px] object-contain" alt="" />
       </div>
     ))}
@@ -65,7 +65,7 @@ const FacebookNav: React.FC<{tab: FbTab}> = ({tab}) => (
 
 const TopBar: React.FC = () => (
   <div className="flex h-[58px] shrink-0 items-center justify-between bg-white px-3 text-black">
-    <div className="flex items-center gap-1"><img src={asset('/facebook/menu.png')} className="h-8 w-8" alt=""/><div className="text-[27px] font-bold tracking-[-1.2px] text-[#1877f2]">facebook</div></div>
+    <div className="flex items-center gap-1"><img src={asset('/facebook/menu.png')} className="h-8 w-8" alt=""/><div className="text-[27px] font-bold tracking-[-1.2px] text-[#0866FF]">facebook</div></div>
     <div className="flex gap-2"><div className="grid h-9 w-9 place-items-center rounded-full bg-black/10"><img src={asset('/facebook/search.png')} className="h-5 w-5" alt=""/></div><div className="grid h-9 w-9 place-items-center rounded-full bg-black/10"><img src={asset('/facebook/message.png')} className="h-5 w-5" alt=""/></div></div>
   </div>
 );
@@ -74,7 +74,7 @@ const Composer: React.FC = () => <div className="bg-white text-black"><div class
 
 const Stories: React.FC = () => {
   const stories = [['Create Story','/facebook/user/lcd.webp'],['Doraemon','/facebook/story/1.webp'],['Old Books','/facebook/story/2.webp'],['VAFFC','/facebook/story/3.webp']];
-  return <div className="mt-2 flex gap-2 bg-white px-3 py-3">{stories.map(([name,src],i)=><div key={name} className="relative h-[180px] w-[104px] shrink-0 overflow-hidden rounded-xl border bg-white"><img src={asset(src)} className="h-full w-full object-cover" alt=""/><div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"/>{i===0?<div className="absolute left-2 top-2 grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-[#1877f2] text-white"><Plus/></div>:<div className="absolute left-2 top-2 h-10 w-10 rounded-full border-[3px] border-[#1877f2] bg-white"/>}<div className="absolute bottom-2 left-2 right-1 text-[12px] font-semibold text-white">{name}</div></div>)}</div>;
+  return <div className="mt-2 flex gap-2 bg-white px-3 py-3">{stories.map(([name,src],i)=><div key={name} className="relative h-[180px] w-[104px] shrink-0 overflow-hidden rounded-xl border bg-white"><img src={asset(src)} className="h-full w-full object-cover" alt=""/><div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"/>{i===0?<div className="absolute left-2 top-2 grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-[#0866FF] text-white"><Plus/></div>:<div className="absolute left-2 top-2 h-10 w-10 rounded-full border-[3px] border-[#0866FF] bg-white"/>}<div className="absolute bottom-2 left-2 right-1 text-[12px] font-semibold text-white">{name}</div></div>)}</div>;
 };
 
 const Post: React.FC<{second?: boolean}> = ({second}) => <div className="mt-2 bg-white text-black"><div className="flex items-center gap-2.5 px-3 py-3"><img src={asset(second?'/facebook/user/goal.webp':'/facebook/user/daiphatthanh.webp')} className="h-10 w-10 rounded-full object-cover" alt=""/><div className="flex-1"><b className="text-[14px]">{second?'GOAL Vietnam':'Radio Station.'}</b><div className="flex items-center gap-1 text-[11px] text-zinc-500">{second?'3m':'16h'} · <Globe2 size={12}/></div></div><MoreHorizontal/><X size={20}/></div><p className="px-3 pb-3 text-[13px] leading-snug">{second?'✅ 10 years dedicated to Vietnamese youth football 🌏🇻🇳 🏆':'Rap Viet Season 3 has found the Top 9 advancing to the Finals, promising an intense showdown.'}</p><img src={asset(second?'/facebook/post/2.webp':'/facebook/post/1.webp')} className="max-h-[350px] w-full object-cover" alt=""/><div className="flex justify-between px-3 py-2 text-[11px] text-zinc-500"><span>👍 ❤️ {second?'187':'10.845'}</span><span>{second?'5':'902'} comments</span></div><div className="mx-3 grid grid-cols-3 border-t py-2 text-center text-[12px] font-semibold text-zinc-600"><span>👍 Like</span><span>◯ Comment</span><span>↗ Share</span></div></div>;
@@ -86,106 +86,105 @@ const Feed: React.FC<{frame: number}> = ({frame}) => {
 
 const Watch: React.FC = () => <div className="min-h-full bg-white p-3 text-black"><div className="flex justify-between"><h2 className="text-2xl font-bold">Video</h2><Search/></div><div className="mt-4 overflow-hidden rounded-xl border"><img src={asset('/facebook/post/3.webp')} className="aspect-video w-full object-cover" alt=""/><div className="p-3"><b>GOAL Vietnam</b><p className="text-sm">New videos for you · Trending</p></div></div></div>;
 const Market: React.FC = () => <div className="min-h-full bg-white p-3 text-black"><h2 className="text-2xl font-bold">Marketplace</h2><div className="my-3 grid grid-cols-2 gap-2"><div className="rounded-full bg-zinc-200 py-2 text-center font-semibold">Sell</div><div className="rounded-full bg-zinc-200 py-2 text-center font-semibold">Categories</div></div><div className="grid grid-cols-2 gap-2">{['1','2','3'].map((x,i)=><div key={x}><img src={asset(`/facebook/post/${x}.webp`)} className="aspect-square w-full rounded-lg object-cover" alt=""/><b className="text-sm">{[250000,480000,150000][i].toLocaleString('en-US')} $</b></div>)}</div></div>;
-const Notifications: React.FC = () => <div className="min-h-full bg-white text-black"><h2 className="p-4 text-2xl font-bold">Notifications</h2>{[['Doraemon','doraemon.webp'],['GOAL Vietnam','goal.webp'],['Khánh Vy','khanhvy.webp']].map(([n,a],i)=><div key={n} className={`flex gap-3 p-4 ${i!==1?'bg-[#e7f3ff]':''}`}><img src={asset(`/facebook/user/${a}`)} className="h-14 w-14 rounded-full object-cover" alt=""/><div className="text-sm"><b>{n}</b> added new content.<div className="text-xs text-[#1877f2]">{i+1} h ago</div></div></div>)}</div>;
+const Notifications: React.FC = () => <div className="min-h-full bg-white text-black"><h2 className="p-4 text-2xl font-bold">Notifications</h2>{[['Doraemon','doraemon.webp'],['GOAL Vietnam','goal.webp'],['Khánh Vy','khanhvy.webp']].map(([n,a],i)=><div key={n} className={`flex gap-3 p-4 ${i!==1?'bg-[#e7f3ff]':''}`}><img src={asset(`/facebook/user/${a}`)} className="h-14 w-14 rounded-full object-cover" alt=""/><div className="text-sm"><b>{n}</b> added new content.<div className="text-xs text-[#0866FF]">{i+1} h ago</div></div></div>)}</div>;
 const MenuScreen: React.FC = () => <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><div className="my-3 flex items-center gap-3 rounded-xl bg-white p-3"><img src={asset('/facebook/user/lcd.webp')} className="h-12 w-12 rounded-full object-cover" alt=""/><b>Lê Công Đắt</b></div><div className="grid grid-cols-2 gap-2">{[['Friends','friends.png'],['Memories','memory.png'],['Saved','saved.png'],['Marketplace','market.png'],['Video','video.png'],['Events','event.png']].map(([n,i])=><div key={n} className="flex items-center gap-3 rounded-xl bg-white p-3 font-semibold"><img src={asset(`/facebook/menu/${i}`)} className="h-7 w-7" alt=""/>{n}</div>)}</div></div>;
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
   const scroll = interpolate(frame, [440, 500], [0, -400], clamp);
   return (
-    <div className="min-h-full bg-[#f0f2f5] text-[#050505] font-sans" style={{transform: `translateY(${scroll}px)`}}>
-      {/* 1. App Bar */}
-      <div className="flex h-[48px] items-center justify-between border-b border-[#ced0d4] bg-white px-3">
-        <div className="flex items-center gap-3 truncate">
-          <ArrowLeft size={22} className="text-[#050505]" />
-          <span className="text-[17px] font-bold text-[#050505] truncate">{fbProfile.profileName || 'Facebook User'}</span>
+    <div className="min-h-full bg-white text-[#050505] font-sans" style={{transform: `translateY(${scroll}px)`}}>
+      {/* 1. Top App Bar */}
+      <div className="flex h-[50px] items-center justify-between border-b border-[#ced0d4] bg-white px-3 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0866FF] text-white font-bold text-2xl">
+          f
         </div>
-        <div className="flex items-center gap-1 text-[#050505]">
-          <Search size={20} />
+        <div className="flex items-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505]">
+            <Search size={19} />
+          </div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505]">
+            <Grid size={18} />
+          </div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505]">
+            <MessageCircle size={19} />
+          </div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505]">
+            <Bell size={19} />
+          </div>
         </div>
       </div>
 
-      {/* 2. Header & Profile Card */}
-      <div className="bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-        {/* Cover */}
-        <div className="relative h-[190px] w-full bg-[#e4e6eb]">
+      {/* 2. Cover & Avatar Hero */}
+      <div className="relative bg-white pb-3">
+        <div className="relative h-[180px] w-full bg-gradient-to-b from-[#8a919a] to-[#cbd2d9] overflow-hidden">
           {fbProfile.coverPicture ? (
             <img src={fbProfile.coverPicture} className="h-full w-full object-cover" alt="" />
           ) : (
             <img src={asset('/facebook/user/lcd-cover.webp')} className="h-full w-full object-cover" alt="" />
           )}
-          {/* Cover Camera Button */}
-          <div className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#e4e6eb] shadow-md border border-white/40">
+          <div className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white shadow-md">
             <Camera size={18} className="text-[#050505]" />
           </div>
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-white/95 px-4 py-1.5 shadow-md border border-[#ced0d4]/40 flex items-center gap-1.5">
+            <span className="text-[13px] font-medium text-[#65676B]">Share a thought...</span>
+          </div>
+        </div>
 
-          {/* Avatar overlay */}
-          <div className="absolute -bottom-[48px] left-4">
-            <div className="relative h-[136px] w-[136px] rounded-full border-[4px] border-white bg-white shadow-sm overflow-hidden">
+        <div className="relative flex justify-center -mt-[65px]">
+          <div className="relative">
+            <div className="h-[130px] w-[130px] rounded-full border-[4px] border-white bg-white shadow-md overflow-hidden">
               {fbProfile.profilePicture ? (
                 <img src={fbProfile.profilePicture} className="h-full w-full object-cover" alt="" />
               ) : (
                 <img src={asset('/facebook/user/lcd.webp')} className="h-full w-full object-cover" alt="" />
               )}
             </div>
-            {/* Avatar camera badge */}
-            <div className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#e4e6eb] shadow-md">
-              <Camera size={17} className="text-[#050505]" />
+            <div className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#E4E6EB] shadow-md text-[#050505]">
+              <Camera size={17} />
             </div>
           </div>
         </div>
 
-        {/* Identity & Bio */}
-        <div className="px-4 pt-[56px] pb-4">
+        {/* Identity & Buttons */}
+        <div className="px-4 pt-2 text-center">
           <h1 className="text-[24px] font-bold text-[#050505] leading-tight">{fbProfile.profileName || 'Facebook User'}</h1>
-          {fbProfile.friendsCount && (
-            <div className="mt-1 flex items-center gap-1.5 text-[14px]">
-              <span className="font-bold text-[#050505]">{fbProfile.friendsCount}</span>
-              <span className="text-[#65676b]">friends</span>
-            </div>
-          )}
-          {fbProfile.bio && <p className="mt-2 text-[15px] text-[#050505] leading-relaxed">{fbProfile.bio}</p>}
+          <div className="mt-1 flex items-center justify-center gap-1.5 text-[14px] text-[#65676B]">
+            <span>{fbProfile.friendsCount ? `${fbProfile.friendsCount} followers` : '1,150 followers'}</span>
+            <span>•</span>
+            <span>480 following</span>
+          </div>
+          {fbProfile.bio && <p className="mt-2 text-[14px] text-[#050505] leading-snug">{fbProfile.bio}</p>}
 
-          {/* Action buttons */}
-          <div className="mt-3.5 flex gap-2">
-            <div className="flex h-[36px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1877f2] px-3 text-[14px] font-semibold text-white shadow-none">
+          <div className="mt-4 flex gap-2 px-2">
+            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white">
               <Plus size={18} strokeWidth={2.5} />
               <span>Add to story</span>
             </div>
-            <div className="flex h-[36px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#e4e6eb] px-3 text-[14px] font-semibold text-[#050505]">
+            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#050505]">
               <Edit2 size={16} />
               <span>Edit profile</span>
             </div>
-            <div className="flex h-[36px] w-[42px] items-center justify-center rounded-lg bg-[#e4e6eb] text-[#050505]">
+            <div className="flex h-[38px] w-[42px] items-center justify-center rounded-lg bg-[#E4E6EB] text-[#050505]">
               <MoreHorizontal size={19} />
             </div>
           </div>
         </div>
-
-        {/* Profile Tabs */}
-        <div className="flex border-t border-[#ced0d4] px-2 bg-white">
-          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#1877f2] relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:rounded-full after:bg-[#1877f2]">
-            Posts
-          </div>
-          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#65676b]">About</div>
-          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#65676b]">Reels</div>
-          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#65676b]">Photos</div>
-        </div>
       </div>
 
-      {/* Friends Grid */}
+      {/* 3. Friends Grid */}
       {fbProfile.friends && fbProfile.friends.length > 0 && (
-        <div className="mt-2.5 bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-          <div className="flex items-center justify-between">
+        <div className="my-2 bg-white p-3.5 border-y border-[#ced0d4]/80">
+          <div className="flex items-center justify-between pb-2.5">
             <div>
-              <h2 className="text-[19px] font-bold text-[#050505]">Friends</h2>
-              {fbProfile.friendsCount && <p className="text-[13px] text-[#65676b]">{fbProfile.friendsCount} friends</p>}
+              <h2 className="text-[16px] font-bold text-[#050505]">Friends</h2>
+              <p className="text-[12px] text-[#65676B]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} friends` : '1,150 friends'}</p>
             </div>
-            <span className="text-[14px] font-medium text-[#1877f2]">Find friends</span>
+            <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
           </div>
-          <div className="mt-3.5 grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-3 gap-2.5">
             {fbProfile.friends.slice(0, 6).map((f, i) => (
               <div key={i} className="space-y-1">
-                <img src={f.avatar} className="aspect-square w-full rounded-lg object-cover bg-[#e4e6eb]" alt="" />
+                <img src={f.avatar} className="aspect-square w-full rounded-xl object-cover bg-[#E4E6EB]" alt="" />
                 <p className="truncate text-[12px] font-semibold text-[#050505]">{f.name}</p>
               </div>
             ))}

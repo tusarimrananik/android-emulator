@@ -2,33 +2,41 @@
 
 import React, { useState } from 'react';
 import {
-  ArrowLeft,
-  Camera,
-  Edit2,
-  GraduationCap,
-  Image as ImageIcon,
-  MapPin,
-  MoreHorizontal,
-  Plus,
-  Radio,
   Search,
-  Globe2,
-  Lock,
-  CheckCircle2,
+  Grid,
   MessageCircle,
-  Share2,
-  ThumbsUp,
+  Bell,
+  Camera,
+  Plus,
+  Edit2,
+  MoreHorizontal,
+  ChevronRight,
+  X,
+  UserPlus,
+  Image as ImageIcon,
   Video,
-  Sparkles,
+  Radio as LiveIcon,
+  Globe2,
+  ThumbsUp,
+  Share2,
+  GraduationCap,
+  MapPin,
+  Radio,
 } from 'lucide-react';
 
-const friends = [
-  { name: 'Khánh Vy', avatar: '/facebook/user/khanhvy.webp' },
-  { name: 'Leo Messi', avatar: '/facebook/user/messi.webp' },
-  { name: 'Minh Hương', avatar: '/facebook/user/minhhuong.webp' },
-  { name: 'Bảo Ngân', avatar: '/facebook/user/baongan.webp' },
-  { name: 'Hà Linhh', avatar: '/facebook/user/halinh.webp' },
-  { name: 'Minh Trí', avatar: '/facebook/user/minhtri.webp' },
+const suggestedPeople = [
+  { name: 'Pri Ty', avatar: '/facebook/user/khanhvy.webp', mutual: '3 mutual friends' },
+  { name: 'Minh Hương', avatar: '/facebook/user/minhhuong.webp', mutual: '7 mutual friends' },
+  { name: 'Bảo Ngân', avatar: '/facebook/user/baongan.webp', mutual: '12 mutual friends' },
+];
+
+const followerCluster = [
+  '/facebook/user/khanhvy.webp',
+  '/facebook/user/messi.webp',
+  '/facebook/user/minhhuong.webp',
+  '/facebook/user/baongan.webp',
+  '/facebook/user/halinh.webp',
+  '/facebook/user/minhtri.webp',
 ];
 
 export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) => {
@@ -36,39 +44,60 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
   const [liked, setLiked] = useState(false);
 
   return (
-    <div className="min-h-full bg-[#f0f2f5] text-[#050505] font-[-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,Helvetica,Arial,sans-serif] select-none pb-12">
-      {/* 1. TOP APP BAR (OFFICIAL FACEBOOK MOBILE) */}
-      <header className="sticky top-0 z-30 flex h-[48px] items-center justify-between border-b border-[#ced0d4] bg-white px-3">
-        <div className="flex items-center gap-3 min-w-0">
+    <div className="min-h-full bg-white text-[#050505] font-[-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,Helvetica,Arial,sans-serif] select-none pb-16">
+      {/* 1. TOP FACEBOOK NAVIGATION BAR */}
+      <header className="sticky top-0 z-30 flex h-[50px] items-center justify-between border-b border-[#ced0d4] bg-white px-3 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+        {/* Facebook Logo */}
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            aria-label="Back"
             onClick={onBack}
-            className="flex h-9 w-9 items-center justify-center rounded-full active:bg-[#e4e6eb] transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0866FF] text-white font-bold text-2xl active:scale-95 transition-transform"
           >
-            <ArrowLeft size={22} className="text-[#050505]" />
+            f
           </button>
-          <div className="flex items-center gap-1.5 truncate">
-            <span className="text-[17px] font-bold text-[#050505] truncate tracking-tight">
-              Lê Công Đắt
-            </span>
-          </div>
         </div>
-        <div className="flex items-center gap-1">
+
+        {/* Right Icon Actions */}
+        <div className="flex items-center gap-2">
           <button
             type="button"
             aria-label="Search"
-            className="flex h-9 w-9 items-center justify-center rounded-full active:bg-[#e4e6eb] text-[#050505] transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505] active:bg-[#d8dadf]"
           >
-            <Search size={20} />
+            <Search size={19} />
           </button>
+          <button
+            type="button"
+            aria-label="Menu grid"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505] active:bg-[#d8dadf]"
+          >
+            <Grid size={18} />
+          </button>
+          <button
+            type="button"
+            aria-label="Messenger"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505] active:bg-[#d8dadf]"
+          >
+            <MessageCircle size={19} />
+          </button>
+          <button
+            type="button"
+            aria-label="Notifications"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#050505] active:bg-[#d8dadf]"
+          >
+            <Bell size={19} />
+          </button>
+          <div className="h-9 w-9 overflow-hidden rounded-full border border-[#ced0d4]">
+            <img src="/facebook/user/lcd.webp" alt="Account" className="h-full w-full object-cover" />
+          </div>
         </div>
       </header>
 
-      {/* 2. PROFILE HERO CARD */}
-      <div className="bg-white pb-3 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      {/* 2. COVER & CENTERED AVATAR HERO */}
+      <div className="relative bg-white pb-3">
         {/* Cover Photo */}
-        <div className="relative h-[190px] w-full bg-[#e4e6eb]">
+        <div className="relative h-[180px] w-full bg-gradient-to-b from-[#8a919a] to-[#cbd2d9] overflow-hidden">
           <img
             src="/facebook/user/lcd-cover.webp"
             alt="Cover"
@@ -78,15 +107,22 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
           {/* Cover Camera Button */}
           <button
             type="button"
-            aria-label="Edit cover photo"
-            className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#e4e6eb] shadow-md border border-white/40 active:bg-[#d8dadf] transition-transform active:scale-95"
+            aria-label="Edit cover"
+            className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white shadow-md active:bg-[#E4E6EB]"
           >
             <Camera size={18} className="text-[#050505]" />
           </button>
 
-          {/* Avatar (Overlapping Cover by -48px) */}
-          <div className="absolute -bottom-[48px] left-4">
-            <div className="relative h-[136px] w-[136px] rounded-full border-[4px] border-white bg-white shadow-sm overflow-hidden">
+          {/* Floating "Share a thought..." pill */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-white/95 px-4 py-1.5 shadow-md border border-[#ced0d4]/40 flex items-center gap-1.5 backdrop-blur-sm">
+            <span className="text-[13px] font-medium text-[#65676B]">Share a thought...</span>
+          </div>
+        </div>
+
+        {/* Centered Avatar Overlapping Cover */}
+        <div className="relative flex justify-center -mt-[65px]">
+          <div className="relative">
+            <div className="h-[130px] w-[130px] rounded-full border-[4px] border-white bg-white shadow-md overflow-hidden">
               <img
                 src="/facebook/user/lcd.webp"
                 alt="Profile picture"
@@ -98,36 +134,49 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
             <button
               type="button"
               aria-label="Change profile picture"
-              className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#e4e6eb] shadow-md text-[#050505] active:bg-[#d8dadf] transition-transform active:scale-95"
+              className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#E4E6EB] shadow-md text-[#050505] active:bg-[#d8dadf]"
             >
               <Camera size={17} />
             </button>
           </div>
         </div>
 
-        {/* Name, Bio, Connection */}
-        <div className="px-4 pt-[56px]">
+        {/* 3. CENTERED IDENTITY, METRICS & AVATAR CLUSTER */}
+        <div className="px-4 pt-2 text-center">
           <h1 className="text-[24px] font-bold text-[#050505] leading-tight tracking-tight">
             Lê Công Đắt
           </h1>
 
-          <div className="mt-1 flex items-center gap-1.5 text-[14px]">
-            <span className="font-bold text-[#050505]">1.1K</span>
-            <span className="text-[#65676b]">friends</span>
-            <span className="text-[#65676b]">•</span>
-            <span className="font-bold text-[#050505]">4.8K</span>
-            <span className="text-[#65676b]">followers</span>
+          <div className="mt-1 flex items-center justify-center gap-1.5 text-[14px] text-[#65676B]">
+            <span>1,150 followers</span>
+            <span>•</span>
+            <span>480 following</span>
           </div>
 
-          <p className="mt-2 text-[15px] font-normal text-[#050505] leading-relaxed">
-            I am Dat
+          {/* Overlapping Follower Avatar Stack */}
+          <div className="mt-2.5 flex items-center justify-center -space-x-2">
+            {followerCluster.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt=""
+                className="h-7 w-7 rounded-full border-2 border-white object-cover shadow-xs"
+              />
+            ))}
+            <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-black text-[10px] font-bold text-white shadow-xs">
+              •••
+            </div>
+          </div>
+
+          <p className="mt-2.5 text-[14px] text-[#050505] font-normal leading-relaxed">
+            I am Dat • Software Engineer 💻
           </p>
 
-          {/* Action Buttons: Add to Story | Edit Profile | More */}
-          <div className="mt-3.5 flex gap-2">
+          {/* Action Buttons: Add to story | Edit | More */}
+          <div className="mt-4 flex gap-2 px-2">
             <button
               type="button"
-              className="flex h-[36px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1877f2] px-3 text-[14px] font-semibold text-white active:bg-[#166fe5] shadow-none transition-colors"
+              className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white active:bg-[#0055d4] shadow-none"
             >
               <Plus size={18} strokeWidth={2.5} />
               <span>Add to story</span>
@@ -135,7 +184,7 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
 
             <button
               type="button"
-              className="flex h-[36px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#e4e6eb] px-3 text-[14px] font-semibold text-[#050505] active:bg-[#d8dadf] transition-colors"
+              className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#050505] active:bg-[#d8dadf]"
             >
               <Edit2 size={16} />
               <span>Edit profile</span>
@@ -144,132 +193,140 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
             <button
               type="button"
               aria-label="More profile options"
-              className="flex h-[36px] w-[42px] items-center justify-center rounded-lg bg-[#e4e6eb] text-[#050505] active:bg-[#d8dadf] transition-colors"
+              className="flex h-[38px] w-[42px] items-center justify-center rounded-lg bg-[#E4E6EB] text-[#050505] active:bg-[#d8dadf]"
             >
               <MoreHorizontal size={19} />
             </button>
           </div>
         </div>
-
-        {/* 3. PROFILE TABS */}
-        <div className="mt-4 flex border-t border-[#ced0d4] px-2">
-          {(['posts', 'about', 'reels', 'photos'] as const).map((tabKey) => {
-            const labelMap = { posts: 'Posts', about: 'About', reels: 'Reels', photos: 'Photos' };
-            const isActive = activeTab === tabKey;
-            return (
-              <button
-                key={tabKey}
-                type="button"
-                onClick={() => setActiveTab(tabKey)}
-                className={`relative flex-1 py-3 text-center text-[14px] font-semibold transition-colors ${
-                  isActive ? 'text-[#1877f2]' : 'text-[#65676b]'
-                }`}
-              >
-                {labelMap[tabKey]}
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-[#1877f2]" />
-                )}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
-      {/* 4. DETAILS CARD */}
-      <section className="mt-2.5 bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-        <h2 className="text-[19px] font-bold text-[#050505]">Details</h2>
-        <div className="mt-3.5 space-y-3 text-[14px] text-[#050505]">
+      {/* 4. PEOPLE YOU MAY KNOW CAROUSEL (OFFICIAL FACEBOOK COMPONENT) */}
+      <section className="my-2 bg-white p-3.5 border-y border-[#ced0d4]/80">
+        <div className="flex items-center justify-between pb-2.5">
+          <h2 className="text-[16px] font-bold text-[#050505]">People you may know</h2>
+          <button type="button" className="text-[14px] font-semibold text-[#0866FF]">
+            See all
+          </button>
+        </div>
+
+        <div className="flex gap-2.5 overflow-x-auto [scrollbar-width:none] pb-1">
+          {suggestedPeople.map((person) => (
+            <div
+              key={person.name}
+              className="relative w-[140px] shrink-0 rounded-xl border border-[#ced0d4] bg-white overflow-hidden shadow-xs"
+            >
+              <button
+                type="button"
+                aria-label="Dismiss"
+                className="absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white"
+              >
+                <X size={14} />
+              </button>
+              <div className="h-[140px] w-full bg-[#E4E6EB]">
+                <img
+                  src={person.avatar}
+                  alt={person.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-2.5">
+                <p className="font-bold text-[14px] text-[#050505] truncate">{person.name}</p>
+                <p className="text-[11px] text-[#65676B] truncate">{person.mutual}</p>
+                <button
+                  type="button"
+                  className="mt-2.5 flex h-8 w-full items-center justify-center gap-1 rounded-lg bg-[#e7f3ff] text-[13px] font-semibold text-[#0866FF] active:bg-[#d8ecff]"
+                >
+                  <UserPlus size={14} />
+                  <span>Add friend</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. PROFILE TABS */}
+      <div className="flex border-b border-[#ced0d4] bg-white px-2">
+        {(['posts', 'about', 'reels', 'photos'] as const).map((tabKey) => {
+          const labelMap = { posts: 'Posts', about: 'About', reels: 'Reels', photos: 'Photos' };
+          const isActive = activeTab === tabKey;
+          return (
+            <button
+              key={tabKey}
+              type="button"
+              onClick={() => setActiveTab(tabKey)}
+              className={`relative flex-1 py-3 text-center text-[14px] font-semibold transition-colors ${
+                isActive ? 'text-[#0866FF]' : 'text-[#65676B]'
+              }`}
+            >
+              {labelMap[tabKey]}
+              {isActive && (
+                <span className="absolute bottom-0 left-0 right-0 h-[3px] rounded-full bg-[#0866FF]" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 6. DETAILS SECTION */}
+      <section className="bg-white p-4 border-b border-[#ced0d4]/80">
+        <h2 className="text-[18px] font-bold text-[#050505]">Details</h2>
+        <div className="mt-3.5 space-y-3.5 text-[14px] text-[#050505]">
           <div className="flex items-start gap-3">
-            <GraduationCap size={22} className="shrink-0 text-[#65676b] mt-0.5" />
+            <GraduationCap size={22} className="shrink-0 text-[#65676B] mt-0.5" />
             <div className="leading-snug">
               Studied Software Engineering at{' '}
-              <span className="font-semibold text-[#050505]">University of Science, VNU-HCM</span>
+              <span className="font-bold text-[#050505]">University of Science, VNU-HCM</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <MapPin size={22} className="shrink-0 text-[#65676b]" />
+            <MapPin size={22} className="shrink-0 text-[#65676B]" />
             <div className="leading-snug">
-              From <span className="font-semibold text-[#050505]">Cai Lay District, Tien Giang</span>
+              From <span className="font-bold text-[#050505]">Cai Lay District, Tien Giang</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <Radio size={22} className="shrink-0 text-[#65676b]" />
+            <Radio size={22} className="shrink-0 text-[#65676B]" />
             <div className="leading-snug">
-              Followed by <span className="font-semibold text-[#050505]">4,820 people</span>
+              Followed by <span className="font-bold text-[#050505]">4,820 people</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-[#65676b] pt-0.5">
-            <MoreHorizontal size={22} className="shrink-0 text-[#65676b]" />
-            <span className="text-[#1877f2] font-normal cursor-pointer hover:underline">
+          <div className="flex items-center gap-3 text-[#65676B] pt-0.5">
+            <MoreHorizontal size={22} className="shrink-0 text-[#65676B]" />
+            <span className="text-[#0866FF] font-medium cursor-pointer">
               See your About info
             </span>
           </div>
         </div>
 
-        {/* Edit public details button */}
         <button
           type="button"
-          className="mt-4 w-full rounded-lg bg-[#e7f3ff] py-2 text-[14px] font-semibold text-[#1877f2] active:bg-[#d8ecff] transition-colors"
+          className="mt-4 w-full rounded-lg bg-[#e7f3ff] py-2 text-[14px] font-semibold text-[#0866FF] active:bg-[#d8ecff]"
         >
           Edit public details
         </button>
       </section>
 
-      {/* 5. FRIENDS SECTION */}
-      <section className="mt-2.5 bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      {/* 7. POSTS COMPOSER */}
+      <section className="my-2 bg-white p-4 border-y border-[#ced0d4]/80">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-[19px] font-bold text-[#050505]">Friends</h2>
-            <p className="text-[13px] text-[#65676b]">1,150 friends</p>
-          </div>
-          <button type="button" className="text-[14px] font-medium text-[#1877f2]">
-            Find friends
-          </button>
-        </div>
-
-        <div className="mt-3.5 grid grid-cols-3 gap-2.5">
-          {friends.map((friend) => (
-            <div key={friend.name} className="space-y-1 cursor-pointer group">
-              <img
-                src={friend.avatar}
-                alt={friend.name}
-                className="aspect-square w-full rounded-lg object-cover bg-[#e4e6eb]"
-                loading="lazy"
-                decoding="async"
-              />
-              <p className="truncate text-[12px] font-semibold text-[#050505]">{friend.name}</p>
-            </div>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          className="mt-3.5 w-full rounded-lg bg-[#e4e6eb] py-2 text-[14px] font-semibold text-[#050505] active:bg-[#d8dadf] transition-colors"
-        >
-          See all friends
-        </button>
-      </section>
-
-      {/* 6. POSTS COMPOSER */}
-      <section className="mt-2.5 bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-        <div className="flex items-center justify-between">
-          <h2 className="text-[19px] font-bold text-[#050505]">Posts</h2>
-          <button type="button" className="text-[14px] font-medium text-[#1877f2]">
+          <h2 className="text-[18px] font-bold text-[#050505]">Posts</h2>
+          <button type="button" className="text-[14px] font-medium text-[#0866FF]">
             Filters
           </button>
         </div>
 
-        {/* Input bar */}
         <div className="mt-3.5 flex items-center gap-3">
           <img
             src="/facebook/user/lcd.webp"
             alt="User avatar"
             className="h-10 w-10 rounded-full object-cover"
           />
-          <div className="flex-1 rounded-full bg-[#f0f2f5] px-4 py-2 text-[14px] text-[#65676b]">
+          <div className="flex-1 rounded-full bg-[#F0F2F5] px-4 py-2 text-[14px] text-[#65676B]">
             What&apos;s on your mind?
           </div>
           <button type="button" aria-label="Add photo">
@@ -277,34 +334,26 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
           </button>
         </div>
 
-        {/* Reel & Live action pills */}
         <div className="mt-3.5 flex gap-2 border-t border-[#ced0d4] pt-3">
           <button
             type="button"
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#f0f2f5] py-2 text-[13px] font-semibold text-[#050505] active:bg-[#e4e6eb]"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#F0F2F5] py-2 text-[13px] font-semibold text-[#050505] active:bg-[#E4E6EB]"
           >
             <Video size={17} className="text-[#f3425f]" />
             <span>Reel</span>
           </button>
           <button
             type="button"
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#f0f2f5] py-2 text-[13px] font-semibold text-[#050505] active:bg-[#e4e6eb]"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#F0F2F5] py-2 text-[13px] font-semibold text-[#050505] active:bg-[#E4E6EB]"
           >
-            <Radio size={17} className="text-[#f3425f]" />
+            <LiveIcon size={17} className="text-[#f3425f]" />
             <span>Live</span>
           </button>
         </div>
-
-        <button
-          type="button"
-          className="mt-3 w-full rounded-lg bg-[#e4e6eb] py-2 text-[14px] font-semibold text-[#050505] active:bg-[#d8dadf] transition-colors"
-        >
-          Manage posts
-        </button>
       </section>
 
-      {/* 7. POST FEED CARD */}
-      <article className="mt-2.5 bg-white text-[#050505] shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      {/* 8. SAMPLE FEED POST */}
+      <article className="bg-white text-[#050505] border-y border-[#ced0d4]/80">
         <div className="flex items-center gap-2.5 px-4 pt-3.5">
           <img
             src="/facebook/user/lcd.webp"
@@ -313,13 +362,13 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
           />
           <div className="min-w-0 flex-1">
             <div className="text-[15px] font-bold text-[#050505]">Lê Công Đắt</div>
-            <div className="flex items-center gap-1 text-[12px] text-[#65676b]">
+            <div className="flex items-center gap-1 text-[12px] text-[#65676B]">
               <span>3m</span>
               <span>·</span>
               <Globe2 size={12} />
             </div>
           </div>
-          <button type="button" aria-label="Options" className="text-[#65676b]">
+          <button type="button" aria-label="Options" className="text-[#65676B]">
             <MoreHorizontal size={20} />
           </button>
         </div>
@@ -336,7 +385,7 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
           decoding="async"
         />
 
-        <div className="flex items-center justify-between px-4 py-2.5 text-[12px] text-[#65676b]">
+        <div className="flex items-center justify-between px-4 py-2.5 text-[12px] text-[#65676B]">
           <div className="flex items-center">
             <img src="/facebook/reactions/like.webp" alt="Like" className="h-4 w-4" />
             <img src="/facebook/reactions/love.webp" alt="Love" className="-ml-1 h-4 w-4" />
@@ -345,12 +394,12 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
           <div>5 comments · 4 shares</div>
         </div>
 
-        <div className="mx-4 grid grid-cols-3 border-t border-[#ced0d4] py-1.5 text-center text-[13px] font-semibold text-[#65676b]">
+        <div className="mx-4 grid grid-cols-3 border-t border-[#ced0d4] py-1.5 text-center text-[13px] font-semibold text-[#65676B]">
           <button
             type="button"
             onClick={() => setLiked(!liked)}
-            className={`flex items-center justify-center gap-1.5 py-1.5 transition-colors ${
-              liked ? 'text-[#1877f2]' : 'text-[#65676b]'
+            className={`flex items-center justify-center gap-1.5 py-1.5 ${
+              liked ? 'text-[#0866FF]' : 'text-[#65676B]'
             }`}
           >
             <ThumbsUp size={16} />
