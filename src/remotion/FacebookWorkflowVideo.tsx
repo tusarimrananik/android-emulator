@@ -11,7 +11,7 @@ import {Dock} from '@/components/home/Dock';
 import {AppSvgIcon} from '@/components/common/AppSvgIcon';
 import {INITIAL_APPS} from '@/lib/apps-data';
 import {WALLPAPERS} from '@/lib/wallpapers-data';
-import {Globe2, MoreHorizontal, Plus, Search, X} from 'lucide-react';
+import {Globe2, MoreHorizontal, Plus, Search, X, Camera, Edit2} from 'lucide-react';
 
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const asset = (path: string) => staticFile(path);
@@ -92,97 +92,101 @@ const MenuScreen: React.FC = () => <div className="min-h-full bg-[#f0f2f5] p-3 t
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
   const scroll = interpolate(frame, [440, 500], [0, -400], clamp);
   return (
-    <div className="min-h-full bg-white text-black font-sans" style={{transform: `translateY(${scroll}px)`}}>
-      {/* Navigation */}
-      <div className="flex h-[48px] items-center justify-between border-b border-[#C9CCD1] bg-white px-3">
+    <div className="min-h-full bg-[#f0f2f5] text-[#050505] font-sans" style={{transform: `translateY(${scroll}px)`}}>
+      {/* 1. Top App Bar */}
+      <div className="flex h-[48px] items-center justify-between border-b border-[#ced0d4] bg-white px-3">
         <div className="flex items-center gap-3 truncate">
           <img src={asset('/facebook/profile-assets/left-arrow.png')} className="h-[18px] w-[18px]" alt="" />
-          <div className="text-[16px] font-bold text-black truncate">{fbProfile.profileName || 'Facebook User'}</div>
+          <span className="text-[17px] font-bold text-[#050505] truncate">{fbProfile.profileName || 'Facebook User'}</span>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-[14px] text-[#1877f2]">Your profiles</span>
-          <img src={asset('/facebook/profile-assets/search.png')} className="h-[18px] w-[18px]" alt="" />
+        <div className="flex items-center gap-2 text-[#050505]">
+          <Search size={19} />
         </div>
       </div>
 
-      {/* Cover & Avatar */}
-      <div>
-        <div className="relative h-[165px] w-full bg-[#e4e6eb]">
+      {/* 2. Header & Profile Card */}
+      <div className="bg-white">
+        {/* Cover */}
+        <div className="relative h-[190px] w-full bg-[#e4e6eb]">
           {fbProfile.coverPicture ? (
             <img src={fbProfile.coverPicture} className="h-full w-full object-cover" alt="" />
           ) : (
             <img src={asset('/facebook/user/lcd-cover.webp')} className="h-full w-full object-cover" alt="" />
           )}
-          <div className="absolute bottom-[10px] right-[10px] h-[36px] w-[36px]">
-            <img src={asset('/facebook/profile-assets/cameraIcon.png')} className="h-full w-full object-contain drop-shadow" alt="" />
+          {/* Cover Camera Button */}
+          <div className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-[#e4e6eb] shadow-md border border-white/40">
+            <Camera size={18} className="text-[#050505]" />
           </div>
-        </div>
 
-        <div className="relative px-[17px]">
-          <div className="relative -mt-[85px] inline-block">
-            {fbProfile.profilePicture ? (
-              <img src={fbProfile.profilePicture} className="h-[145px] w-[145px] rounded-full border-[4px] border-white object-cover bg-white shadow-sm" alt="" />
-            ) : (
-              <img src={asset('/facebook/user/lcd.webp')} className="h-[145px] w-[145px] rounded-full border-[4px] border-white object-cover bg-white shadow-sm" alt="" />
-            )}
-            <div className="absolute bottom-[4px] right-[4px] h-[36px] w-[36px]">
-              <img src={asset('/facebook/profile-assets/cameraIcon.png')} className="h-full w-full object-contain rounded-full border-2 border-white drop-shadow" alt="" />
+          {/* Avatar overlay */}
+          <div className="absolute -bottom-[50px] left-4">
+            <div className="relative h-[132px] w-[132px] rounded-full border-[4px] border-white bg-white shadow-sm overflow-hidden">
+              {fbProfile.profilePicture ? (
+                <img src={fbProfile.profilePicture} className="h-full w-full object-cover" alt="" />
+              ) : (
+                <img src={asset('/facebook/user/lcd.webp')} className="h-full w-full object-cover" alt="" />
+              )}
+            </div>
+            {/* Avatar camera badge */}
+            <div className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#e4e6eb] shadow-md">
+              <Camera size={17} className="text-[#050505]" />
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Info */}
-      <div className="px-[17px] pt-1">
-        <h1 className="text-[22px] font-bold text-black">{fbProfile.profileName || 'Facebook User'}</h1>
-        {fbProfile.friendsCount && (
-          <div className="mt-1 flex items-center gap-1 text-[14px]">
-            <span className="font-bold text-black">{fbProfile.friendsCount}</span>
-            <span className="text-[#65676B]">friends</span>
+        {/* Identity & Bio */}
+        <div className="px-4 pt-[58px] pb-4">
+          <h1 className="text-[24px] font-bold text-[#050505] leading-tight">{fbProfile.profileName || 'Facebook User'}</h1>
+          {fbProfile.friendsCount && (
+            <div className="mt-1 flex items-center gap-1.5 text-[14px]">
+              <span className="font-bold text-[#050505]">{fbProfile.friendsCount}</span>
+              <span className="text-[#65676b]">friends</span>
+            </div>
+          )}
+          {fbProfile.bio && <p className="mt-2 text-[15px] text-[#050505] leading-relaxed">{fbProfile.bio}</p>}
+
+          {/* Action buttons */}
+          <div className="mt-4 flex gap-2">
+            <div className="flex h-[36px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1877f2] px-3 text-[14px] font-semibold text-white shadow-none">
+              <Plus size={18} strokeWidth={2.5} />
+              <span>Add to story</span>
+            </div>
+            <div className="flex h-[36px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#e4e6eb] px-3 text-[14px] font-semibold text-[#050505]">
+              <Edit2 size={16} />
+              <span>Edit profile</span>
+            </div>
+            <div className="flex h-[36px] w-[42px] items-center justify-center rounded-lg bg-[#e4e6eb] text-[#050505]">
+              <MoreHorizontal size={19} />
+            </div>
           </div>
-        )}
-        {fbProfile.bio && <div className="mt-1.5 text-[14px] text-black leading-snug">{fbProfile.bio}</div>}
-      </div>
+        </div>
 
-      {/* Buttons */}
-      <div className="mt-3 flex items-center gap-2 px-[17px]">
-        <div className="flex h-[36px] flex-1 items-center justify-center gap-2 rounded-[6px] bg-[#1877f2] px-3 text-[13px] font-bold text-white">
-          <img src={asset('/facebook/profile-assets/plus.png')} className="h-[14px] w-[14px] invert" alt="" />
-          <span>Add to story</span>
-        </div>
-        <div className="flex h-[36px] flex-1 items-center justify-center gap-2 rounded-[6px] bg-[#e4e6eb] px-3 text-[13px] font-bold text-black">
-          <img src={asset('/facebook/profile-assets/pencil.png')} className="h-[14px] w-[14px]" alt="" />
-          <span>Edit profile</span>
-        </div>
-        <div className="flex h-[36px] w-[44px] items-center justify-center rounded-[6px] bg-[#e4e6eb] text-black font-black text-[18px] tracking-[-2px]">
-          ...
+        {/* Profile Tabs */}
+        <div className="flex border-t border-[#ced0d4] px-2 bg-white">
+          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#1877f2] relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:rounded-full after:bg-[#1877f2]">
+            Posts
+          </div>
+          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#65676b]">About</div>
+          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#65676b]">Reels</div>
+          <div className="flex-1 py-3 text-center text-[14px] font-semibold text-[#65676b]">Photos</div>
         </div>
       </div>
 
-      <div className="mt-4 h-[1px] w-full bg-[#ddd]" />
-
-      {/* Tabs */}
-      <div className="flex border-b border-[#ddd] bg-white">
-        <div className="flex-1 py-3 text-center text-[14px] font-bold border-b-[2px] border-[#1877f2] text-[#1877f2]">Posts</div>
-        <div className="flex-1 py-3 text-center text-[14px] font-normal text-[#65676B]">Photos</div>
-        <div className="flex-1 py-3 text-center text-[14px] font-normal text-[#65676B]">Reels</div>
-      </div>
-
-      {/* Friends */}
+      {/* Friends Grid */}
       {fbProfile.friends && fbProfile.friends.length > 0 && (
-        <div className="px-[17px] pt-4">
+        <div className="mt-2.5 bg-white p-4">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-[17px] font-bold text-black">Friends</div>
-              {fbProfile.friendsCount && <div className="text-[13px] text-[#65676B]">{fbProfile.friendsCount} friends</div>}
+              <h2 className="text-[19px] font-bold text-[#050505]">Friends</h2>
+              {fbProfile.friendsCount && <p className="text-[13px] text-[#65676b]">{fbProfile.friendsCount} friends</p>}
             </div>
-            <span className="text-[14px] text-[#1877f2]">See all friends</span>
+            <span className="text-[14px] font-medium text-[#1877f2]">Find friends</span>
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-2.5">
+          <div className="mt-3.5 grid grid-cols-3 gap-2.5">
             {fbProfile.friends.slice(0, 6).map((f, i) => (
               <div key={i} className="space-y-1">
-                <img src={f.avatar} className="aspect-square w-full rounded-[7px] object-cover border border-[#dcdcdc]" alt="" />
-                <div className="truncate text-[12px] font-medium text-black">{f.name}</div>
+                <img src={f.avatar} className="aspect-square w-full rounded-lg object-cover bg-[#e4e6eb]" alt="" />
+                <p className="truncate text-[12px] font-semibold text-[#050505]">{f.name}</p>
               </div>
             ))}
           </div>
