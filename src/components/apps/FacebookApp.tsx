@@ -8,11 +8,18 @@ import {
   MetaCommentIcon,
   MetaShareIcon,
   MetaMoreDotsIcon,
+  MetaNavHomeIcon,
+  MetaNavFriendsIcon,
+  MetaNavWatchIcon,
+  MetaNavMarketIcon,
+  MetaNavBellIcon,
+  MetaNavMenuIcon,
+  MetaPlusIcon,
 } from './MetaFacebookSvg';
 import { FacebookProfile } from './FacebookProfile';
-import { Globe2, Plus, X, Video, Image as ImageIcon, Smile } from 'lucide-react';
+import { Globe2, X, Video, Image as ImageIcon, Smile } from 'lucide-react';
 
-type Tab = 'feed' | 'watch' | 'market' | 'dating' | 'notifications' | 'menu';
+type Tab = 'feed' | 'friends' | 'watch' | 'market' | 'notifications' | 'menu';
 type Screen = Tab | 'profile';
 
 const stories = [
@@ -46,26 +53,22 @@ const posts = [
   },
 ];
 
-const nav = [
-  { id: 'feed' as const, normal: 'home.png', active: 'home-active.png', label: 'Home' },
-  { id: 'watch' as const, normal: 'watch.png', active: 'watch-active.png', label: 'Video' },
-  { id: 'market' as const, normal: 'marketplace.png', active: 'marketplace-active.png', label: 'Marketplace' },
-  { id: 'dating' as const, normal: 'dating.webp', active: 'dating-active.webp', label: 'Dating' },
-  { id: 'notifications' as const, normal: 'noti.webp', active: 'noti-active.webp', label: 'Notifications' },
-  { id: 'menu' as const, normal: 'menu.png', active: 'menu-active.png', label: 'Menu' },
-];
-
-const navAsset = (file: string) => `/facebook/nav/${file}`;
-
 function TopBar({ onOpenProfile }: { onOpenProfile?: () => void }) {
   return (
-    <div className="flex h-[56px] shrink-0 items-center justify-between bg-white px-3 text-black">
+    <div className="flex h-[54px] shrink-0 items-center justify-between bg-white px-3 text-[#080809]">
       <div className="flex items-center gap-1">
-        <div className="text-[28px] font-bold font-['Optimistic_Display',sans-serif] tracking-[-1.5px] text-[#0866FF]">
+        <span className="text-[28px] font-bold font-['Optimistic_Display',sans-serif] tracking-[-1.5px] text-[#0866FF]">
           facebook
-        </div>
+        </span>
       </div>
       <div className="flex items-center gap-2">
+        <button
+          type="button"
+          aria-label="Create"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809] active:bg-[#d8dadf]"
+        >
+          <MetaPlusIcon size={18} />
+        </button>
         <button
           type="button"
           aria-label="Search"
@@ -147,7 +150,7 @@ function Stories({ onOpenProfile }: { onOpenProfile: () => void }) {
           {story.own ? (
             <>
               <div className="absolute left-1/2 top-[106px] grid h-9 w-9 -translate-x-1/2 place-items-center rounded-full border-[3px] border-white bg-[#0866FF] text-white">
-                <Plus size={20} />
+                <MetaPlusIcon size={18} />
               </div>
               <div className="absolute bottom-2 w-full text-center text-[12px] font-semibold text-[#080809]">
                 Create Story
@@ -263,6 +266,50 @@ function Feed({ onOpenProfile }: { onOpenProfile: () => void }) {
   );
 }
 
+function FriendsScreen({ onOpenProfile }: { onOpenProfile: () => void }) {
+  const requests = [
+    { name: 'Nguyễn Văn Nam', avatar: '/facebook/user/khanhvy.webp', mutual: '14 mutual friends', time: '2d' },
+    { name: 'Trần Thị Mai', avatar: '/facebook/user/minhhuong.webp', mutual: '3 mutual friends', time: '1w' },
+    { name: 'Phạm Đức Anh', avatar: '/facebook/user/baongan.webp', mutual: '28 mutual friends', time: '3d' },
+  ];
+  return (
+    <div className="min-h-full bg-white p-4 text-[#080809]">
+      <div className="flex items-center justify-between pb-3">
+        <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Friends</h2>
+        <MetaSearchIcon size={20} className="text-[#080809]" />
+      </div>
+      <div className="flex gap-2 pb-3 border-b border-[#D0D3D7]">
+        <button className="rounded-full bg-[#E4E6EB] px-4 py-2 text-sm font-semibold text-[#080809]">Suggestions</button>
+        <button className="rounded-full bg-[#E4E6EB] px-4 py-2 text-sm font-semibold text-[#080809]">Your Friends</button>
+      </div>
+      <div className="pt-3">
+        <div className="flex justify-between items-center pb-2">
+          <span className="font-bold text-[17px]">Friend Requests</span>
+          <span className="text-[14px] text-[#0866FF] font-semibold">See all</span>
+        </div>
+        <div className="space-y-3">
+          {requests.map(req => (
+            <div key={req.name} className="flex gap-3 items-center">
+              <img src={req.avatar} alt="" className="h-16 w-16 rounded-full object-cover" />
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between">
+                  <span className="font-bold text-[15px] truncate">{req.name}</span>
+                  <span className="text-xs text-[#65686C]">{req.time}</span>
+                </div>
+                <p className="text-xs text-[#65686C]">{req.mutual}</p>
+                <div className="flex gap-2 mt-1.5">
+                  <button className="flex-1 rounded-lg bg-[#0866FF] py-1.5 text-xs font-semibold text-white">Confirm</button>
+                  <button className="flex-1 rounded-lg bg-[#E4E6EB] py-1.5 text-xs font-semibold text-[#080809]">Delete</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Watch() {
   return (
     <div className="min-h-full bg-white p-3 text-[#080809]">
@@ -311,21 +358,6 @@ function Market() {
           </div>
         ))}
       </div>
-    </div>
-  );
-}
-
-function Dating() {
-  return (
-    <div className="flex min-h-full flex-col items-center justify-center bg-white p-8 text-center text-black">
-      <div className="mb-4 text-6xl">❤</div>
-      <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif] text-[#0866FF]">
-        Facebook Dating
-      </h2>
-      <p className="mt-2 text-sm text-[#65686C]">Connect with people who share your interests.</p>
-      <button className="mt-5 rounded-lg bg-[#0866FF] px-6 py-2.5 font-semibold text-white">
-        Get Started
-      </button>
     </div>
   );
 }
@@ -420,24 +452,72 @@ export const FacebookApp: React.FC = () => {
       {screen !== 'profile' && tab === 'feed' && <TopBar onOpenProfile={() => setScreen('profile')} />}
       {screen !== 'profile' && (
         <nav className="grid h-[48px] shrink-0 grid-cols-6 border-b border-[#D0D3D7] bg-white">
-          {nav.map((item) => (
-            <button
-              key={item.id}
-              aria-label={item.label}
-              onClick={() => setScreen(item.id)}
-              className={`relative grid place-items-center ${
-                tab === item.id
-                  ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
-                  : ''
-              }`}
-            >
-              <img
-                src={navAsset(tab === item.id ? item.active : item.normal)}
-                alt=""
-                className="h-[26px] w-[26px] object-contain"
-              />
-            </button>
-          ))}
+          <button
+            aria-label="Home"
+            onClick={() => setScreen('feed')}
+            className={`relative grid place-items-center ${
+              tab === 'feed'
+                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                : ''
+            }`}
+          >
+            <MetaNavHomeIcon active={tab === 'feed'} size={24} />
+          </button>
+          <button
+            aria-label="Friends"
+            onClick={() => setScreen('friends')}
+            className={`relative grid place-items-center ${
+              tab === 'friends'
+                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                : ''
+            }`}
+          >
+            <MetaNavFriendsIcon active={tab === 'friends'} size={24} />
+          </button>
+          <button
+            aria-label="Watch"
+            onClick={() => setScreen('watch')}
+            className={`relative grid place-items-center ${
+              tab === 'watch'
+                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                : ''
+            }`}
+          >
+            <MetaNavWatchIcon active={tab === 'watch'} size={24} />
+          </button>
+          <button
+            aria-label="Marketplace"
+            onClick={() => setScreen('market')}
+            className={`relative grid place-items-center ${
+              tab === 'market'
+                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                : ''
+            }`}
+          >
+            <MetaNavMarketIcon active={tab === 'market'} size={24} />
+          </button>
+          <button
+            aria-label="Notifications"
+            onClick={() => setScreen('notifications')}
+            className={`relative grid place-items-center ${
+              tab === 'notifications'
+                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                : ''
+            }`}
+          >
+            <MetaNavBellIcon active={tab === 'notifications'} size={24} />
+          </button>
+          <button
+            aria-label="Menu"
+            onClick={() => setScreen('menu')}
+            className={`relative grid place-items-center ${
+              tab === 'menu'
+                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                : ''
+            }`}
+          >
+            <MetaNavMenuIcon active={tab === 'menu'} size={24} />
+          </button>
         </nav>
       )}
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-width:none]">
@@ -446,9 +526,9 @@ export const FacebookApp: React.FC = () => {
         ) : (
           <>
             {tab === 'feed' && <Feed onOpenProfile={() => setScreen('profile')} />}
+            {tab === 'friends' && <FriendsScreen onOpenProfile={() => setScreen('profile')} />}
             {tab === 'watch' && <Watch />}
             {tab === 'market' && <Market />}
-            {tab === 'dating' && <Dating />}
             {tab === 'notifications' && <Notifications />}
             {tab === 'menu' && <MenuScreen onOpenProfile={() => setScreen('profile')} />}
           </>
