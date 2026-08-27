@@ -1,0 +1,165 @@
+{
+  "source": {
+    "package": "com.facebook.katana",
+    "versionName": "576.0.0.42.73",
+    "versionCode": 474227113,
+    "split": "config.mdpi",
+    "splitSha256": "76ae77cff2201c0384155cdf0aea7011a5a7c4866258550bf52e25b90e44682c",
+    "certSha256": [
+      "e3f9e1e0cf99d0e56a055ba65e241b3399f7cea524326b0cdd6ec1327ed0fdc1",
+      "911d604446084ca7f4760b775bfc160fa8702441240a7258645d7a72c4312d27"
+    ]
+  },
+  "assets": {
+    "fb_ic_house_outline_24": {
+      "resourceId": "0x7f190bbc",
+      "resourceType": "drawable.2",
+      "apkPath": "res/hq9.g.png",
+      "file": "fb_ic_house_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "d9702e1d1602156337ac8289523f0a7922807187dae8857263dc70adbd69add5"
+    },
+    "fb_ic_house_filled_24": {
+      "resourceId": "0x7f190bb9",
+      "resourceType": "drawable.2",
+      "apkPath": "res/hq6.g.png",
+      "file": "fb_ic_house_filled_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "5f7a6d5322bdcf746aaf1cf577b3687981e7d1f7034832920d7ab821a39261e8"
+    },
+    "fb_ic_bell_outline_24": {
+      "resourceId": "0x7f19053f",
+      "resourceType": "drawable.2",
+      "apkPath": "res/gli.g.png",
+      "file": "fb_ic_bell_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "a04386db58392decb95b40226c8739224f8abab2833e8e2200aa6a0ffc0d60ed"
+    },
+    "fb_ic_bell_filled_24": {
+      "resourceId": "0x7f190527",
+      "resourceType": "drawable.2",
+      "apkPath": "res/gkw.g.png",
+      "file": "fb_ic_bell_filled_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "08ab6875947b9efc3fcdccbef99da2264fce8826008322c5f8d99efa2ab67b52"
+    },
+    "fb_ic_app_messenger_outline_24": {
+      "resourceId": "0x7f19034b",
+      "resourceType": "drawable.2",
+      "apkPath": "res/f_c.g.png",
+      "file": "fb_ic_app_messenger_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "a62c7d52f67c35b6d4c02888234220ec69751faca0902db6421ec7ae49a05be6"
+    },
+    "fb_ic_plus_filled_24": {
+      "resourceId": "0x7f190ef6",
+      "resourceType": "drawable.2",
+      "apkPath": "res/iay.g.png",
+      "file": "fb_ic_plus_filled_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "78247728ef7aa5724f7111190312140d7234ae19b35a4972b9900c23a5584566"
+    },
+    "fb_ic_magnifying_glass_filled_24": {
+      "resourceId": "0x7f190cb9",
+      "resourceType": "drawable.2",
+      "apkPath": "res/hxw.g.png",
+      "file": "fb_ic_magnifying_glass_filled_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "6710e5c93eef7af02985520c56e6a143c6f16ef4b691c989a6750088b40ba5aa"
+    },
+    "fb_ic_more_filled_24": {
+      "resourceId": "0x7f190d59",
+      "resourceType": "drawable.2",
+      "apkPath": "res/h14.g.png",
+      "file": "fb_ic_more_filled_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "6637100de2a4572e24dfdc15516bbe4eec5a502a44269d40615b35c97b62c236"
+    },
+    "fb_ic_photo_filled_24": {
+      "resourceId": "0x7f190e91",
+      "resourceType": "drawable.2",
+      "apkPath": "res/h9-.g.png",
+      "file": "fb_ic_photo_filled_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "4c55cbd890a13df196fa0d06b2881132a0279cece5a1838f4c9d790d37141370"
+    },
+    "fb_ic_camera_outline_24": {
+      "resourceId": "0x7f19065a",
+      "resourceType": "drawable.2",
+      "apkPath": "res/gsz.g.png",
+      "file": "fb_ic_camera_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "cefa4eacda3911c4d1f981f4dfb7ecdb3d6c1658cb551572e7d76f8cb4d9a9b0"
+    },
+    "fb_ic_pencil_outline_24": {
+      "resourceId": "0x7f190e5c",
+      "resourceType": "drawable.2",
+      "apkPath": "res/h8w.g.png",
+      "file": "fb_ic_pencil_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "204b7c724efbf21dffb97c016ff9026738e5b748914c7cd22a70f74edbf8670a"
+    },
+    "fb_ic_like_outline_24": {
+      "resourceId": "0x7f190c61",
+      "resourceType": "drawable.2",
+      "apkPath": "res/hvk.g.png",
+      "file": "fb_ic_like_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "d9c46498c455d5fc4b0fccaa20b6e51784c76789050898d60baca2ab2c09e73e"
+    },
+    "fb_ic_like_filled_24": {
+      "resourceId": "0x7f190c5d",
+      "resourceType": "drawable.2",
+      "apkPath": "res/hvg.g.png",
+      "file": "fb_ic_like_filled_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "70501a51069381852f4c5aa031933164f59ed4baf37754afdd1e957eaab8e373"
+    },
+    "fb_ic_comment_outline_24": {
+      "resourceId": "0x7f1907a9",
+      "resourceType": "drawable.2",
+      "apkPath": "res/g1s.g.png",
+      "file": "fb_ic_comment_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "78df4a3cbcce914bddc37fb551f6cebe5896dd7333a8f02dbf293a0fa0c618d4"
+    },
+    "fb_ic_share_outline_24": {
+      "resourceId": "0x7f1910a4",
+      "resourceType": "drawable.2",
+      "apkPath": "res/il_.g.png",
+      "file": "fb_ic_share_outline_24.png",
+      "width": 24,
+      "height": 24,
+      "mode": "LA",
+      "sha256": "e7f6338d360fbca8fe8f2e986071956af2707ac85f54d081d18ecc511bd6bcbc"
+    }
+  }
+}

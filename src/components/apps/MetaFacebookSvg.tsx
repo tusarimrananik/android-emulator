@@ -1,6 +1,33 @@
 import React from 'react';
 
-// 100% Exact Raw Vectors directly from Meta's production server
+const KATANA_ICON_ROOT = '/facebook/katana-current';
+
+const KatanaMask: React.FC<{
+  asset: string;
+  size: number;
+  color: string;
+  className?: string;
+}> = ({ asset, size, color, className = '' }) => (
+  <span
+    aria-hidden="true"
+    className={`inline-block shrink-0 ${className}`}
+    style={{
+      width: size,
+      height: size,
+      backgroundColor: color,
+      WebkitMaskImage: `url(${KATANA_ICON_ROOT}/${asset}.png)`,
+      maskImage: `url(${KATANA_ICON_ROOT}/${asset}.png)`,
+      WebkitMaskPosition: 'center',
+      maskPosition: 'center',
+      WebkitMaskRepeat: 'no-repeat',
+      maskRepeat: 'no-repeat',
+      WebkitMaskSize: 'contain',
+      maskSize: 'contain',
+    }}
+  />
+);
+
+// Facebook logo retained separately; interface glyphs use exact Katana APK masks.
 
 export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 36 }) => (
   <svg viewBox="0 0 36 36" width={size} height={size} fill="#0866FF" className={className}>
@@ -9,11 +36,13 @@ export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> =
   </svg>
 );
 
-// 1. HOME TAB — exact com.facebook.katana house_outline_24.xml path
+// 1. HOME TAB — current Katana active/inactive density-split masks.
 export const MetaNavHomeIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 24 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65676B'}>
-    <path d="M14.39,3.87a3.507,3.507 0,0 0,-4.79 0L4.26,8.88C3.46,9.63 3,10.7 3,11.8v6.5c0,1.18 0.82,2.21 1.96,2.45 0.91,0.19 1.86,0.35 2.81,0.47 0.08,0.01 0.16,0.02 0.24,0.02 0.48,0 0.95,-0.17 1.31,-0.5 0.43,-0.38 0.68,-0.93 0.68,-1.51V16c0,-0.55 0.45,-1 1,-1h2c0.55,0 1,0.45 1,1v3.23c0,0.58 0.25,1.12 0.68,1.51 0.43,0.38 0.99,0.55 1.56,0.48 0.95,-0.12 1.9,-0.28 2.81,-0.47 1.13,-0.24 1.96,-1.27 1.96,-2.45v-6.5c0,-1.1 -0.46,-2.17 -1.26,-2.92l-5.34,-5.01zM19,18.3c0,0.24 -0.16,0.45 -0.38,0.49 -0.86,0.18 -1.74,0.33 -2.62,0.44V16c0,-1.65 -1.35,-3 -3,-3h-2c-1.65,0 -3,1.35 -3,3v3.24c-0.88,-0.11 -1.77,-0.26 -2.63,-0.45A0.49,0.49 0,0 1,5 18.3v-6.5c0,-0.55 0.23,-1.08 0.63,-1.46l5.34,-5.01c0.29,-0.27 0.66,-0.4 1.03,-0.4s0.74,0.13 1.03,0.4l5.34,5.01c0.4,0.38 0.63,0.91 0.63,1.46z" />
-  </svg>
+  <KatanaMask
+    asset={active ? 'fb_ic_house_filled_24' : 'fb_ic_house_outline_24'}
+    size={size}
+    color={active ? '#0866FF' : '#65676B'}
+  />
 );
 
 // 2. VIDEO / REELS TAB (SVG 5)
@@ -40,12 +69,13 @@ export const MetaNavMarketIcon: React.FC<{ active?: boolean; size?: number }> = 
   </svg>
 );
 
-// 5. NOTIFICATIONS TAB — exact com.facebook.katana bell_outline_24.xml paths
+// 5. NOTIFICATIONS TAB — current Katana active/inactive density-split masks.
 export const MetaNavBellIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 24 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65676B'}>
-    <path d="M15.613,18.759A3.636,3.636 0,0 1,11.999 22l-0.187,-0.005a3.64,3.64 0,0 1,-3.428 -3.236q0.979,0.108 2.077,0.159a1.634,1.634 0,0 0,3.075 0.001,32 32,0 0,0 2.077,-0.16" />
-    <path fillRule="evenodd" d="M12.327,2.008a6.33,6.33 0,0 1,4.382 2.077,6.34 6.34,0 0,1 1.654,4.278v1.862a5.37,5.37 0,0 0,2.147 4.295c0.684,0.513 0.565,1.518 -0.25,1.773l-0.14,0.04 -0.023,0.01 -0.244,0.07 -0.36,0.102 -0.375,0.096q-0.207,0.053 -0.427,0.107l-0.223,0.052 -0.17,0.037 -0.21,0.045 -0.282,0.057 -0.169,0.032 -0.285,0.053 -0.276,0.047 -0.21,0.035q-0.117,0.019 -0.236,0.036l-0.332,0.05 -0.252,0.033 -0.245,0.032 -0.29,0.033 -0.344,0.038 -0.147,0.013q-0.195,0.019 -0.392,0.036l-0.449,0.033 -0.182,0.013q-0.246,0.015 -0.499,0.026l-0.138,0.007 -0.334,0.01q-0.164,0.007 -0.33,0.011l-0.697,0.007 -0.591,-0.005q-0.601,-0.011 -1.167,-0.043l-0.225,-0.014 -0.32,-0.02 -0.203,-0.016a28,28 0,0 1,-0.745 -0.067l-0.058,-0.006 -0.342,-0.039 -0.209,-0.024 -0.23,-0.03 -0.204,-0.027a28,28 0,0 1,-0.8 -0.124l-0.118,-0.02q-0.239,-0.042 -0.465,-0.087 -0.19,-0.036 -0.372,-0.073 -0.21,-0.044 -0.41,-0.09 -0.19,-0.041 -0.369,-0.083l-0.323,-0.082 -0.266,-0.067 -0.079,-0.022 -0.086,-0.023 -0.26,-0.077 -0.255,-0.072 -0.026,-0.01 -0.136,-0.04c-0.817,-0.255 -0.936,-1.26 -0.251,-1.773a5.37,5.37 0,0 0,2.137 -3.98l0.01,-0.315V8.363a6.4,6.4 0,0 1,0.2 -1.59q0.158,-0.61 0.427,-1.169A6.4,6.4 0,0 1,9.522 2.5a6.3,6.3 0,0 1,2.477 -0.5zM11.999,4a4.363,4.363 0,0 0,-4.363 4.363v2.034a7.02,7.02 0,0 1,-1.583 4.438,26.6 26.6,0 0,0 4.183,0.568q0.238,0.013 0.483,0.02 0.618,0.029 1.28,0.031 0.677,-0.002 1.307,-0.031 0.232,-0.008 0.457,-0.02c1.659,-0.097 3.06,-0.32 4.182,-0.568a7.03,7.03 0,0 1,-1.582 -4.439V8.364a4.4,4.4 0,0 0,-0.051 -0.664,4.34 4.34,0 0,0 -2.05,-3.067A4.3,4.3 0,0 0,12 4" />
-  </svg>
+  <KatanaMask
+    asset={active ? 'fb_ic_bell_filled_24' : 'fb_ic_bell_outline_24'}
+    size={size}
+    color={active ? '#0866FF' : '#65676B'}
+  />
 );
 
 export const MetaBellIcon = MetaNavBellIcon;
@@ -59,77 +89,49 @@ export const MetaNavMenuIcon: React.FC<{ active?: boolean; size?: number }> = ({
 
 // OFFICIAL SEARCH SVG (SVG 3)
 export const MetaSearchIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <svg viewBox="0 0 16 16" width={size} height={size} fill="#050505" className={className}>
-    <g fillRule="evenodd" transform="translate(-448 -544)">
-      <g fillRule="nonzero">
-        <path d="M10.743 2.257a6 6 0 1 1-8.485 8.486 6 6 0 0 1 8.485-8.486zm-1.06 1.06a4.5 4.5 0 1 0-6.365 6.364 4.5 4.5 0 0 0 6.364-6.363z" transform="translate(448 544)" />
-        <path d="m13.463 15.142-.04-.044-3.574-4.192c-.599-.703.355-1.656 1.058-1.057l4.191 3.574.044.04c.058.059.122.137.182.24.249.425.249.96-.154 1.41l-.057.057c-.45.403-.986.403-1.411.154a1.182 1.182 0 0 1-.24-.182zm.617-.616.444-.444a.31.31 0 0 0-.063-.052c-.093-.055-.263-.055-.35.024l.208.232.207-.206.006.007-.22.257-.026-.024.033-.034.025.027-.257.22-.007-.007zm-.027-.415c-.078.088-.078.257-.023.35a.31.31 0 0 0 .051.063l.205-.204-.233-.209z" transform="translate(448 544)" />
-      </g>
-    </g>
-  </svg>
+  <KatanaMask asset="fb_ic_magnifying_glass_filled_24" size={size} color="#050505" className={className} />
 );
 
 // OFFICIAL MESSENGER SVG (SVG 10)
 export const MetaMessengerIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <svg viewBox="0 0 16 16" width={size} height={size} fill="#050505" className={className}>
-    <path fillRule="evenodd" d="M.5 8a7.5 7.5 0 1 1 4.006 6.638.341.341 0 0 0-.236-.041l-2.193.534A1 1 0 0 1 .87 13.923l.534-2.193a.341.341 0 0 0-.04-.236A7.47 7.47 0 0 1 .5 8zm11.389-.907a.56.56 0 0 0-.79-.78L9.25 7.75 7.294 6.327a1 1 0 0 0-1.386.205L4.111 8.906a.56.56 0 0 0 .791.781L6.75 8.25l1.957 1.423a1 1 0 0 0 1.385-.205l1.797-2.375z" clipRule="evenodd" />
-  </svg>
+  <KatanaMask asset="fb_ic_app_messenger_outline_24" size={size} color="#050505" className={className} />
 );
 
 // OFFICIAL PLUS SVG (SVG 18)
 export const MetaPlusIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 18, fill = '#050505' }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ color: fill }} className={className}>
-    <path d="M18 11h-5V6a1 1 0 0 0-2 0v5H6a1 1 0 0 0 0 2h5v5a1 1 0 0 0 2 0v-5h5a1 1 0 0 0 0-2z" />
-  </svg>
+  <KatanaMask asset="fb_ic_plus_filled_24" size={size} color={fill} className={className} />
 );
 
 // OFFICIAL 3 DOTS (SVG 21)
 export const MetaMoreDotsIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <svg viewBox="0 0 20 20" width={size} height={size} fill="#65676B" className={className}>
-    <g fillRule="evenodd" transform="translate(-446 -350)">
-      <path d="M458 360a2 2 0 1 1-4 0 2 2 0 0 1 4 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-12 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" />
-    </g>
-  </svg>
+  <KatanaMask asset="fb_ic_more_filled_24" size={size} color="#65676B" className={className} />
 );
 
 // OFFICIAL EDIT PENCIL (SVG 26)
 export const MetaEditPencilIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 16, fill = '#050505' }) => (
-  <svg viewBox="0 0 20 20" width={size} height={size} fill={fill} className={className}>
-    <path fillRule="evenodd" d="M17.99.93a1.75 1.75 0 0 0-2.48.005l-9.148 9.224a1.25 1.25 0 0 0-.362.88v2.21c0 .415.336.75.75.75h2.212c.33 0 .646-.13.88-.362l9.223-9.148a1.75 1.75 0 0 0 .005-2.48L17.99.93zm-1.415 1.06a.25.25 0 0 1 .355 0l1.08 1.08a.25.25 0 0 1-.001.353L16.742 4.68l-1.423-1.423 1.256-1.267z" clipRule="evenodd" />
-  </svg>
+  <KatanaMask asset="fb_ic_pencil_outline_24" size={size} color={fill} className={className} />
 );
 
 // OFFICIAL COMPOSER PHOTO SVG
 export const MetaComposerPhotoIcon: React.FC<{ size?: number }> = ({ size = 24 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#45BD62">
-    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71zM8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
-  </svg>
+  <KatanaMask asset="fb_ic_photo_filled_24" size={size} color="#45BD62" />
 );
 
 // OFFICIAL CAMERA
 export const MetaCameraIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 16, fill = '#050505' }) => (
-  <svg viewBox="0 0 16 16" width={size} height={size} fill={fill} className={className}>
-    <path d="M5.5 8a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0z" />
-    <path d="M5.03 1.659A2.25 2.25 0 0 1 6.621 1H9.38a2.25 2.25 0 0 1 1.59.659l.842.841h.939a2.75 2.75 0 0 1 2.75 2.75v6A2.75 2.75 0 0 1 12.75 14h-9.5A2.75 2.75 0 0 1 .5 11.25v-6A2.75 2.75 0 0 1 3.25 2.5h.94l.84-.841zM8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
-  </svg>
+  <KatanaMask asset="fb_ic_camera_outline_24" size={size} color={fill} className={className} />
 );
 
 export const MetaLikeThumbIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 18, fill = '#65676B' }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
-    <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
-  </svg>
+  <KatanaMask asset={fill === '#0866FF' ? 'fb_ic_like_filled_24' : 'fb_ic_like_outline_24'} size={size} color={fill} className={className} />
 );
 
 export const MetaCommentIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
-    <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
-  </svg>
+  <KatanaMask asset="fb_ic_comment_outline_24" size={size} color="#65676B" className={className} />
 );
 
 export const MetaShareIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
-    <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
-  </svg>
+  <KatanaMask asset="fb_ic_share_outline_24" size={size} color="#65676B" className={className} />
 );
 
 export const MetaArrowBackIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
