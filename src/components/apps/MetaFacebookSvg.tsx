@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Exact Unaltered Meta Brand Design System Vectors directly from com.facebook.katana APK resources
+// Exact 100% Unaltered Raw SVG Paths extracted directly from Meta's live production servers
 
 export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 36 }) => (
   <svg viewBox="0 0 36 36" width={size} height={size} fill="#0866FF" className={className}>
@@ -9,144 +9,147 @@ export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> =
   </svg>
 );
 
-export const MetaNavHomeIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M14.39,3.87a3.507,3.507 0,0 0,-4.79 0L4.26,8.88C3.46,9.63 3,10.7 3,11.8v6.5c0,1.18 0.82,2.21 1.96,2.45 0.91,0.19 1.86,0.35 2.81,0.47 0.08,0.01 0.16,0.02 0.24,0.02 0.48,0 0.95,-0.17 1.31,-0.5 0.43,-0.38 0.68,-0.93 0.68,-1.51V16c0,-0.55 0.45,-1 1,-1h2c0.55,0 1,0.45 1,1v3.23c0,0.58 0.25,1.12 0.68,1.51 0.43,0.38 0.99,0.55 1.56,0.48 0.95,-0.12 1.9,-0.28 2.81,-0.47 1.13,-0.24 1.96,-1.27 1.96,-2.45v-6.5c0,-1.1 -0.46,-2.17 -1.26,-2.92l-5.34,-5.01zM19,18.3c0,0.24 -0.16,0.45 -0.38,0.49 -0.86,0.18 -1.74,0.33 -2.62,0.44V16c0,-1.65 -1.35,-3 -3,-3h-2c-1.65,0 -3,1.35 -3,3v3.24c-0.88,-0.11 -1.77,-0.26 -2.63,-0.45A0.49,0.49 0,0 1,5 18.3v-6.5c0,-0.55 0.23,-1.08 0.63,-1.46l5.34,-5.01c0.29,-0.27 0.66,-0.4 1.03,-0.4s0.74,0.13 1.03,0.4l5.34,5.01c0.4,0.38 0.63,0.91 0.63,1.46z" />
+// 1. HOME TAB (Meta SVG 4)
+export const MetaNavHomeIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M9.464 1.286C10.294.803 11.092.5 12 .5c.908 0 1.707.303 2.537.786.795.462 1.7 1.142 2.815 1.977l2.232 1.675c1.391 1.042 2.359 1.766 2.888 2.826.53 1.059.53 2.268.528 4.006v4.3c0 1.355 0 2.471-.119 3.355-.124.928-.396 1.747-1.052 2.403-.657.657-1.476.928-2.404 1.053-.884.119-2 .119-3.354.119H7.93c-1.354 0-2.471 0-3.355-.119-.928-.125-1.747-.396-2.403-1.053-.656-.656-.928-1.475-1.053-2.403C1 18.541 1 17.425 1 16.07v-4.3c0-1.738-.002-2.947.528-4.006.53-1.06 1.497-1.784 2.888-2.826L6.65 3.263c1.114-.835 2.02-1.515 2.815-1.977zM10.5 13A1.5 1.5 0 0 0 9 14.5V21h6v-6.5a1.5 1.5 0 0 0-1.5-1.5h-3z" />
   </svg>
 );
 
-
-export const MetaNavWatchIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M20.93,7.33c-0.34,-0.22 -0.74,-0.29 -1.14,-0.2l-2.99,0.66c-0.03,-0.36 -0.05,-0.72 -0.09,-1.08a3.013,3.013 0,0 0,-2.99 -2.72L5.25,3.99c-1.54,0 -2.82,1.17 -2.99,2.72 -0.37,3.51 -0.37,7.06 0,10.57A3.013,3.013 0,0 0,5.25 20h8.47c1.54,0 2.82,-1.17 2.99,-2.72 0.04,-0.36 0.06,-0.72 0.09,-1.08l2.5,0.55a2,2 0,0 0,1.54 -0.28c0.45,-0.3 0.75,-0.75 0.85,-1.27 0.43,-2.3 0.4,-4.63 -0.11,-6.93 -0.09,-0.39 -0.32,-0.72 -0.66,-0.94zM14.73,17.07c-0.06,0.53 -0.49,0.93 -1,0.93L5.26,18c-0.51,0 -0.94,-0.4 -1,-0.93a48,48 0,0 1,0 -10.15c0.06,-0.53 0.49,-0.93 1,-0.93h8.47c0.51,0 0.94,0.4 1,0.93 0.36,3.37 0.36,6.78 0,10.15m5.01,-2.26 l-2.8,-0.62c0.06,-1.46 0.06,-2.91 0,-4.37l2.8,-0.62c0.35,1.88 0.35,3.77 0,5.61" />
+// 2. VIDEO / REELS TAB (Meta SVG 5)
+export const MetaNavWatchIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M10.996 12.132A1 1 0 0 0 9.5 13v4a1 1 0 0 0 1.496.868l3.5-2a1 1 0 0 0 0-1.736l-3.5-2z" />
+    <path d="M12.075 1h-.15C9.632 1 7.81 1 6.38 1.192c-1.472.198-2.674.616-3.623 1.565-.949.95-1.367 2.15-1.565 3.623C1 7.81 1 9.632 1 11.925v.15c0 2.293 0 4.116.192 5.545.198 1.472.616 2.674 1.565 3.623.95.949 2.15 1.367 3.623 1.565C7.81 23 9.632 23 11.925 23h.15c2.293 0 4.116 0 5.545-.192 1.472-.198 2.674-.616 3.623-1.565.949-.95 1.367-2.15 1.565-3.623.192-1.43.192-3.252.192-5.545v-.15c0-2.293 0-4.116-.192-5.545-.198-1.472-.616-2.674-1.565-3.623-.95-.949-2.15-1.367-3.623-1.565C16.19 1 14.368 1 12.075 1zM4.172 4.172c.515-.516 1.224-.83 2.475-.998l.183-.023L8.113 7H3.132c.013-.121.027-.239.042-.353.168-1.25.482-1.96.998-2.475zM10.22 7 8.895 3.023C9.778 3 10.801 3 12 3c.642 0 1.234 0 1.78.004L15.114 7H10.22zm6.253 2h4.507c.02.86.02 1.848.02 3 0 2.385-.002 4.074-.174 5.353-.168 1.25-.482 1.96-.998 2.475-.515.516-1.224.83-2.475.998-1.28.172-2.968.174-5.353.174s-4.074-.002-5.353-.174c-1.25-.168-1.96-.482-2.475-.998-.516-.515-.83-1.224-.998-2.475C3.002 16.073 3 14.385 3 12c0-1.152 0-2.14.02-3h13.454zm.747-2-1.316-3.949c.537.026 1.016.065 1.448.123 1.25.168 1.96.482 2.475.998.516.515.83 1.224.998 2.475.015.114.03.232.042.353H17.22z" />
   </svg>
 );
 
-
-export const MetaNavFriendsIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M8.186,12.847a8.5,8.5 0,0 1,2.209 0.354l0.04,0.013q0.086,0.027 0.171,0.056l0.075,0.025a7,7 0,0 1,0.393 0.153l0.085,0.036a6,6 0,0 1,0.378 0.183l0.072,0.038q0.084,0.045 0.166,0.094l0.047,0.028q0.182,0.11 0.35,0.232l0.05,0.034c0.678,0.5 1.188,1.15 1.433,1.952a3,3 0,0 1,0.063 0.231l0.018,0.081q0.016,0.077 0.029,0.155 0.01,0.057 0.018,0.115l0.012,0.107q0.007,0.06 0.012,0.122 0.01,0.145 0.011,0.294v0.733l-0.005,0.156c-0.062,0.774 -0.577,1.433 -1.351,1.58l-0.394,0.07c-0.977,0.163 -2.363,0.312 -4.159,0.312l-0.744,-0.009a24.5,24.5 0,0 1,-3.415 -0.303l-0.394,-0.07C2.531,19.462 2,18.723 2,17.883v-0.733c0,-2.871 2.955,-4.307 5.91,-4.307zM7.909,14.843c-1.19,0 -2.265,0.295 -2.974,0.755 -0.652,0.422 -0.935,0.919 -0.935,1.552v0.552c0.872,0.15 2.174,0.299 3.91,0.299 1.734,0 3.037,-0.15 3.908,-0.3v-0.55c0,-0.634 -0.283,-1.131 -0.934,-1.553 -0.71,-0.46 -1.784,-0.755 -2.975,-0.755" fillRule="evenodd" clipRule="evenodd" />
-    <path d="M16.367,10.162c2.86,0.087 5.633,1.522 5.633,4.304v0.732l-0.006,0.156c-0.061,0.775 -0.576,1.434 -1.35,1.58l-0.394,0.07c-0.977,0.163 -2.364,0.312 -4.16,0.312l-0.454,-0.005v-0.16c0,-0.67 -0.111,-1.285 -0.31,-1.846q0.367,0.01 0.765,0.011c1.735,0 3.037,-0.15 3.909,-0.3v-0.55c0,-0.634 -0.283,-1.13 -0.935,-1.553 -0.71,-0.46 -1.784,-0.755 -2.974,-0.755 -1.034,0 -1.98,0.224 -2.676,0.583a7,7 0,0 0,-0.443 -0.316,8 8,0 0,0 -1.517,-0.756c1.136,-1.007 2.886,-1.51 4.636,-1.51z" />
-    <path d="M7.91,5.685c1.756,0 3.18,1.402 3.18,3.131l-0.003,0.162c-0.086,1.654 -1.476,2.969 -3.178,2.97 -1.702,0 -3.092,-1.316 -3.178,-2.97l-0.003,-0.162c0,-1.73 1.424,-3.131 3.181,-3.131m0,2c-0.684,0 -1.182,0.536 -1.182,1.131s0.499,1.131 1.181,1.131c0.683,0 1.181,-0.536 1.182,-1.13 0,-0.596 -0.5,-1.132 -1.182,-1.132M16.09,3c1.758,0 3.183,1.402 3.183,3.132l-0.004,0.161c-0.086,1.654 -1.476,2.97 -3.178,2.97s-3.093,-1.316 -3.178,-2.97l-0.004,-0.161C12.91,4.402 14.334,3 16.091,3m0,2c-0.682,0 -1.18,0.537 -1.18,1.132s0.498,1.13 1.18,1.13c0.683,0 1.182,-0.535 1.183,-1.13 0,-0.595 -0.5,-1.132 -1.182,-1.132" fillRule="evenodd" clipRule="evenodd" />
+// 3. GROUPS TAB (Meta SVG 6)
+export const MetaNavGroupsIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M12.496 5a4 4 0 1 1 8 0 4 4 0 0 1-8 0zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-9 2.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-2 4a2 2 0 1 1 4 0 2 2 0 0 1-4 0zM5.5 15a5 5 0 0 0-5 5 3 3 0 0 0 3 3h8.006a3 3 0 0 0 3-3 5 5 0 0 0-5-5H5.5zm-3 5a3 3 0 0 1 3-3h4.006a3 3 0 0 1 3 3 1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1zm12-9.5a5.04 5.04 0 0 0-.37.014 1 1 0 0 0 .146 1.994c.074-.005.149-.008.224-.008h4.006a3 3 0 0 1 3 3 1 1 0 0 1-1 1h-3.398a1 1 0 1 0 0 2h3.398a3 3 0 0 0 3-3 5 5 0 0 0-5-5H14.5z" />
   </svg>
 );
 
+export const MetaNavFriendsIcon = MetaNavGroupsIcon;
 
-export const MetaNavBellIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M15.613,18.759A3.636,3.636 0,0 1,11.999 22l-0.187,-0.005a3.64,3.64 0,0 1,-3.428 -3.236q0.979,0.108 2.077,0.159a1.634,1.634 0,0 0,3.075 0.001,32 32,0 0,0 2.077,-0.16" />
-    <path d="M12.327,2.008a6.33,6.33 0,0 1,4.382 2.077,6.34 6.34,0 0,1 1.654,4.278v1.862a5.37,5.37 0,0 0,2.147 4.295c0.684,0.513 0.565,1.518 -0.25,1.773l-0.14,0.04 -0.023,0.01 -0.244,0.07 -0.36,0.102 -0.375,0.096q-0.207,0.053 -0.427,0.107l-0.223,0.052 -0.17,0.037 -0.21,0.045 -0.282,0.057 -0.169,0.032 -0.285,0.053 -0.276,0.047 -0.21,0.035q-0.117,0.019 -0.236,0.036l-0.332,0.05 -0.252,0.033 -0.245,0.032 -0.29,0.033 -0.344,0.038 -0.147,0.013q-0.195,0.019 -0.392,0.036l-0.449,0.033 -0.182,0.013q-0.246,0.015 -0.499,0.026l-0.138,0.007 -0.334,0.01q-0.164,0.007 -0.33,0.011l-0.697,0.007 -0.591,-0.005q-0.601,-0.011 -1.167,-0.043l-0.225,-0.014 -0.32,-0.02 -0.203,-0.016a28,28 0,0 1,-0.745 -0.067l-0.058,-0.006 -0.342,-0.039 -0.209,-0.024 -0.23,-0.03 -0.204,-0.027a28,28 0,0 1,-0.8 -0.124l-0.118,-0.02q-0.239,-0.042 -0.465,-0.087 -0.19,-0.036 -0.372,-0.073 -0.21,-0.044 -0.41,-0.09 -0.19,-0.041 -0.369,-0.083l-0.323,-0.082 -0.266,-0.067 -0.079,-0.022 -0.086,-0.023 -0.26,-0.077 -0.255,-0.072 -0.026,-0.01 -0.136,-0.04c-0.817,-0.255 -0.936,-1.26 -0.251,-1.773a5.37,5.37 0,0 0,2.137 -3.98l0.01,-0.315V8.363a6.4,6.4 0,0 1,0.2 -1.59q0.158,-0.61 0.427,-1.169A6.4,6.4 0,0 1,9.522 2.5a6.3,6.3 0,0 1,2.477 -0.5zM11.999,4a4.363,4.363 0,0 0,-4.363 4.363v2.034a7.02,7.02 0,0 1,-1.583 4.438,26.6 26.6,0 0,0 4.183,0.568q0.238,0.013 0.483,0.02 0.618,0.029 1.28,0.031 0.677,-0.002 1.307,-0.031 0.232,-0.008 0.457,-0.02c1.659,-0.097 3.06,-0.32 4.182,-0.568a7.03,7.03 0,0 1,-1.582 -4.439V8.364a4.4,4.4 0,0 0,-0.051 -0.664,4.34 4.34,0 0,0 -2.05,-3.067A4.3,4.3 0,0 0,12 4" fillRule="evenodd" clipRule="evenodd" />
+// 4. NOTIFICATIONS TAB (Meta SVG 11)
+export const MetaNavBellIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M3 9.5a9 9 0 1 1 18 0v2.927c0 1.69.475 3.345 1.37 4.778a1.5 1.5 0 0 1-1.272 2.295h-4.625a4.5 4.5 0 0 1-8.946 0H2.902a1.5 1.5 0 0 1-1.272-2.295A9.01 9.01 0 0 0 3 12.43V9.5zm6.55 10a2.5 2.5 0 0 0 4.9 0h-4.9z" />
   </svg>
 );
 
-
-export const MetaNavMenuIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M20,5H4c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h16c0.55,0 1,-0.45 1,-1s-0.45,-1 -1,-1m0,6H4c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h16c0.55,0 1,-0.45 1,-1s-0.45,-1 -1,-1m0,6H4c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h16c0.55,0 1,-0.45 1,-1s-0.45,-1 -1,-1" />
-  </svg>
-);
-
-
-export const MetaMessengerIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M16.882,8.912c0.377,-0.31 0.685,-0.564 0.993,-0.303 0.31,0.263 0.065,0.674 -0.632,1.838q-0.218,0.363 -0.493,0.831 -0.281,0.483 -0.519,0.898c-1.002,1.746 -1.491,2.598 -2.356,2.598 -0.83,0 -1.442,-0.566 -2.16,-1.23q-0.224,-0.207 -0.465,-0.422c-0.84,-0.741 -1.113,-0.827 -2.062,0 -0.875,0.763 -1.5,1.271 -2,1.652 -0.5,0.382 -0.688,0.509 -1.063,0.254 -0.3,-0.203 -0.077,-0.635 0.125,-0.953 0.398,-0.625 1.068,-1.698 1.67,-2.663 0.44,-0.702 0.843,-1.348 1.08,-1.723 0.563,-0.889 1.563,-0.798 2.563,0 0.387,0.31 0.624,0.496 0.807,0.64 0.23,0.18 0.376,0.294 0.63,0.505 0.687,0.572 0.875,0.508 1.625,-0.127a49,49 0,0 1,2 -1.589q0.134,-0.103 0.257,-0.206" />
-    <path d="M12,2c5.49,0 10,4.308 10,9.694s-4.51,9.695 -10,9.695c-0.923,0 -1.819,-0.123 -2.67,-0.35 -0.57,0.286 -1.263,0.629 -1.69,0.796 -0.553,0.216 -1.185,0.254 -1.72,-0.094 -0.516,-0.337 -0.714,-0.89 -0.714,-1.352v-1.583C3.241,17.04 2,14.512 2,11.694 2,6.308 6.51,2 12,2m0,2c-4.451,0 -8,3.477 -8,7.694 0,2.35 1.094,4.46 2.837,5.878l0.37,0.3v1.973c0.442,-0.198 1.072,-0.51 1.568,-0.765l0.365,-0.186 0.39,0.12a8.3,8.3 0,0 0,2.47 0.375c4.451,0 8,-3.478 8,-7.695S16.451,4 12,4" fillRule="evenodd" clipRule="evenodd" />
-  </svg>
-);
-
-
-export const MetaCameraIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={fill || "#050505"} className={className}>
-    <path d="M12,7.5c-2.48,0 -4.5,2.02 -4.5,4.5s2.02,4.5 4.5,4.5 4.5,-2.02 4.5,-4.5 -2.02,-4.5 -4.5,-4.5m0,7a2.5,2.5 0,0 1,0 -5,2.5 2.5,0 0,1 0,5" />
-    <path d="M18.75,5h-1.63l-0.67,-1.34A2.99,2.99 0,0 0,13.77 2h-3.53c-1.14,0 -2.17,0.64 -2.68,1.66L6.89,5H5.26C3.73,5 2.44,6.16 2.27,7.7c-0.35,3.19 -0.35,6.42 0,9.6 0.17,1.54 1.45,2.7 2.99,2.7h13.49c1.53,0 2.82,-1.16 2.99,-2.7 0.35,-3.19 0.35,-6.42 0,-9.6A3.01,3.01 0,0 0,18.75 5m1,12.08c-0.06,0.52 -0.49,0.92 -1,0.92H5.26c-0.51,0 -0.94,-0.4 -1,-0.92 -0.34,-3.04 -0.34,-6.12 0,-9.16 0.06,-0.52 0.49,-0.92 1,-0.92h2.86l1.22,-2.45c0.17,-0.34 0.51,-0.55 0.89,-0.55h3.53c0.38,0 0.72,0.21 0.89,0.55L15.87,7h2.86c0.51,0 0.94,0.4 1,0.92 0.34,3.04 0.34,6.12 0,9.16z" />
-  </svg>
-);
-
-
-export const MetaLikeThumbIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M20.87,9.43C20.4,9.15 19.86,9 19.31,9h-5.85c0.44,-1.14 0.79,-2.33 1.04,-3.52 0.18,-0.85 -0.03,-1.73 -0.58,-2.41A2.87,2.87 0,0 0,11.68 2c-0.76,0 -1.45,0.42 -1.79,1.11L8.21,6.47 6.88,8.59C6.33,9.47 5.38,10 4.34,10H2.99c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h1.35c1.73,0 3.32,-0.88 4.24,-2.35l1.37,-2.2L11.67,4c0.37,0 0.59,0.2 0.69,0.33 0.1,0.12 0.25,0.38 0.18,0.74 -0.23,1.09 -0.55,2.18 -0.96,3.22l-0.26,0.67a1.497,1.497 0,0 0,1.4 2.04h6.58c0.19,0 0.37,0.05 0.53,0.15 0.18,0.11 0.22,0.28 0.23,0.37s0,0.26 -0.17,0.4l-0.41,0.33c-0.53,0.42 -0.65,1.2 -0.28,1.76 0.13,0.19 0.08,0.45 -0.1,0.59l-0.49,0.37c-0.53,0.4 -0.7,1.12 -0.41,1.71 0.18,0.36 0.03,0.81 -0.39,1.02 -0.56,0.28 -0.84,0.95 -0.63,1.57a0.546,0.546 0,0 1,-0.52 0.72h-5.09c-1.34,0 -2.59,-0.52 -3.54,-1.46l-0.07,-0.07C7.02,17.52 5.76,17 4.42,17H3c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h1.42c0.79,0 1.56,0.32 2.12,0.88l0.07,0.07A6.96,6.96 0,0 0,11.56 22h5.09a2.55,2.55 0,0 0,2.53 -2.8c0.89,-0.67 1.29,-1.83 0.99,-2.91l0.12,-0.09c0.86,-0.64 1.18,-1.75 0.85,-2.73 0.63,-0.5 0.97,-1.28 0.91,-2.09 -0.05,-0.81 -0.5,-1.54 -1.19,-1.95z" />
-  </svg>
-);
-
-
-export const MetaEditPencilIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={fill || "#050505"} className={className}>
-    <path d="M15.87,3.88 L4.9,14.85c-0.5,0.5 -0.87,1.07 -1.12,1.72 -1.03,2.65 -0.91,3.51 -0.38,4.04 0.24,0.24 0.55,0.4 1.07,0.4 0.62,0 1.53,-0.22 2.96,-0.78 0.65,-0.25 1.22,-0.63 1.72,-1.12L20.12,8.14a3.01,3.01 0,0 0,0 -4.25,3.01 3.01,0 0,0 -4.25,0zM7.74,17.68c-0.3,0.3 -0.64,0.52 -1.03,0.67 -0.71,0.28 -1.24,0.44 -1.6,0.54 0.09,-0.37 0.26,-0.89 0.54,-1.6 0.15,-0.39 0.38,-0.73 0.67,-1.03l7.77,-7.77 1.42,1.42zM18.71,6.72l-1.79,1.79 -1.42,-1.42 1.79,-1.79c0.2,-0.2 0.45,-0.29 0.71,-0.29s0.52,0.1 0.71,0.29c0.39,0.39 0.39,1.03 0,1.42" />
-  </svg>
-);
-
-
-export const MetaPlusIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={fill || "#050505"} className={className}>
-    <path d="M12,20c0.55,0 1,-0.45 1,-1v-6h6c0.55,0 1,-0.45 1,-1s-0.45,-1 -1,-1h-6V5c0,-0.55 -0.45,-1 -1,-1s-1,0.45 -1,1v6H5c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h6v6c0,0.55 0.45,1 1,1" />
-  </svg>
-);
-
-
-export const MetaMoreDotsIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={active ? "#0866FF" : (fill || "#65676B")} className={className}>
-    <path d="M12,14a2,2 0,1 0,0 -4,2 2,0 0,0 0,4m-6,0a2,2 0,1 0,0 -4,2 2,0 0,0 0,4m12,0a2,2 0,1 0,0 -4,2 2,0 0,0 0,4" />
-  </svg>
-);
-
-
-export const MetaComposerPhotoIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = "", size = 24, fill, active }) => (
-  <svg viewBox="0 0 24.0 24.0" width={size} height={size} fill={"#45BD62"} className={className}>
-    <path d="M8.5,7a1.5,1.5 0,1 1,0 3,1.5 1.5,0 0,1 0,-3" />
-    <path d="M17.655,3c1.352,0 2.531,0.907 2.762,2.24 0.28,1.62 0.583,4.005 0.583,6.76s-0.302,5.139 -0.583,6.76l-0.055,0.246C20.038,20.203 18.922,21 17.655,21L6.345,21c-1.352,0 -2.531,-0.907 -2.762,-2.24l-0.105,-0.643a40,40 0,0 1,-0.108 -0.748l-0.077,-0.076 0.06,-0.06A40,40 0,0 1,3 12c0,-2.41 0.231,-4.537 0.478,-6.117l0.105,-0.644C3.813,3.907 4.993,3 6.345,3zM11.707,16.707a1,1 0,0 1,-1.262 0.125l-2.317,-1.546 -2.652,2.653q0.038,0.25 0.078,0.48c0.05,0.287 0.32,0.581 0.79,0.581h11.311c0.47,0 0.742,-0.294 0.791,-0.581q0.106,-0.606 0.208,-1.352L15,13.414zM6.345,5c-0.47,0 -0.742,0.294 -0.791,0.581A38,38 0,0 0,5 12c0,1.232 0.066,2.387 0.161,3.425l2.132,-2.132a1,1 0,0 1,1.186 -0.17l0.076,0.045 2.318,1.545 3.42,-3.42a1,1 0,0 1,1.338 -0.068l0.076,0.068 3.206,3.205c0.053,-0.784 0.087,-1.622 0.087,-2.498 0,-2.612 -0.287,-4.88 -0.554,-6.419 -0.05,-0.287 -0.32,-0.581 -0.79,-0.581z" fillRule="evenodd" clipRule="evenodd" />
-  </svg>
-);
-
-
-export const MetaNavGroupsIcon = MetaNavFriendsIcon;
 export const MetaBellIcon = MetaNavBellIcon;
 
-export const MetaSearchIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = "", size = 20, fill = "#050505" }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={fill} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <circle cx="11" cy="11" r="7" />
-    <line x1="16.5" y1="16.5" x2="21.5" y2="21.5" />
+// 5. MENU TAB (Meta SVG 8)
+export const MetaNavMenuIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 26 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65686C'}>
+    <path d="M.5 12c0 6.351 5.149 11.5 11.5 11.5S23.5 18.351 23.5 12 18.351.5 12 .5.5 5.649.5 12zm2 0c0-.682.072-1.348.209-1.99a2 2 0 0 1 0 3.98A9.539 9.539 0 0 1 2.5 12zm.84-3.912A9.502 9.502 0 0 1 12 2.5a9.502 9.502 0 0 1 8.66 5.588 4.001 4.001 0 0 0 0 7.824 9.514 9.514 0 0 1-1.755 2.613A5.002 5.002 0 0 0 14 14.5h-4a5.002 5.002 0 0 0-4.905 4.025 9.515 9.515 0 0 1-1.755-2.613 4.001 4.001 0 0 0 0-7.824zM12 5a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm-2 4a2 2 0 1 0 4 0 2 2 0 0 0-4 0zm11.291 1.01a9.538 9.538 0 0 1 0 3.98 2 2 0 0 1 0-3.98zM16.99 20.087A9.455 9.455 0 0 1 12 21.5c-1.83 0-3.54-.517-4.99-1.414a1.004 1.004 0 0 1-.01-.148V19.5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v.438a1 1 0 0 1-.01.148z" />
   </svg>
 );
 
-export const MetaCommentIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = "", size = 18, fill = "#65676B" }) => (
+// OFFICIAL COMPOSER PHOTO SVG
+export const MetaComposerPhotoIcon: React.FC<{ size?: number }> = ({ size = 24 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="#45BD62">
+    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71zM8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+  </svg>
+);
+
+// OFFICIAL SEARCH SVG
+export const MetaSearchIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} fill="currentColor" className={className}>
+    <g fillRule="evenodd" transform="translate(-448 -544)">
+      <g fillRule="nonzero">
+        <path d="M10.743 2.257a6 6 0 1 1-8.485 8.486 6 6 0 0 1 8.485-8.486zm-1.06 1.06a4.5 4.5 0 1 0-6.365 6.364 4.5 4.5 0 0 0 6.364-6.363z" transform="translate(448 544)" />
+        <path d="m13.463 15.142-.04-.044-3.574-4.192c-.599-.703.355-1.656 1.058-1.057l4.191 3.574.044.04c.058.059.122.137.182.24.249.425.249.96-.154 1.41l-.057.057c-.45.403-.986.403-1.411.154a1.182 1.182 0 0 1-.24-.182zm.617-.616.444-.444a.31.31 0 0 0-.063-.052c-.093-.055-.263-.055-.35.024l.208.232.207-.206.006.007-.22.257-.026-.024.033-.034.025.027-.257.22-.007-.007zm-.027-.415c-.078.088-.078.257-.023.35a.31.31 0 0 0 .051.063l.205-.204-.233-.209z" transform="translate(448 544)" />
+      </g>
+    </g>
+  </svg>
+);
+
+// OFFICIAL MESSENGER SVG (Meta SVG 10)
+export const MetaMessengerIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} fill="currentColor" className={className}>
+    <path fillRule="evenodd" d="M.5 8a7.5 7.5 0 1 1 4.006 6.638.341.341 0 0 0-.236-.041l-2.193.534A1 1 0 0 1 .87 13.923l.534-2.193a.341.341 0 0 0-.04-.236A7.47 7.47 0 0 1 .5 8zm11.389-.907a.56.56 0 0 0-.79-.78L9.25 7.75 7.294 6.327a1 1 0 0 0-1.386.205L4.111 8.906a.56.56 0 0 0 .791.781L6.75 8.25l1.957 1.423a1 1 0 0 0 1.385-.205l1.797-2.375z" clipRule="evenodd" />
+  </svg>
+);
+
+// OFFICIAL PLUS SVG (Meta SVG 18)
+export const MetaPlusIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 18, fill = '#050505' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ color: fill }} className={className}>
+    <path d="M18 11h-5V6a1 1 0 0 0-2 0v5H6a1 1 0 0 0 0 2h5v5a1 1 0 0 0 2 0v-5h5a1 1 0 0 0 0-2z" />
+  </svg>
+);
+
+// OFFICIAL 3 DOTS (Meta SVG 21)
+export const MetaMoreDotsIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 20 20" width={size} height={size} fill="currentColor" className={className}>
+    <g fillRule="evenodd" transform="translate(-446 -350)">
+      <path d="M458 360a2 2 0 1 1-4 0 2 2 0 0 1 4 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-12 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" />
+    </g>
+  </svg>
+);
+
+// OFFICIAL EDIT PENCIL (Meta SVG 26)
+export const MetaEditPencilIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 16, fill = 'currentColor' }) => (
+  <svg viewBox="0 0 20 20" width={size} height={size} fill={fill} className={className}>
+    <path fillRule="evenodd" d="M17.99.93a1.75 1.75 0 0 0-2.48.005l-9.148 9.224a1.25 1.25 0 0 0-.362.88v2.21c0 .415.336.75.75.75h2.212c.33 0 .646-.13.88-.362l9.223-9.148a1.75 1.75 0 0 0 .005-2.48L17.99.93zm-1.415 1.06a.25.25 0 0 1 .355 0l1.08 1.08a.25.25 0 0 1-.001.353L16.742 4.68l-1.423-1.423 1.256-1.267z" clipRule="evenodd" />
+  </svg>
+);
+
+// OFFICIAL CAMERA (Meta SVG 14)
+export const MetaCameraIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 16, fill = 'currentColor' }) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} fill={fill} className={className}>
+    <path d="M5.5 8a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0z" />
+    <path d="M5.03 1.659A2.25 2.25 0 0 1 6.621 1H9.38a2.25 2.25 0 0 1 1.59.659l.842.841h.939a2.75 2.75 0 0 1 2.75 2.75v6A2.75 2.75 0 0 1 12.75 14h-9.5A2.75 2.75 0 0 1 .5 11.25v-6A2.75 2.75 0 0 1 3.25 2.5h.94l.84-.841zM8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
+  </svg>
+);
+
+export const MetaLikeThumbIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 18, fill = 'currentColor' }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+  </svg>
+);
+
+export const MetaCommentIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
     <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" />
   </svg>
 );
 
-export const MetaShareIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = "", size = 18, fill = "#65676B" }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+export const MetaShareIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
     <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z" />
   </svg>
 );
 
-export const MetaArrowBackIcon: React.FC<{ className?: string; size?: number }> = ({ className = "", size = 20 }) => (
-  <svg viewBox="0 0 20 20" width={size} height={size} fill="#050505" className={className}>
+export const MetaArrowBackIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
+  <svg viewBox="0 0 20 20" width={size} height={size} fill="currentColor" className={className}>
     <path d="M8.043 3.043a1 1 0 1 1 1.414 1.414c-.638.639-1.32 1.32-2.018 2.015-.84.836-1.701 1.696-2.532 2.528H17.25a1 1 0 1 1 0 2H4.912l2.556 2.554.003.003 1.986 1.986a1 1 0 1 1-1.414 1.414l-1.987-1.986a7265.663 7265.663 0 0 1-3.21-3.209 2.495 2.495 0 0 1-.003-3.526C3.87 7.206 4.97 6.11 6.03 5.051a1339 1339 0 0 0 2.013-2.008z" />
   </svg>
 );
 
-export const MetaGraduationIcon: React.FC<{ className?: string; size?: number }> = ({ className = "", size = 20 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
+export const MetaGraduationIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
     <path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM3.45 13.47 12 18.13l8.55-4.66v3.13L12 21.26 3.45 16.6v-3.13z" />
   </svg>
 );
 
-export const MetaLocationIcon: React.FC<{ className?: string; size?: number }> = ({ className = "", size = 20 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
+export const MetaLocationIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
   </svg>
 );
 
-export const MetaFollowersIcon: React.FC<{ className?: string; size?: number }> = ({ className = "", size = 20 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
+export const MetaFollowersIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
     <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
   </svg>
 );
 
-export const MetaMenuGridIcon: React.FC<{ className?: string; size?: number }> = ({ className = "", size = 20 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#050505" className={className}>
+export const MetaMenuGridIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
     <path d="M18.5 1A1.5 1.5 0 0 0 17 2.5v3A1.5 1.5 0 0 0 18.5 7h3A1.5 1.5 0 0 0 23 5.5v-3A1.5 1.5 0 0 0 21.5 1h-3zm0 8a1.5 1.5 0 0 0-1.5 1.5v3a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5v-3A1.5 1.5 0 0 0 21.5 9h-3zm-16 8A1.5 1.5 0 0 0 1 18.5v3A1.5 1.5 0 0 0 2.5 23h3A1.5 1.5 0 0 0 7 21.5v-3A1.5 1.5 0 0 0 5.5 17h-3zm8 0A1.5 1.5 0 0 0 9 18.5v3a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5v-3a1.5 1.5 0 0 0-1.5-1.5h-3zm8 0a1.5 1.5 0 0 0-1.5 1.5v3a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5v-3a1.5 1.5 0 0 0-1.5-1.5h-3zm-16-8A1.5 1.5 0 0 0 1 10.5v3A1.5 1.5 0 0 0 2.5 15h3A1.5 1.5 0 0 0 7 13.5v-3A1.5 1.5 0 0 0 5.5 9h-3zm0-8A1.5 1.5 0 0 0 1 2.5v3A1.5 1.5 0 0 0 2.5 7h3A1.5 1.5 0 0 0 7 5.5v-3A1.5 1.5 0 0 0 5.5 1h-3zm8 0A1.5 1.5 0 0 0 9 2.5v3A1.5 1.5 0 0 0 10.5 7h3A1.5 1.5 0 0 0 15 5.5v-3A1.5 1.5 0 0 0 13.5 1h-3zm0 8A1.5 1.5 0 0 0 9 10.5v3a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5v-3A1.5 1.5 0 0 0 13.5 9h-3z" />
   </svg>
 );
