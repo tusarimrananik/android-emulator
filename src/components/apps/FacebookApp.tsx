@@ -10,7 +10,7 @@ import {
   MetaMoreDotsIcon,
   MetaNavHomeIcon,
   MetaNavWatchIcon,
-  MetaNavGroupsIcon,
+  MetaNavFriendsIcon,
   MetaNavBellIcon,
   MetaNavMenuIcon,
   MetaComposerPhotoIcon,
@@ -19,7 +19,7 @@ import {
 import { FacebookProfile } from './FacebookProfile';
 import { Globe2, X } from 'lucide-react';
 
-type Tab = 'feed' | 'watch' | 'groups' | 'notifications' | 'menu';
+type Tab = 'feed' | 'watch' | 'friends' | 'notifications' | 'menu';
 type Screen = Tab | 'profile';
 
 const stories = [
@@ -238,12 +238,12 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
         <div>{post.comments} · {post.shares}</div>
       </div>
 
-      <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4] py-1 text-center text-[13px] font-semibold text-[#65686b]">
+      <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4] py-1 text-center text-[13px] font-semibold text-[#65676b]">
         <button
           type="button"
           onClick={() => setLiked(!liked)}
           className={`flex items-center justify-center gap-1.5 py-2 transition-colors ${
-            liked ? 'text-[#0866FF]' : 'text-[#65686C]'
+            liked ? 'text-[#0866FF]' : 'text-[#65676B]'
           }`}
         >
           <MetaLikeThumbIcon size={18} />
@@ -292,31 +292,45 @@ function Watch() {
   );
 }
 
-function GroupsScreen() {
-  const groups = [
-    { name: 'React & Next.js Developers', members: '142K members · 10+ posts a day', image: '/facebook/story/1.webp' },
-    { name: 'Design & UI/UX Creators', members: '89K members · 5 posts a day', image: '/facebook/story/2.webp' },
+function FriendsScreen({ onOpenProfile }: { onOpenProfile: () => void }) {
+  const requests = [
+    { name: 'Nguyễn Văn Nam', avatar: '/facebook/user/khanhvy.webp', mutual: '14 mutual friends', time: '2d' },
+    { name: 'Trần Thị Mai', avatar: '/facebook/user/minhhuong.webp', mutual: '3 mutual friends', time: '1w' },
+    { name: 'Phạm Đức Anh', avatar: '/facebook/user/baongan.webp', mutual: '28 mutual friends', time: '3d' },
   ];
   return (
     <div className="min-h-full bg-white p-4 text-[#050505]">
       <div className="flex items-center justify-between pb-3">
-        <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Groups</h2>
+        <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Friends</h2>
         <MetaSearchIcon size={20} />
       </div>
       <div className="flex gap-2 pb-3 border-b border-[#ced0d4]">
-        <button className="rounded-full bg-[#e4e6eb] px-4 py-2 text-sm font-semibold text-[#050505]">Your groups</button>
-        <button className="rounded-full bg-[#e4e6eb] px-4 py-2 text-sm font-semibold text-[#050505]">Discover</button>
+        <button className="rounded-full bg-[#e4e6eb] px-4 py-2 text-sm font-semibold text-[#050505]">Suggestions</button>
+        <button className="rounded-full bg-[#e4e6eb] px-4 py-2 text-sm font-semibold text-[#050505]">Your Friends</button>
       </div>
       <div className="pt-3 space-y-4">
-        {groups.map(g => (
-          <div key={g.name} className="flex gap-3 items-center">
-            <img src={g.image} alt="" className="h-14 w-14 rounded-xl object-cover" />
-            <div className="flex-1">
-              <p className="font-bold text-[15px]">{g.name}</p>
-              <p className="text-xs text-[#65676b]">{g.members}</p>
+        <div className="flex justify-between items-center pb-1">
+          <span className="font-bold text-[17px]">Friend Requests</span>
+          <span className="text-[14px] text-[#0866FF] font-semibold">See all</span>
+        </div>
+        <div className="space-y-3">
+          {requests.map(req => (
+            <div key={req.name} className="flex gap-3 items-center">
+              <img src={req.avatar} alt="" className="h-16 w-16 rounded-full object-cover" />
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between">
+                  <span className="font-bold text-[15px] truncate">{req.name}</span>
+                  <span className="text-xs text-[#65676b]">{req.time}</span>
+                </div>
+                <p className="text-xs text-[#65676b]">{req.mutual}</p>
+                <div className="flex gap-2 mt-1.5">
+                  <button className="flex-1 rounded-lg bg-[#0866FF] py-1.5 text-xs font-semibold text-white">Confirm</button>
+                  <button className="flex-1 rounded-lg bg-[#e4e6eb] py-1.5 text-xs font-semibold text-[#050505]">Delete</button>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -435,15 +449,15 @@ export const FacebookApp: React.FC = () => {
             <MetaNavWatchIcon active={tab === 'watch'} size={24} />
           </button>
           <button
-            aria-label="Groups"
-            onClick={() => setScreen('groups')}
+            aria-label="Friends"
+            onClick={() => setScreen('friends')}
             className={`relative grid place-items-center ${
-              tab === 'groups'
+              tab === 'friends'
                 ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]'
                 : ''
             }`}
           >
-            <MetaNavGroupsIcon active={tab === 'groups'} size={24} />
+            <MetaNavFriendsIcon active={tab === 'friends'} size={25} />
           </button>
           <button
             aria-label="Notifications"
@@ -476,7 +490,7 @@ export const FacebookApp: React.FC = () => {
           <>
             {tab === 'feed' && <Feed onOpenProfile={() => setScreen('profile')} />}
             {tab === 'watch' && <Watch />}
-            {tab === 'groups' && <GroupsScreen />}
+            {tab === 'friends' && <FriendsScreen onOpenProfile={() => setScreen('profile')} />}
             {tab === 'notifications' && <Notifications />}
             {tab === 'menu' && <MenuScreen onOpenProfile={() => setScreen('profile')} />}
           </>
