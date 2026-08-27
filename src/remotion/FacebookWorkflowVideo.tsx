@@ -11,7 +11,18 @@ import {Dock} from '@/components/home/Dock';
 import {AppSvgIcon} from '@/components/common/AppSvgIcon';
 import {INITIAL_APPS} from '@/lib/apps-data';
 import {WALLPAPERS} from '@/lib/wallpapers-data';
-import {Globe2, MoreHorizontal, Plus, Search, X, Camera, Edit2, ArrowLeft} from 'lucide-react';
+import {
+  MetaFacebookLogo,
+  MetaSearchIcon,
+  MetaMenuGridIcon,
+  MetaMessengerIcon,
+  MetaBellIcon,
+  MetaCameraIcon,
+  MetaPlusIcon,
+  MetaEditPencilIcon,
+  MetaMoreDotsIcon,
+} from '@/components/apps/MetaFacebookSvg';
+import {Globe2, MoreHorizontal, Plus, Search, X} from 'lucide-react';
 
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const asset = (path: string) => staticFile(path);
@@ -29,7 +40,6 @@ type FbProfileData = {
 
 const tabForFrame = (frame: number, hasFbProfile: boolean): FbTab => {
   if (hasFbProfile) {
-    // With profile: feed → watch → market → menu → profile → feed
     if (frame >= 510) return 'feed';
     if (frame >= 430) return 'profile';
     if (frame >= 390) return 'menu';
@@ -56,7 +66,7 @@ const fbNav = [
 const FacebookNav: React.FC<{tab: FbTab}> = ({tab}) => (
   <div className="grid h-[48px] shrink-0 grid-cols-5 border-b border-zinc-200 bg-white">
     {fbNav.map(([id, normal, active]) => (
-      <div key={id} className={`relative grid place-items-center ${tab === id ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[70%] after:rounded-full after:bg-[#1877f2]' : ''}`}>
+      <div key={id} className={`relative grid place-items-center ${tab === id ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[70%] after:rounded-full after:bg-[#0866FF]' : ''}`}>
         <img src={asset(`/facebook/nav/${tab === id ? active : normal}`)} className="h-[27px] w-[27px] object-contain" alt="" />
       </div>
     ))}
@@ -65,7 +75,7 @@ const FacebookNav: React.FC<{tab: FbTab}> = ({tab}) => (
 
 const TopBar: React.FC = () => (
   <div className="flex h-[58px] shrink-0 items-center justify-between bg-white px-3 text-black">
-    <div className="flex items-center gap-1"><img src={asset('/facebook/menu.png')} className="h-8 w-8" alt=""/><div className="text-[27px] font-bold tracking-[-1.2px] text-[#1877f2]">facebook</div></div>
+    <div className="flex items-center gap-1"><img src={asset('/facebook/menu.png')} className="h-8 w-8" alt=""/><div className="text-[27px] font-bold tracking-[-1.2px] text-[#0866FF]">facebook</div></div>
     <div className="flex gap-2"><div className="grid h-9 w-9 place-items-center rounded-full bg-black/10"><img src={asset('/facebook/search.png')} className="h-5 w-5" alt=""/></div><div className="grid h-9 w-9 place-items-center rounded-full bg-black/10"><img src={asset('/facebook/message.png')} className="h-5 w-5" alt=""/></div></div>
   </div>
 );
@@ -74,7 +84,7 @@ const Composer: React.FC = () => <div className="bg-white text-black"><div class
 
 const Stories: React.FC = () => {
   const stories = [['Create Story','/facebook/user/lcd.webp'],['Doraemon','/facebook/story/1.webp'],['Old Books','/facebook/story/2.webp'],['VAFFC','/facebook/story/3.webp']];
-  return <div className="mt-2 flex gap-2 bg-white px-3 py-3">{stories.map(([name,src],i)=><div key={name} className="relative h-[180px] w-[104px] shrink-0 overflow-hidden rounded-xl border bg-white"><img src={asset(src)} className="h-full w-full object-cover" alt=""/><div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"/>{i===0?<div className="absolute left-2 top-2 grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-[#1877f2] text-white"><Plus/></div>:<div className="absolute left-2 top-2 h-10 w-10 rounded-full border-[3px] border-[#1877f2] bg-white"/>}<div className="absolute bottom-2 left-2 right-1 text-[12px] font-semibold text-white">{name}</div></div>)}</div>;
+  return <div className="mt-2 flex gap-2 bg-white px-3 py-3">{stories.map(([name,src],i)=><div key={name} className="relative h-[180px] w-[104px] shrink-0 overflow-hidden rounded-xl border bg-white"><img src={asset(src)} className="h-full w-full object-cover" alt=""/><div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"/>{i===0?<div className="absolute left-2 top-2 grid h-9 w-9 place-items-center rounded-full border-2 border-white bg-[#0866FF] text-white"><Plus/></div>:<div className="absolute left-2 top-2 h-10 w-10 rounded-full border-[3px] border-[#0866FF] bg-white"/>}<div className="absolute bottom-2 left-2 right-1 text-[12px] font-semibold text-white">{name}</div></div>)}</div>;
 };
 
 const Post: React.FC<{second?: boolean}> = ({second}) => <div className="mt-2 bg-white text-black"><div className="flex items-center gap-2.5 px-3 py-3"><img src={asset(second?'/facebook/user/goal.webp':'/facebook/user/daiphatthanh.webp')} className="h-10 w-10 rounded-full object-cover" alt=""/><div className="flex-1"><b className="text-[14px]">{second?'GOAL Vietnam':'Radio Station.'}</b><div className="flex items-center gap-1 text-[11px] text-zinc-500">{second?'3m':'16h'} · <Globe2 size={12}/></div></div><MoreHorizontal/><X size={20}/></div><p className="px-3 pb-3 text-[13px] leading-snug">{second?'✅ 10 years dedicated to Vietnamese youth football 🌏🇻🇳 🏆':'Rap Viet Season 3 has found the Top 9 advancing to the Finals, promising an intense showdown.'}</p><img src={asset(second?'/facebook/post/2.webp':'/facebook/post/1.webp')} className="max-h-[350px] w-full object-cover" alt=""/><div className="flex justify-between px-3 py-2 text-[11px] text-zinc-500"><span>👍 ❤️ {second?'187':'10.845'}</span><span>{second?'5':'902'} comments</span></div><div className="mx-3 grid grid-cols-3 border-t py-2 text-center text-[12px] font-semibold text-zinc-600"><span>👍 Like</span><span>◯ Comment</span><span>↗ Share</span></div></div>;
@@ -86,74 +96,86 @@ const Feed: React.FC<{frame: number}> = ({frame}) => {
 
 const Watch: React.FC = () => <div className="min-h-full bg-white p-3 text-black"><div className="flex justify-between"><h2 className="text-2xl font-bold">Video</h2><Search/></div><div className="mt-4 overflow-hidden rounded-xl border"><img src={asset('/facebook/post/3.webp')} className="aspect-video w-full object-cover" alt=""/><div className="p-3"><b>GOAL Vietnam</b><p className="text-sm">New videos for you · Trending</p></div></div></div>;
 const Market: React.FC = () => <div className="min-h-full bg-white p-3 text-black"><h2 className="text-2xl font-bold">Marketplace</h2><div className="my-3 grid grid-cols-2 gap-2"><div className="rounded-full bg-zinc-200 py-2 text-center font-semibold">Sell</div><div className="rounded-full bg-zinc-200 py-2 text-center font-semibold">Categories</div></div><div className="grid grid-cols-2 gap-2">{['1','2','3'].map((x,i)=><div key={x}><img src={asset(`/facebook/post/${x}.webp`)} className="aspect-square w-full rounded-lg object-cover" alt=""/><b className="text-sm">{[250000,480000,150000][i].toLocaleString('en-US')} $</b></div>)}</div></div>;
-const Notifications: React.FC = () => <div className="min-h-full bg-white text-black"><h2 className="p-4 text-2xl font-bold">Notifications</h2>{[['Doraemon','doraemon.webp'],['GOAL Vietnam','goal.webp'],['Khánh Vy','khanhvy.webp']].map(([n,a],i)=><div key={n} className={`flex gap-3 p-4 ${i!==1?'bg-[#e7f3ff]':''}`}><img src={asset(`/facebook/user/${a}`)} className="h-14 w-14 rounded-full object-cover" alt=""/><div className="text-sm"><b>{n}</b> added new content.<div className="text-xs text-[#1877f2]">{i+1} h ago</div></div></div>)}</div>;
+const Notifications: React.FC = () => <div className="min-h-full bg-white text-black"><h2 className="p-4 text-2xl font-bold">Notifications</h2>{[['Doraemon','doraemon.webp'],['GOAL Vietnam','goal.webp'],['Khánh Vy','khanhvy.webp']].map(([n,a],i)=><div key={n} className={`flex gap-3 p-4 ${i!==1?'bg-[#e7f3ff]':''}`}><img src={asset(`/facebook/user/${a}`)} className="h-14 w-14 rounded-full object-cover" alt=""/><div className="text-sm"><b>{n}</b> added new content.<div className="text-xs text-[#0866FF]">{i+1} h ago</div></div></div>)}</div>;
 const MenuScreen: React.FC = () => <div className="min-h-full bg-[#f0f2f5] p-3 text-black"><h2 className="text-2xl font-bold">Menu</h2><div className="my-3 flex items-center gap-3 rounded-xl bg-white p-3"><img src={asset('/facebook/user/lcd.webp')} className="h-12 w-12 rounded-full object-cover" alt=""/><b>Lê Công Đắt</b></div><div className="grid grid-cols-2 gap-2">{[['Friends','friends.png'],['Memories','memory.png'],['Saved','saved.png'],['Marketplace','market.png'],['Video','video.png'],['Events','event.png']].map(([n,i])=><div key={n} className="flex items-center gap-3 rounded-xl bg-white p-3 font-semibold"><img src={asset(`/facebook/menu/${i}`)} className="h-7 w-7" alt=""/>{n}</div>)}</div></div>;
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
   const scroll = interpolate(frame, [440, 500], [0, -400], clamp);
   return (
-    <div className="min-h-full bg-[#d8dadf] text-[#050505] font-sans" style={{transform: `translateY(${scroll}px)`}}>
-      {/* 1. App Bar */}
-      <div className="flex h-[54px] items-center gap-2 border-b border-black/10 bg-white px-2 shadow-xs">
-        <div className="flex h-10 w-10 items-center justify-center">
-          <ArrowLeft size={26} className="text-[#050505]" />
+    <div className="min-h-full bg-white text-[#080809] font-sans" style={{transform: `translateY(${scroll}px)`}}>
+      {/* 1. Top App Bar */}
+      <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full">
+          <MetaFacebookLogo size={36} />
         </div>
-        <div className="flex h-[38px] flex-1 items-center gap-2 rounded-full bg-[#f0f2f5] px-3.5 text-[#65676b]">
-          <Search size={18} className="text-[#65676b]" />
-          <span className="text-[15px] text-[#65676b]">Search</span>
+        <div className="flex items-center gap-1.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809]">
+            <MetaSearchIcon size={18} />
+          </div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809]">
+            <MetaMenuGridIcon size={18} />
+          </div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809]">
+            <MetaMessengerIcon size={18} />
+          </div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809]">
+            <MetaBellIcon size={18} />
+          </div>
         </div>
       </div>
 
       {/* 2. Cover & Avatar Hero */}
-      <div className="bg-white pb-4">
-        <div className="relative h-[210px] w-full bg-[#e4e6eb]">
+      <div className="relative bg-white pb-3">
+        <div className="relative h-[180px] w-full bg-gradient-to-b from-[#8a919a] to-[#cbd2d9] overflow-hidden">
           {fbProfile.coverPicture ? (
             <img src={fbProfile.coverPicture} className="h-full w-full object-cover" alt="" />
           ) : (
             <img src={asset('/facebook/user/lcd-cover.webp')} className="h-full w-full object-cover" alt="" />
           )}
-          <div className="absolute bottom-3 right-3 flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[#e4e6eb] shadow-md border border-white/40">
-            <Camera size={19} className="text-[#050505]" />
+          <div className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white shadow-md border border-[#D0D3D7]/60">
+            <MetaCameraIcon size={17} className="text-[#080809]" />
           </div>
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-white/95 px-4 py-1.5 shadow-md border border-[#D0D3D7]/50 flex items-center gap-1.5">
+            <span className="text-[13px] font-medium text-[#65686C]">Share a thought...</span>
+          </div>
+        </div>
 
-          <div className="absolute -bottom-[50px] left-4">
-            <div className="relative h-[140px] w-[140px] rounded-full border-[4px] border-white bg-white shadow-md overflow-hidden">
+        <div className="relative flex justify-center -mt-[65px]">
+          <div className="relative">
+            <div className="h-[130px] w-[130px] rounded-full border-[4px] border-white bg-white shadow-md overflow-hidden">
               {fbProfile.profilePicture ? (
                 <img src={fbProfile.profilePicture} className="h-full w-full object-cover" alt="" />
               ) : (
                 <img src={asset('/facebook/user/lcd.webp')} className="h-full w-full object-cover" alt="" />
               )}
             </div>
-            <div className="absolute bottom-1 right-1 flex h-[36px] w-[36px] items-center justify-center rounded-full border-[2px] border-white bg-[#e4e6eb] shadow-md text-[#050505]">
-              <Camera size={18} />
+            <div className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#E4E6EB] shadow-md text-[#080809]">
+              <MetaCameraIcon size={16} />
             </div>
           </div>
         </div>
 
         {/* Identity & Buttons */}
-        <div className="px-4 pt-[58px]">
-          <h1 className="text-[23px] font-bold text-[#050505] leading-tight">{fbProfile.profileName || 'Facebook User'}</h1>
-          {fbProfile.friendsCount && (
-            <div className="mt-1 flex items-center gap-1 text-[15px]">
-              <span className="font-bold text-[#050505]">{fbProfile.friendsCount}</span>
-              <span className="text-[#65676b]">friends</span>
-            </div>
-          )}
-          {fbProfile.bio && <p className="mt-2 text-[15px] text-[#050505] leading-snug">{fbProfile.bio}</p>}
+        <div className="px-4 pt-2 text-center">
+          <h1 className="text-[24px] font-bold text-[#080809] leading-tight">{fbProfile.profileName || 'Facebook User'}</h1>
+          <div className="mt-1 flex items-center justify-center gap-1.5 text-[14px] text-[#65686C]">
+            <span className="font-semibold text-[#080809]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} followers` : '1,150 followers'}</span>
+            <span>•</span>
+            <span className="font-semibold text-[#080809]">480 following</span>
+          </div>
+          {fbProfile.bio && <p className="mt-2 text-[14px] text-[#080809] leading-snug">{fbProfile.bio}</p>}
 
-          <div className="mt-3.5 flex flex-col gap-2">
-            <div className="flex h-[38px] w-full items-center justify-center gap-2 rounded-md bg-[#1877f2] text-[14px] font-semibold text-white shadow-none">
-              <Plus size={18} strokeWidth={2.5} />
+          <div className="mt-4 flex gap-2 px-2">
+            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white">
+              <MetaPlusIcon size={16} />
               <span>Add to story</span>
             </div>
-            <div className="flex gap-2">
-              <div className="flex h-[38px] flex-1 items-center justify-center gap-2 rounded-md bg-[#e4e6eb] text-[14px] font-semibold text-[#050505]">
-                <Edit2 size={16} />
-                <span>Edit profile</span>
-              </div>
-              <div className="flex h-[38px] w-[46px] items-center justify-center rounded-md bg-[#e4e6eb] text-[#050505]">
-                <MoreHorizontal size={20} />
-              </div>
+            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
+              <MetaEditPencilIcon size={16} />
+              <span>Edit profile</span>
+            </div>
+            <div className="flex h-[38px] w-[42px] items-center justify-center rounded-lg bg-[#E4E6EB] text-[#080809]">
+              <MetaMoreDotsIcon size={18} />
             </div>
           </div>
         </div>
@@ -161,19 +183,19 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
 
       {/* 3. Friends Grid */}
       {fbProfile.friends && fbProfile.friends.length > 0 && (
-        <div className="mt-2 bg-white p-4 shadow-xs">
-          <div className="flex items-center justify-between pb-2">
+        <div className="my-2 bg-white p-3.5 border-y border-[#D0D3D7]/80">
+          <div className="flex items-center justify-between pb-2.5">
             <div>
-              <h2 className="text-[19px] font-bold text-[#050505]">Friends</h2>
-              <p className="text-[13px] text-[#65676b]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} friends` : '1,150 friends'}</p>
+              <h2 className="text-[16px] font-bold text-[#080809]">Friends</h2>
+              <p className="text-[12px] text-[#65686C]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} friends` : '1,150 friends'}</p>
             </div>
-            <span className="text-[14px] font-medium text-[#1877f2]">Find friends</span>
+            <span className="text-[14px] font-semibold text-[#0064D1]">See all</span>
           </div>
           <div className="grid grid-cols-3 gap-2.5">
             {fbProfile.friends.slice(0, 6).map((f, i) => (
               <div key={i} className="space-y-1">
-                <img src={f.avatar} className="aspect-square w-full rounded-lg object-cover bg-[#e4e6eb]" alt="" />
-                <p className="truncate text-[12px] font-semibold text-[#050505]">{f.name}</p>
+                <img src={f.avatar} className="aspect-square w-full rounded-xl object-cover bg-[#E4E6EB]" alt="" />
+                <p className="truncate text-[12px] font-semibold text-[#080809]">{f.name}</p>
               </div>
             ))}
           </div>
