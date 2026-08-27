@@ -13,10 +13,11 @@ import {
   MetaNavGroupsIcon,
   MetaNavBellIcon,
   MetaNavMenuIcon,
+  MetaComposerPhotoIcon,
   MetaPlusIcon,
 } from './MetaFacebookSvg';
 import { FacebookProfile } from './FacebookProfile';
-import { Globe2, X, Image as ImageIcon } from 'lucide-react';
+import { Globe2, X } from 'lucide-react';
 
 type Tab = 'feed' | 'watch' | 'groups' | 'notifications' | 'menu';
 type Screen = Tab | 'profile';
@@ -68,21 +69,21 @@ function TopBar({ onOpenProfile }: { onOpenProfile?: () => void }) {
           aria-label="Create"
           className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809] active:bg-[#d8dadf]"
         >
-          <MetaPlusIcon size={17} />
+          <MetaPlusIcon size={18} fill="#050505" />
         </button>
         <button
           type="button"
           aria-label="Search"
           className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809] active:bg-[#d8dadf]"
         >
-          <MetaSearchIcon size={17} />
+          <MetaSearchIcon size={18} />
         </button>
         <button
           type="button"
           aria-label="Messenger"
           className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809] active:bg-[#d8dadf]"
         >
-          <MetaMessengerIcon size={17} />
+          <MetaMessengerIcon size={18} />
         </button>
       </div>
     </div>
@@ -107,8 +108,8 @@ function Composer({ onOpenProfile }: { onOpenProfile: () => void }) {
         >
           What&apos;s on your mind?
         </div>
-        <button type="button" aria-label="Photo" className="p-1 text-[#45bd62]">
-          <ImageIcon size={24} />
+        <button type="button" aria-label="Photo" className="p-1 shrink-0 active:scale-95 transition-transform">
+          <MetaComposerPhotoIcon size={24} />
         </button>
       </div>
     </div>
@@ -136,7 +137,7 @@ function Stories({ onOpenProfile }: { onOpenProfile: () => void }) {
                   />
                 </div>
                 <div className="absolute left-1/2 top-[107px] grid h-9 w-9 -translate-x-1/2 place-items-center rounded-full border-[3px] border-white bg-[#0866FF] text-white shadow-xs">
-                  <MetaPlusIcon size={18} />
+                  <MetaPlusIcon size={18} fill="#ffffff" />
                 </div>
                 <div className="absolute bottom-2.5 w-full px-1 text-center text-[12px] font-bold text-[#050505] leading-tight">
                   Create story
@@ -278,7 +279,7 @@ function Watch() {
     <div className="min-h-full bg-white p-3 text-[#050505]">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Video</h2>
-        <MetaSearchIcon size={20} className="text-[#050505]" />
+        <MetaSearchIcon size={20} />
       </div>
       <div className="mt-4 overflow-hidden rounded-xl border border-[#ced0d4]">
         <img src="/facebook/post/3.webp" alt="" className="aspect-video w-full object-cover" />
@@ -300,7 +301,7 @@ function GroupsScreen() {
     <div className="min-h-full bg-white p-4 text-[#050505]">
       <div className="flex items-center justify-between pb-3">
         <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Groups</h2>
-        <MetaSearchIcon size={20} className="text-[#050505]" />
+        <MetaSearchIcon size={20} />
       </div>
       <div className="flex gap-2 pb-3 border-b border-[#ced0d4]">
         <button className="rounded-full bg-[#e4e6eb] px-4 py-2 text-sm font-semibold text-[#050505]">Your groups</button>
@@ -344,7 +345,7 @@ function Notifications() {
             <b>{n.n}</b> {n.t}
             <div className="mt-1 text-xs text-[#0866FF] font-medium">{i + 1} h ago</div>
           </div>
-          <MetaMoreDotsIcon size={18} className="text-[#65676b]" />
+          <MetaMoreDotsIcon size={18} />
         </div>
       ))}
     </div>
@@ -416,18 +417,18 @@ export const FacebookApp: React.FC = () => {
             onClick={() => setScreen('feed')}
             className={`relative grid place-items-center ${
               tab === 'feed'
-                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]'
                 : ''
             }`}
           >
-            <MetaNavHomeIcon active={tab === 'feed'} size={24} />
+            <MetaNavHomeIcon active={tab === 'feed'} size={25} />
           </button>
           <button
             aria-label="Video"
             onClick={() => setScreen('watch')}
             className={`relative grid place-items-center ${
               tab === 'watch'
-                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]'
                 : ''
             }`}
           >
@@ -438,7 +439,7 @@ export const FacebookApp: React.FC = () => {
             onClick={() => setScreen('groups')}
             className={`relative grid place-items-center ${
               tab === 'groups'
-                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]'
                 : ''
             }`}
           >
@@ -449,7 +450,7 @@ export const FacebookApp: React.FC = () => {
             onClick={() => setScreen('notifications')}
             className={`relative grid place-items-center ${
               tab === 'notifications'
-                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]'
                 : ''
             }`}
           >
@@ -460,7 +461,7 @@ export const FacebookApp: React.FC = () => {
             onClick={() => setScreen('menu')}
             className={`relative grid place-items-center ${
               tab === 'menu'
-                ? 'after:absolute after:bottom-0 after:h-[3px] after:w-[80%] after:rounded-full after:bg-[#0866FF]'
+                ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]'
                 : ''
             }`}
           >
