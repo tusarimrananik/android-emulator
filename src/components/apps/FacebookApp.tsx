@@ -11,6 +11,7 @@ import {
   MetaNavHomeIcon,
   MetaNavWatchIcon,
   MetaNavFriendsIcon,
+  MetaNavMarketIcon,
   MetaNavBellIcon,
   MetaNavMenuIcon,
   MetaComposerPhotoIcon,
@@ -19,7 +20,7 @@ import {
 import { FacebookProfile } from './FacebookProfile';
 import { Globe2, X } from 'lucide-react';
 
-type Tab = 'feed' | 'watch' | 'friends' | 'notifications' | 'menu';
+type Tab = 'feed' | 'watch' | 'friends' | 'market' | 'notifications' | 'menu';
 type Screen = Tab | 'profile';
 
 const stories = [
@@ -238,12 +239,12 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
         <div>{post.comments} · {post.shares}</div>
       </div>
 
-      <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4] py-1 text-center text-[13px] font-semibold text-[#65676b]">
+      <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4] py-1 text-center text-[13px] font-semibold text-[#65686b]">
         <button
           type="button"
           onClick={() => setLiked(!liked)}
           className={`flex items-center justify-center gap-1.5 py-2 transition-colors ${
-            liked ? 'text-[#0866FF]' : 'text-[#65676B]'
+            liked ? 'text-[#0866FF]' : 'text-[#65686B]'
           }`}
         >
           <MetaLikeThumbIcon size={18} />
@@ -331,6 +332,38 @@ function FriendsScreen({ onOpenProfile }: { onOpenProfile: () => void }) {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function MarketScreen() {
+  const items = [
+    { name: 'Vintage Leather Jacket (1978)', price: '$85', location: 'San Francisco, CA', image: '/facebook/post/1.webp' },
+    { name: 'Sony Alpha Camera Bundle', price: '$450', location: 'Oakland, CA', image: '/facebook/post/2.webp' },
+    { name: 'Mid-Century Modern Chair', price: '$120', location: 'Berkeley, CA', image: '/facebook/post/3.webp' },
+  ];
+  return (
+    <div className="min-h-full bg-white p-4 text-[#050505]">
+      <div className="flex items-center justify-between pb-3">
+        <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Marketplace</h2>
+        <MetaSearchIcon size={20} />
+      </div>
+      <div className="flex gap-2 pb-3 border-b border-[#ced0d4]">
+        <button className="rounded-full bg-[#e4e6eb] px-4 py-2 text-sm font-semibold text-[#050505]">Sell</button>
+        <button className="rounded-full bg-[#e4e6eb] px-4 py-2 text-sm font-semibold text-[#050505]">Categories</button>
+      </div>
+      <div className="pt-3 grid grid-cols-2 gap-3">
+        {items.map(it => (
+          <div key={it.name} className="overflow-hidden rounded-xl border border-[#ced0d4]/60 bg-white">
+            <img src={it.image} alt="" className="aspect-square w-full object-cover" />
+            <div className="p-2.5">
+              <p className="font-bold text-[16px] text-[#050505]">{it.price}</p>
+              <p className="text-xs text-[#050505] truncate">{it.name}</p>
+              <p className="text-[11px] text-[#65676b]">{it.location}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -425,7 +458,7 @@ export const FacebookApp: React.FC = () => {
     <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[#f0f2f5] font-['Optimistic_Text',-apple-system,sans-serif]">
       {screen !== 'profile' && tab === 'feed' && <TopBar onOpenProfile={() => setScreen('profile')} />}
       {screen !== 'profile' && (
-        <nav className="grid h-[48px] shrink-0 grid-cols-5 border-b border-[#ced0d4] bg-white">
+        <nav className="grid h-[48px] shrink-0 grid-cols-6 border-b border-[#ced0d4] bg-white">
           <button
             aria-label="Home"
             onClick={() => setScreen('feed')}
@@ -460,6 +493,17 @@ export const FacebookApp: React.FC = () => {
             <MetaNavFriendsIcon active={tab === 'friends'} size={24} />
           </button>
           <button
+            aria-label="Marketplace"
+            onClick={() => setScreen('market')}
+            className={`relative grid place-items-center ${
+              tab === 'market'
+                ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]'
+                : ''
+            }`}
+          >
+            <MetaNavMarketIcon active={tab === 'market'} size={24} />
+          </button>
+          <button
             aria-label="Notifications"
             onClick={() => setScreen('notifications')}
             className={`relative grid place-items-center ${
@@ -491,6 +535,7 @@ export const FacebookApp: React.FC = () => {
             {tab === 'feed' && <Feed onOpenProfile={() => setScreen('profile')} />}
             {tab === 'watch' && <Watch />}
             {tab === 'friends' && <FriendsScreen onOpenProfile={() => setScreen('profile')} />}
+            {tab === 'market' && <MarketScreen />}
             {tab === 'notifications' && <Notifications />}
             {tab === 'menu' && <MenuScreen onOpenProfile={() => setScreen('profile')} />}
           </>

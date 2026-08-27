@@ -18,6 +18,7 @@ import {
   MetaNavHomeIcon,
   MetaNavWatchIcon,
   MetaNavFriendsIcon,
+  MetaNavMarketIcon,
   MetaNavBellIcon,
   MetaNavMenuIcon,
   MetaPlusIcon,
@@ -34,7 +35,7 @@ import {Globe2, X, Search} from 'lucide-react';
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const asset = (path: string) => staticFile(path);
 
-type FbTab = 'feed' | 'watch' | 'friends' | 'notifications' | 'menu' | 'profile';
+type FbTab = 'feed' | 'watch' | 'friends' | 'market' | 'notifications' | 'menu' | 'profile';
 
 type FbProfileData = {
   profileName: string;
@@ -63,15 +64,18 @@ const tabForFrame = (frame: number, hasFbProfile: boolean): FbTab => {
 };
 
 const FacebookNav: React.FC<{tab: FbTab}> = ({tab}) => (
-  <div className="grid h-[48px] shrink-0 grid-cols-5 border-b border-[#ced0d4] bg-white">
+  <div className="grid h-[48px] shrink-0 grid-cols-6 border-b border-[#ced0d4] bg-white">
     <div className={`relative grid place-items-center ${tab === 'feed' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavHomeIcon active={tab === 'feed'} size={25} />
+      <MetaNavHomeIcon active={tab === 'feed'} size={24} />
     </div>
     <div className={`relative grid place-items-center ${tab === 'watch' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
       <MetaNavWatchIcon active={tab === 'watch'} size={24} />
     </div>
     <div className={`relative grid place-items-center ${tab === 'friends' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavFriendsIcon active={tab === 'friends'} size={25} />
+      <MetaNavFriendsIcon active={tab === 'friends'} size={24} />
+    </div>
+    <div className={`relative grid place-items-center ${tab === 'market' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
+      <MetaNavMarketIcon active={tab === 'market'} size={24} />
     </div>
     <div className={`relative grid place-items-center ${tab === 'notifications' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
       <MetaNavBellIcon active={tab === 'notifications'} size={24} />
@@ -289,6 +293,14 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
   );
 };
 
+const MarketScreen: React.FC = () => (
+  <div className="min-h-full bg-white p-3 text-[#050505]">
+    <div className="flex items-center justify-between"><h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Marketplace</h2><MetaSearchIcon size={20}/></div>
+    <div className="my-3 grid grid-cols-2 gap-2"><div className="rounded-full bg-[#e4e6eb] py-2 text-center text-sm font-semibold">Sell</div><div className="rounded-full bg-[#e4e6eb] py-2 text-center text-sm font-semibold">Categories</div></div>
+    <div className="grid grid-cols-2 gap-2">{['1','2','3'].map((x,i)=><div key={x} className="overflow-hidden rounded-xl border border-[#ced0d4]/60 bg-white"><img src={asset(`/facebook/post/${x}.webp`)} className="aspect-square w-full object-cover" alt=""/><div className="p-2"><p className="font-bold text-[15px]">{[85,450,120][i]} $</p><p className="text-xs text-[#65676b]">Local listing</p></div></div>)}</div>
+  </div>
+);
+
 const FacebookScreen: React.FC<{frame:number; fbProfile?: FbProfileData}> = ({frame, fbProfile}) => {
   const tab=tabForFrame(frame, !!fbProfile);
   return (
@@ -299,6 +311,7 @@ const FacebookScreen: React.FC<{frame:number; fbProfile?: FbProfileData}> = ({fr
         {tab==='feed'&&<Feed frame={frame}/>}
         {tab==='watch'&&<Watch/>}
         {tab==='friends'&&<FriendsTabScreen/>}
+        {tab==='market'&&<MarketScreen/>}
         {tab==='notifications'&&<Notifications/>}
         {tab==='menu'&&<MenuScreen/>}
         {tab==='profile'&&fbProfile&&<ProfileScreen fbProfile={fbProfile} frame={frame}/>}
