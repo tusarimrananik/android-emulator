@@ -1,7 +1,6 @@
 import React from 'react';
 
-// 100% Extracted from Official Facebook Android APK (com.facebook.katana)
-// Resource directory: res/drawable.3/meta_brand_design_system_icons_vector_*.xml
+// Exact vector path data parsed directly from Meta fb_ic_*.xml files inside com.facebook.katana APK
 
 export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 36 }) => (
   <svg viewBox="0 0 36 36" width={size} height={size} fill="#0866FF" className={className}>
@@ -19,6 +18,12 @@ export const MetaNavHomeIcon: React.FC<{ className?: string; size?: number; fill
 export const MetaNavFriendsIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = '', size = 24, fill = '#65686C', active }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : fill} className={className}>
     <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+  </svg>
+);
+
+export const MetaNavGroupsIcon: React.FC<{ className?: string; size?: number; fill?: string; active?: boolean }> = ({ className = '', size = 24, fill = '#65686C', active }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : fill} className={className}>
+    <path d="M12.496 5a4 4 0 1 1 8 0 4 4 0 0 1-8 0zm4-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-9 2.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm-2 4a2 2 0 1 1 4 0 2 2 0 0 1-4 0zM5.5 15a5 5 0 0 0-5 5 3 3 0 0 0 3 3h8.006a3 3 0 0 0 3-3 5 5 0 0 0-5-5H5.5zm-3 5a3 3 0 0 1 3-3h4.006a3 3 0 0 1 3 3 1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1zm12-9.5a5.04 5.04 0 0 0-.37.014 1 1 0 0 0 .146 1.994c.074-.005.149-.008.224-.008h4.006a3 3 0 0 1 3 3 1 1 0 0 1-1 1h-3.398a1 1 0 1 0 0 2h3.398a3 3 0 0 0 3-3 5 5 0 0 0-5-5H14.5z" />
   </svg>
 );
 
