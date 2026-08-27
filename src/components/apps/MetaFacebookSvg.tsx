@@ -9,14 +9,10 @@ export const MetaFacebookLogo: React.FC<{ className?: string; size?: number }> =
   </svg>
 );
 
-// 1. HOME TAB (Exact Meta Outline Vector with evenodd fill rule so all parts are visible)
+// 1. HOME TAB (Complete, Symmetrical Outline House)
 export const MetaNavHomeIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 24 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65676B'}>
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M12.5 1.579a1.75 1.75 0 0 0-1 0L3.35 4.394A2.75 2.75 0 0 0 1.5 6.985v10.515A3.5 3.5 0 0 0 5 21h14a3.5 3.5 0 0 0 3.5-3.5V6.985a2.75 2.75 0 0 0-1.85-2.591L12.5 1.58zM10.5 13a1.5 1.5 0 0 1 3 0v6.5h-3V13zm-7-6.015c0-.622.42-1.164 1.02-1.372l8.15-2.815c.21-.072.45-.072.66 0l8.15 2.815c.6.208 1.02.75 1.02 1.372V17.5a1.5 1.5 0 0 1-1.5 1.5H15.5V13a3.5 3.5 0 0 0-7 0v6H5a1.5 1.5 0 0 1-1.5-1.5V6.985z"
-    />
+    <path d="M12 2.1 1 12h3v9h6v-6h4v6h6v-9h3L12 2.1zm8 16.9h-4v-6H8v6H4v-8.1l8-7.2 8 7.2v8.1z" />
   </svg>
 );
 
@@ -44,14 +40,10 @@ export const MetaNavMarketIcon: React.FC<{ active?: boolean; size?: number }> = 
   </svg>
 );
 
-// 5. NOTIFICATIONS TAB (Exact Meta Outline Bell Vector with evenodd fill rule so all parts are visible)
+// 5. NOTIFICATIONS TAB (Complete, Symmetrical Outline Bell)
 export const MetaNavBellIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 24 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65676B'}>
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M12 2a6.5 6.5 0 0 0-6.5 6.5v4.276a3 3 0 0 1-.879 2.122L3.293 16.22A1.5 1.5 0 0 0 4.354 18.75h15.292a1.5 1.5 0 0 0 1.061-2.53l-1.328-1.322a3 3 0 0 1-.879-2.122V8.5A6.5 6.5 0 0 0 12 2zm-4.5 6.5a4.5 4.5 0 1 1 9 0v4.276a5 5 0 0 0 1.464 3.536l.465.463a.5.5 0 0 1-.354.85H4.925a.5.5 0 0 1-.354-.85l.465-.463A5 5 0 0 0 6.5 12.776V8.5zM9.5 20.25a2.5 2.5 0 0 0 5 0h-5z"
-    />
+    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" />
   </svg>
 );
 
