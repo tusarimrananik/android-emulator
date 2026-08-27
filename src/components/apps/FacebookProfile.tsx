@@ -51,8 +51,8 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
   const [liked, setLiked] = useState(false);
 
   return (
-    <div className="min-h-full bg-white text-[#080809] font-[-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,Helvetica,Arial,sans-serif] select-none pb-16">
-      {/* 1. OFFICIAL META TOP HEADER BAR */}
+    <div className="min-h-full bg-white text-[#080809] font-['Optimistic_Text',-apple-system,sans-serif] select-none pb-16">
+      {/* 1. OFFICIAL META TOP HEADER BAR (DIRECT FROM APK) */}
       <header className="sticky top-0 z-30 flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
         <div className="flex items-center gap-2">
           <button
@@ -100,7 +100,7 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
         </div>
       </header>
 
-      {/* 2. COVER & CENTERED AVATAR HERO */}
+      {/* 2. COVER & CENTERED AVATAR HERO (OFFICIAL META KATANA LAYOUT) */}
       <div className="relative bg-white pb-3">
         {/* Cover Photo */}
         <div className="relative h-[180px] w-full bg-gradient-to-b from-[#8a919a] to-[#cbd2d9] overflow-hidden">
@@ -149,7 +149,7 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
 
         {/* 3. CENTERED IDENTITY, METRICS & AVATAR CLUSTER */}
         <div className="px-4 pt-2 text-center">
-          <h1 className="text-[24px] font-bold text-[#080809] leading-tight tracking-tight">
+          <h1 className="text-[24px] font-bold font-['Optimistic_Display',sans-serif] text-[#080809] leading-tight tracking-tight">
             Lê Công Đắt
           </h1>
 
@@ -209,7 +209,7 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
 
       {/* 4. DETAILS SECTION */}
       <section className="bg-white p-4 border-y border-[#D0D3D7]/80 my-2">
-        <h2 className="text-[18px] font-bold text-[#080809]">Details</h2>
+        <h2 className="text-[18px] font-bold font-['Optimistic_Display',sans-serif] text-[#080809]">Details</h2>
         <div className="mt-3.5 space-y-3.5 text-[14px] text-[#080809]">
           <div className="flex items-start gap-3">
             <span className="text-[#65686C] mt-0.5"><MetaGraduationIcon size={20} /></span>
@@ -252,7 +252,7 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
       {/* 5. POSTS COMPOSER */}
       <section className="my-2 bg-white p-4 border-y border-[#D0D3D7]/80">
         <div className="flex items-center justify-between">
-          <h2 className="text-[18px] font-bold text-[#080809]">Posts</h2>
+          <h2 className="text-[18px] font-bold font-['Optimistic_Display',sans-serif] text-[#080809]">Posts</h2>
           <button type="button" className="text-[14px] font-medium text-[#0064D1]">
             Filters
           </button>
