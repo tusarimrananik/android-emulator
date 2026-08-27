@@ -435,7 +435,7 @@ export const FacebookApp: React.FC = () => {
                 : ''
             }`}
           >
-            <MetaNavHomeIcon active={tab === 'feed'} size={25} />
+            <MetaNavHomeIcon active={tab === 'feed'} size={24} />
           </button>
           <button
             aria-label="Video"
@@ -457,7 +457,7 @@ export const FacebookApp: React.FC = () => {
                 : ''
             }`}
           >
-            <MetaNavFriendsIcon active={tab === 'friends'} size={25} />
+            <MetaNavFriendsIcon active={tab === 'friends'} size={24} />
           </button>
           <button
             aria-label="Notifications"
