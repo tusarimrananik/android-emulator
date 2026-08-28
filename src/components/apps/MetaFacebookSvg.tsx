@@ -37,10 +37,15 @@ export const MetaNavFriendsIcon: React.FC<{ active?: boolean; size?: number }> =
 );
 export const MetaNavGroupsIcon = MetaNavFriendsIcon;
 
-// 4. MARKETPLACE TAB — FBNucleusAppPagesOutline24Icon (shopping bag icon from live feed)
+// 4. PAGES TAB — FBNucleusAppPagesFilled24Icon (flag on pole from live feed)
+// Filled = solid flag; Outline = flag outline without inner decorations
 export const MetaNavMarketIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 24 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill={active ? '#0866FF' : '#65676B'}>
-    <path d="M3.023 2a1.006 1.006 0 0 0-.917.551.995.995 0 0 0-.094.601l3 19.5a1 1 0 0 0 1.977-.304L6.166 17h13.48a2 2 0 0 0 1.912-2.588L20.046 9.5l1.512-4.912A2 2 0 0 0 19.646 2H3.023zM5.86 15 4.166 4h15.48l-1.511 4.912a2 2 0 0 0 0 1.176L19.646 15H5.86z" />
+    {active ? (
+      <path d="M6.166 17h13.48a2 2 0 0 0 1.912-2.588L20.046 9.5l1.512-4.912A2 2 0 0 0 19.646 2H3.023a1.006 1.006 0 0 0-.917.551.995.995 0 0 0-.094.601l2 13 .002.017.998 6.483a1 1 0 0 0 1.977-.304L6.166 17z" />
+    ) : (
+      <path d="M3.023 2a1.006 1.006 0 0 0-.917.551.995.995 0 0 0-.094.601l3 19.5a1 1 0 0 0 1.977-.304L6.166 17h13.48a2 2 0 0 0 1.912-2.588L20.046 9.5l1.512-4.912A2 2 0 0 0 19.646 2H3.023zM5.86 15 4.166 4h15.48l-1.511 4.912a2 2 0 0 0 0 1.176L19.646 15H5.86z" />
+    )}
   </svg>
 );
 
