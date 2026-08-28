@@ -122,16 +122,54 @@ export const MetaCameraIcon: React.FC<{ className?: string; size?: number; fill?
   <KatanaMask asset="fb_ic_camera_outline_24" size={size} color={fill} className={className} />
 );
 
+// LIKE THUMB — APK meta_brand_design_system_icons_vector_hand_thumbs_up_outline_24
 export const MetaLikeThumbIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 18, fill = '#65676B' }) => (
-  <KatanaMask asset={fill === '#0866FF' ? 'fb_ic_like_filled_24' : 'fb_ic_like_outline_24'} size={size} color={fill} className={className} />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M20.87,9.43C20.4,9.15 19.86,9 19.31,9h-5.85c0.44,-1.14 0.79,-2.33 1.04,-3.52 0.18,-0.85 -0.03,-1.73 -0.58,-2.41A2.87,2.87 0,0 0,11.68 2c-0.76,0 -1.45,0.42 -1.79,1.11L8.21,6.47 6.88,8.59C6.33,9.47 5.38,10 4.34,10H2.99c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h1.35c1.73,0 3.32,-0.88 4.24,-2.35l1.37,-2.2L11.67,4c0.37,0 0.59,0.2 0.69,0.33 0.1,0.12 0.25,0.38 0.18,0.74 -0.23,1.09 -0.55,2.18 -0.96,3.22l-0.26,0.67a1.497,1.497 0,0 0,1.4 2.04h6.58c0.19,0 0.37,0.05 0.53,0.15 0.18,0.11 0.22,0.28 0.23,0.37s0,0.26 -0.17,0.4l-0.41,0.33c-0.53,0.42 -0.65,1.2 -0.28,1.76 0.13,0.19 0.08,0.45 -0.1,0.59l-0.49,0.37c-0.53,0.4 -0.7,1.12 -0.41,1.71 0.18,0.36 0.03,0.81 -0.39,1.02 -0.56,0.28 -0.84,0.95 -0.63,1.57a0.546,0.546 0,0 1,-0.52 0.72h-5.09c-1.34,0 -2.59,-0.52 -3.54,-1.46l-0.07,-0.07C7.02,17.52 5.76,17 4.42,17H3c-0.55,0 -1,0.45 -1,1s0.45,1 1,1h1.42c0.79,0 1.56,0.32 2.12,0.88l0.07,0.07A6.96,6.96 0,0 0,11.56 22h5.09a2.55,2.55 0,0 0,2.53 -2.8c0.89,-0.67 1.29,-1.83 0.99,-2.91l0.12,-0.09c0.86,-0.64 1.18,-1.75 0.85,-2.73 0.63,-0.5 0.97,-1.28 0.91,-2.09 -0.05,-0.81 -0.5,-1.54 -1.19,-1.95z" />
+  </svg>
 );
 
+// COMMENT — APK meta_brand_design_system_icons_vector_speech_bubble_outline_24
 export const MetaCommentIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <KatanaMask asset="fb_ic_comment_outline_24" size={size} color="#65676B" className={className} />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
+    <path d="M5,18.67V21c0,0.32 0.15,0.62 0.42,0.81 0.17,0.12 0.38,0.19 0.58,0.19 0.11,0 0.21,-0.02 0.32,-0.05l3.3,-1.1c0.16,-0.05 0.33,-0.06 0.53,-0.02 0.62,0.12 1.25,0.17 1.86,0.17 5.5,0 9.97,-4.26 9.97,-9.5S17.51,2 12.01,2s-9.97,4.26 -9.97,9.5c0,2.43 0.97,4.75 2.74,6.52 0.15,0.15 0.24,0.39 0.24,0.65zM11.998,4c4.4,0 7.97,3.36 7.97,7.5 0,4.59 -4.43,8.29 -9.47,7.36 -0.53,-0.1 -1.04,-0.07 -1.52,0.09l-1.98,0.66v-0.94c0,-0.8 -0.29,-1.53 -0.82,-2.06 -1.39,-1.4 -2.15,-3.21 -2.15,-5.11C4.029,7.36 7.609,4 12,4" />
+  </svg>
 );
 
+// SHARE — APK-style forward arrow
 export const MetaShareIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <KatanaMask asset="fb_ic_share_outline_24" size={size} color="#65676B" className={className} />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
+    <path d="M12.3 2.3a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1-1.4 1.4L14 5.42V15a1 1 0 1 1-2 0V5.41L8.7 8.7a1 1 0 0 1-1.4-1.4l5-5zM5 14a1 1 0 0 0-2 0v4.5A2.5 2.5 0 0 0 5.5 21h13a2.5 2.5 0 0 0 2.5-2.5V14a1 1 0 1 0-2 0v4.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V14z" />
+  </svg>
+);
+
+// NAVICON / HAMBURGER — 3-bar menu icon
+export const MetaNaviconIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#050505' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M3 5.5a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 6.5a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm0 6.5a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1z" />
+  </svg>
+);
+
+// VERIFIED BADGE — blue circle with white checkmark
+export const MetaVerifiedBadge: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 16 }) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} className={className}>
+    <circle cx="8" cy="8" r="8" fill="#0866FF" />
+    <path d="M6.53 11.53a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 1 1 1.06-1.06L6 9.94l4.47-4.47a.75.75 0 1 1 1.06 1.06l-5 5z" fill="#FFFFFF" />
+  </svg>
+);
+
+// GLOBE — public audience indicator
+export const MetaGlobeIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 12 }) => (
+  <svg viewBox="0 0 16 16" width={size} height={size} fill="#65676B" className={className}>
+    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.5 1.56v2.6l-2.31.28C6.22 2.8 7.07 1.94 7.5 1.55zm1 0c.43.39 1.28 1.25 2.31 2.89l-2.31-.28v-2.6zM5.02 4.72 7.5 5.03v2.44H3.06a6.49 6.49 0 0 1 1.96-2.75zm5.96 0a6.49 6.49 0 0 1 1.96 2.75H8.5V5.03l2.48-.31zM3.06 8.53H7.5v2.44l-2.48.31A6.49 6.49 0 0 1 3.06 8.53zm5.44 0h4.44a6.49 6.49 0 0 1-1.96 2.75L8.5 10.97V8.53zm-1 3.32v2.6c-.43-.39-1.28-1.25-2.31-2.88l2.31.28zm1 0 2.31-.28c-1.03 1.63-1.88 2.49-2.31 2.88v-2.6z" />
+  </svg>
+);
+
+// CLOSE X — inline SVG, no Lucide dependency
+export const MetaCloseIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
+    <path d="M18.36 5.64a1 1 0 0 0-1.41 0L12 10.59 7.05 5.64a1 1 0 0 0-1.41 1.41L10.59 12l-4.95 4.95a1 1 0 1 0 1.41 1.41L12 13.41l4.95 4.95a1 1 0 0 0 1.41-1.41L13.41 12l4.95-4.95a1 1 0 0 0 0-1.41z" />
+  </svg>
 );
 
 export const MetaArrowBackIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (

@@ -16,9 +16,12 @@ import {
   MetaNavMenuIcon,
   MetaComposerPhotoIcon,
   MetaPlusIcon,
+  MetaNaviconIcon,
+  MetaVerifiedBadge,
+  MetaGlobeIcon,
+  MetaCloseIcon,
 } from './MetaFacebookSvg';
 import { FacebookProfile } from './FacebookProfile';
-import { Globe2, X } from 'lucide-react';
 
 type Tab = 'feed' | 'watch' | 'friends' | 'market' | 'notifications' | 'menu';
 type Screen = Tab | 'profile';
@@ -59,7 +62,10 @@ const posts = [
 function TopBar({ onOpenProfile }: { onOpenProfile?: () => void }) {
   return (
     <div className="flex h-[52px] shrink-0 items-center justify-between bg-white px-3 text-[#080809]">
-      <div className="flex items-center">
+      <div className="flex items-center gap-1.5">
+        <button type="button" aria-label="Menu" className="p-1 active:opacity-60">
+          <MetaNaviconIcon size={22} fill="#050505" />
+        </button>
         <span className="text-[28px] font-extrabold font-['Optimistic_Display',sans-serif] tracking-[-1.5px] text-[#0866FF]">
           facebook
         </span>
@@ -197,22 +203,20 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
           <div className="flex items-center gap-1.5 text-[15px] font-bold text-[#050505] leading-tight">
             <span>{post.user}</span>
             {post.verified && (
-              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#0866FF] text-white text-[9px] font-bold">
-                ✓
-              </span>
+              <MetaVerifiedBadge size={14} />
             )}
           </div>
           <div className="flex items-center gap-1 text-[12px] text-[#65676b] pt-0.5">
             <span>{post.time}</span>
             <span>·</span>
-            <Globe2 size={12} />
+            <MetaGlobeIcon size={12} />
           </div>
         </div>
         <button type="button" aria-label="More" className="text-[#65676b] p-1">
           <MetaMoreDotsIcon size={18} />
         </button>
         <button type="button" aria-label="Close" onClick={() => setVisible(false)} className="text-[#65676b] p-1">
-          <X size={18} />
+          <MetaCloseIcon size={18} />
         </button>
       </div>
 
@@ -247,7 +251,7 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
             liked ? 'text-[#0866FF]' : 'text-[#65686B]'
           }`}
         >
-          <MetaLikeThumbIcon size={18} />
+          <MetaLikeThumbIcon size={18} fill={liked ? '#0866FF' : '#65686B'} />
           <span>Like</span>
         </button>
         <button type="button" className="flex items-center justify-center gap-1.5 py-2 active:bg-[#f0f2f5]">
