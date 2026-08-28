@@ -29,11 +29,8 @@ import {
   MetaMoreDotsIcon,
   MetaEditPencilIcon,
   MetaCameraIcon,
-  MetaNaviconIcon,
-  MetaVerifiedBadge,
-  MetaGlobeIcon,
-  MetaCloseIcon,
 } from '@/components/apps/MetaFacebookSvg';
+import {Globe2, X, Search} from 'lucide-react';
 
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const asset = (path: string) => staticFile(path);
@@ -91,8 +88,7 @@ const FacebookNav: React.FC<{tab: FbTab}> = ({tab}) => (
 
 const TopBar: React.FC = () => (
   <div className="flex h-[52px] shrink-0 items-center justify-between bg-white px-3 text-[#080809]">
-    <div className="flex items-center gap-1.5">
-      <MetaNaviconIcon size={22} fill="#050505" />
+    <div className="flex items-center">
       <span className="text-[28px] font-extrabold font-['Optimistic_Display',sans-serif] tracking-[-1.5px] text-[#0866FF]">
         facebook
       </span>
@@ -174,14 +170,14 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 text-[15px] font-bold text-[#050505] leading-tight">
           <span>{second ? 'GOAL Football' : 'Becker Threads'}</span>
-          <MetaVerifiedBadge size={14} />
+          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#0866FF] text-white text-[9px] font-bold">✓</span>
         </div>
         <div className="flex items-center gap-1 text-[12px] text-[#65676b] pt-0.5">
-          <span>{second ? '4h' : '2h'}</span> · <MetaGlobeIcon size={12} />
+          <span>{second ? '4h' : '2h'}</span> · <Globe2 size={12} />
         </div>
       </div>
       <MetaMoreDotsIcon size={18} />
-      <MetaCloseIcon size={18} />
+      <X size={18} className="text-[#65676b]" />
     </div>
     <p className="whitespace-pre-line px-3.5 pt-1 pb-2.5 text-[14px] leading-snug text-[#050505]">
       {second ? '🏆 10 years of dedication to youth football\n⚽ The journey to the World Cup begins now 🌏' : 'Spring brights, all sustainable! 🌿 Everything shown was made before 1982, except the 🌼 #vintage #fashion'}
@@ -349,7 +345,7 @@ export const FacebookWorkflowVideo: React.FC<{fbProfile?: FbProfileData}> = ({fb
                 <Dock/>
               </div>
               <div className="relative z-20"><NavigationBar dark={false}/></div>
-              {drawerVisible&&<div style={{transform:`translateY(${interpolate(drawerOpen,[0,1],[915,0],clamp)}px)`}} className="absolute inset-0 z-40 overflow-hidden rounded-[40px] bg-[#121418]/[.98] p-4 pt-10"><div className="mb-5 flex h-12 items-center gap-3 rounded-full bg-white/10 px-4"><MetaSearchIcon size={17} /><span className="text-xs text-white/50">Search apps</span></div><div className="h-[790px] overflow-hidden"><div style={{transform:`translateY(${drawerScroll}px)`}} className="grid grid-cols-4 gap-x-2 gap-y-7">{INITIAL_APPS.map(a=><div key={a.id} className={`flex h-[78px] flex-col items-center gap-1 ${a.id==='facebook'&&frame>100?'scale-110':''}`}>{a.id==='facebook'?<img src={asset('/app-icons/facebook.png')} className="h-[50px] w-[50px] rounded-full object-cover" alt="Facebook"/>:<AppSvgIcon appId={a.id} isThemed size={50}/>}<span className="max-w-[68px] truncate text-[10px]">{a.name}</span></div>)}</div></div></div>}
+              {drawerVisible&&<div style={{transform:`translateY(${interpolate(drawerOpen,[0,1],[915,0],clamp)}px)`}} className="absolute inset-0 z-40 overflow-hidden rounded-[40px] bg-[#121418]/[.98] p-4 pt-10"><div className="mb-5 flex h-12 items-center gap-3 rounded-full bg-white/10 px-4"><Search size={17}/><span className="text-xs text-white/50">Search apps</span></div><div className="h-[790px] overflow-hidden"><div style={{transform:`translateY(${drawerScroll}px)`}} className="grid grid-cols-4 gap-x-2 gap-y-7">{INITIAL_APPS.map(a=><div key={a.id} className={`flex h-[78px] flex-col items-center gap-1 ${a.id==='facebook'&&frame>100?'scale-110':''}`}>{a.id==='facebook'?<img src={asset('/app-icons/facebook.png')} className="h-[50px] w-[50px] rounded-full object-cover" alt="Facebook"/>:<AppSvgIcon appId={a.id} isThemed size={50}/>}<span className="max-w-[68px] truncate text-[10px]">{a.name}</span></div>)}</div></div></div>}
               {facebookVisible&&<div style={{transform:`scale(${appScale})`,transformOrigin:'center'}} className="absolute inset-0 z-30"><FacebookScreen frame={frame} fbProfile={fbProfile}/></div>}
             </div>
           </DeviceFrame>
