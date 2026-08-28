@@ -136,10 +136,10 @@ export const MetaCommentIcon: React.FC<{ className?: string; size?: number }> = 
   </svg>
 );
 
-// SHARE — APK-style forward arrow
+// SHARE — Facebook's curved forward arrow pointing right
 export const MetaShareIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
-    <path d="M12.3 2.3a1 1 0 0 1 1.4 0l5 5a1 1 0 0 1-1.4 1.4L14 5.42V15a1 1 0 1 1-2 0V5.41L8.7 8.7a1 1 0 0 1-1.4-1.4l5-5zM5 14a1 1 0 0 0-2 0v4.5A2.5 2.5 0 0 0 5.5 21h13a2.5 2.5 0 0 0 2.5-2.5V14a1 1 0 1 0-2 0v4.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V14z" />
+    <path d="M13.02 3.29a1 1 0 0 1 1.41-.05l6.27 5.8a1.5 1.5 0 0 1 .04 2.16l-6.27 5.86a1 1 0 0 1-1.36-1.46l4.83-4.52H12a8.99 8.99 0 0 0-8.94 8.02 1 1 0 0 1-1.99-.2A10.99 10.99 0 0 1 12 9.08h5.92l-4.85-4.38a1 1 0 0 1-.05-1.41z" />
   </svg>
 );
 
