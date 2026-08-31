@@ -93,17 +93,28 @@ export const MetaNavMenuIcon: React.FC<{ active?: boolean; size?: number }> = ({
 
 // OFFICIAL SEARCH SVG (SVG 3)
 export const MetaSearchIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <KatanaMask asset="fb_ic_magnifying_glass_filled_24" size={size} color="#050505" className={className} />
+  <svg viewBox="0 0 16 16" width={size} height={size} fill="#050505" className={className}>
+    <g fillRule="evenodd" transform="translate(-448 -544)">
+      <g fillRule="nonzero">
+        <path d="M10.743 2.257a6 6 0 1 1-8.485 8.486 6 6 0 0 1 8.485-8.486zm-1.06 1.06a4.5 4.5 0 1 0-6.365 6.364 4.5 4.5 0 0 0 6.364-6.363z" transform="translate(448 544)" />
+        <path d="m13.463 15.142-.04-.044-3.574-4.192c-.599-.703.355-1.656 1.058-1.057l4.191 3.574.044.04c.058.059.122.137.182.24.249.425.249.96-.154 1.41l-.057.057c-.45.403-.986.403-1.411.154a1.182 1.182 0 0 1-.24-.182zm.617-.616.444-.444a.31.31 0 0 0-.063-.052c-.093-.055-.263-.055-.35.024l.208.232.207-.206.006.007-.22.257-.026-.024.033-.034.025.027-.257.22-.007-.007zm-.027-.415c-.078.088-.078.257-.023.35a.31.31 0 0 0 .051.063l.205-.204-.233-.209z" transform="translate(448 544)" />
+      </g>
+    </g>
+  </svg>
 );
 
 // OFFICIAL MESSENGER SVG (SVG 10)
 export const MetaMessengerIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <KatanaMask asset="fb_ic_app_messenger_outline_24" size={size} color="#050505" className={className} />
+  <svg viewBox="0 0 16 16" width={size} height={size} fill="#050505" className={className}>
+    <path fillRule="evenodd" d="M.5 8a7.5 7.5 0 1 1 4.006 6.638.341.341 0 0 0-.236-.041l-2.193.534A1 1 0 0 1 .87 13.923l.534-2.193a.341.341 0 0 0-.04-.236A7.47 7.47 0 0 1 .5 8zm11.389-.907a.56.56 0 0 0-.79-.78L9.25 7.75 7.294 6.327a1 1 0 0 0-1.386.205L4.111 8.906a.56.56 0 0 0 .791.781L6.75 8.25l1.957 1.423a1 1 0 0 0 1.385-.205l1.797-2.375z" clipRule="evenodd" />
+  </svg>
 );
 
 // OFFICIAL PLUS SVG (SVG 18)
 export const MetaPlusIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 18, fill = '#050505' }) => (
-  <KatanaMask asset="fb_ic_plus_filled_24" size={size} color={fill} className={className} />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" style={{ color: fill }} className={className}>
+    <path d="M18 11h-5V6a1 1 0 0 0-2 0v5H6a1 1 0 0 0 0 2h5v5a1 1 0 0 0 2 0v-5h5a1 1 0 0 0 0-2z" />
+  </svg>
 );
 
 // OFFICIAL 3 DOTS (SVG 21)
