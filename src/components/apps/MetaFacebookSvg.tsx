@@ -76,7 +76,7 @@ export const MetaNavMarketIcon: React.FC<{ active?: boolean; size?: number }> = 
 // 5. NOTIFICATIONS TAB — current Katana active/inactive density-split masks.
 export const MetaNavBellIcon: React.FC<{ active?: boolean; size?: number }> = ({ active = false, size = 24 }) => (
   <KatanaMask
-    asset={active ? 'fb_ic_bell_filled_24' : 'fb_ic_bell_outline_24'}
+    asset="fb_ic_bell_filled_24"
     size={size}
     color={active ? '#0866FF' : '#65676B'}
   />
