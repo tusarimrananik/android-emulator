@@ -119,7 +119,11 @@ export const MetaPlusIcon: React.FC<{ className?: string; size?: number; fill?: 
 
 // OFFICIAL 3 DOTS (SVG 21)
 export const MetaMoreDotsIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 18 }) => (
-  <KatanaMask asset="fb_ic_more_filled_24" size={size} color="#65676B" className={className} />
+  <svg viewBox="0 0 20 20" width={size} height={size} fill="#65676B" className={className}>
+    <g fillRule="evenodd" transform="translate(-446 -350)">
+      <path d="M458 360a2 2 0 1 1-4 0 2 2 0 0 1 4 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-12 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" />
+    </g>
+  </svg>
 );
 
 // OFFICIAL EDIT PENCIL (SVG 26)
