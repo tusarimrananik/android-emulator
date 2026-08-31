@@ -92,7 +92,7 @@ export const FacebookProfile: React.FC<{ onBack: () => void }> = ({ onBack }) =>
             aria-label="Notifications"
             className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809] active:bg-[#d8dadf]"
           >
-            <MetaBellIcon size={18} />
+            <MetaBellIcon active size={18} />
           </button>
           <div className="h-9 w-9 overflow-hidden rounded-full border border-[#D0D3D7]">
             <img src="/facebook/user/lcd.webp" alt="Account" className="h-full w-full object-cover" />
