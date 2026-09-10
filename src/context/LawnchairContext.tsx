@@ -68,7 +68,7 @@ interface LawnchairContextType {
 
 const DEFAULT_SETTINGS: LawnchairSettingsState = {
   isDarkMode: true,
-  themedIcons: true,
+  themedIcons: false,
   iconShape: 'circle',
   accentPaletteId: 'obsidian_dark',
   iconPack: 'lawnicons',
