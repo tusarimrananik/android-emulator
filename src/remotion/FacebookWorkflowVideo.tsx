@@ -62,7 +62,6 @@ type FbProfileData = {
 
 const tabForFrame = (frame: number, hasFbProfile: boolean): FbTab => {
   if (hasFbProfile) {
-    if (frame >= 510) return 'feed';
     if (frame >= 430) return 'profile';
     if (frame >= 390) return 'menu';
     if (frame >= 330) return 'friends';
@@ -313,7 +312,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const scroll = interpolate(frame, [440, 500], [0, -400], clamp);
+  const scroll = interpolate(frame, [450, 560], [0, -680], clamp);
   return (
     <div className="min-h-full bg-white text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
