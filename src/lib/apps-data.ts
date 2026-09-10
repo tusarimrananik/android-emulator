@@ -85,6 +85,20 @@ export const INITIAL_APPS: AppItem[] = [
 
   // Home Screen Page 0 Apps
   {
+    id: 'facebook',
+    name: 'Facebook',
+    packageName: 'com.facebook.katana',
+    category: 'social',
+    iconColor: '#1877f2',
+    iconBg: '#ffffff',
+    iconType: 'svg',
+    homePosition: { page: 0, row: 1, col: 2 },
+    shortcuts: [
+      { id: 'create_post', label: 'Create post', icon: 'edit-3' },
+      { id: 'search_facebook', label: 'Search Facebook', icon: 'search' },
+    ],
+  },
+  {
     id: 'play_store',
     name: 'Play Store',
     packageName: 'com.android.vending',
@@ -266,19 +280,6 @@ export const INITIAL_APPS: AppItem[] = [
     iconColor: '#5865f2',
     iconBg: '#36393f',
     iconType: 'svg',
-  },
-  {
-    id: 'facebook',
-    name: 'Facebook',
-    packageName: 'com.facebook.katana',
-    category: 'social',
-    iconColor: '#1877f2',
-    iconBg: '#ffffff',
-    iconType: 'svg',
-    shortcuts: [
-      { id: 'create_post', label: 'Create post', icon: 'edit-3' },
-      { id: 'search_facebook', label: 'Search Facebook', icon: 'search' },
-    ],
   },
   {
     id: 'github',

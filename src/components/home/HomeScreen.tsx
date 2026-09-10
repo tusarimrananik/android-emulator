@@ -23,9 +23,16 @@ export const HomeScreen: React.FC = () => {
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Desktop apps for Page 0
-  const page0Apps = apps.filter(
-    (a) => a.homePosition && a.homePosition.page === 0 && !a.isFavorite
-  );
+  const page0Apps = apps
+    .filter((a) => a.homePosition && a.homePosition.page === 0 && !a.isFavorite)
+    .sort((a, b) => {
+      const rowA = a.homePosition?.row ?? 99;
+      const rowB = b.homePosition?.row ?? 99;
+      if (rowA !== rowB) return rowA - rowB;
+      const colA = a.homePosition?.col ?? 99;
+      const colB = b.homePosition?.col ?? 99;
+      return colA - colB;
+    });
 
   // Desktop apps for Page 1
   const page1Apps = apps.filter(
