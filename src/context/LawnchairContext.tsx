@@ -137,7 +137,7 @@ export const LawnchairProvider: React.FC<{ children: ReactNode }> = ({ children 
   const [contextMenu, setContextMenu] = useState<ContextMenuData | null>(null);
   const [drawerSearchQuery, setDrawerSearchQuery] = useState<string>('');
 
-  const [isPhoneFrameMode, setIsPhoneFrameMode] = useState<boolean>(true);
+  const [isPhoneFrameMode, setIsPhoneFrameMode] = useState<boolean>(false);
   const [recordingZoom, setRecordingZoom] = useState<number>(1.0);
 
   // Active Monet Palette based on wallpaper and dark mode

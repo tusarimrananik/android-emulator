@@ -12,14 +12,16 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({
   isFrameEnabled = true,
 }) => {
   if (!isFrameEnabled) {
-    // Pure Screen / Recording Mode (100% borderless, exact pixel canvas)
+    // Pure Screen / Android Viewport (100% clean, exact pixel canvas)
     return (
       <div
         id="lawnchair-recording-canvas"
-        className="relative overflow-hidden bg-black select-none shadow-2xl"
+        className="relative rounded-[36px] overflow-hidden bg-black select-none shadow-2xl"
         style={{
           width: '412px',
           height: '915px',
+          maxWidth: '100vw',
+          maxHeight: '100dvh',
           aspectRatio: '412 / 915',
         }}
       >

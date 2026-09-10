@@ -21,11 +21,10 @@ export const LawnchairPhone: React.FC = () => {
   const {
     currentWallpaper,
     activeOverlay,
-    isPhoneFrameMode,
   } = useLawnchair();
 
   return (
-    <DeviceFrame isFrameEnabled={isPhoneFrameMode}>
+    <DeviceFrame isFrameEnabled={false}>
       <div
         id="lawnchair-phone-screen"
         className="relative w-full h-full flex flex-col justify-between overflow-hidden select-none bg-black"
