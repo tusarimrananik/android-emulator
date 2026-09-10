@@ -94,32 +94,106 @@ export async function scrapeFacebookProfile(facebookUrl) {
         return collected;
       };
 
-      return { profileName, coverPicture, profilePicture, bio, friendsCount, _needsScroll: !!connEls[0] };
+      // Details list (Education, Work, Location, Joined, Relationship)
+      const textNodes = Array.from(document.querySelectorAll('span, div'))
+        .map(el => (el.innerText || '').trim())
+        .filter(t => t && t.length > 3 && t.length < 120 && !t.includes('\n'));
+
+      const patterns = [
+        /^(worked|works) at /i,
+        /^(studied|studies|went to) /i,
+        /^(lives in|lived in) /i,
+        /^(from) /i,
+        /^(joined) /i,
+        /^(followed by) /i,
+        /^(in a relationship|married|single|engaged|in an open relationship)/i,
+        /^(founder|ceo|director|engineer|developer|student) /i
+      ];
+
+      const details = [];
+      for (const t of textNodes) {
+        if (patterns.some(p => p.test(t)) && !details.includes(t)) {
+          details.push(t);
+        }
+      }
+
+      // Check if profile is locked
+      const bodyText = document.body ? document.body.innerText : '';
+      const isLocked = bodyText.includes('locked his profile') || bodyText.includes('locked her profile') || bodyText.includes('locked their profile');
+
+      // Timeline posts (articles on profile feed)
+      const articles = Array.from(document.querySelectorAll('div[role="article"]'));
+      const posts = articles.slice(0, 3).map(art => {
+        const textNodes = Array.from(art.querySelectorAll('div[dir="auto"]')).map(d => (d.innerText || '').trim()).filter(Boolean);
+        const imgs = Array.from(art.querySelectorAll('img'))
+          .map(i => i.src)
+          .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('192x192'));
+        const timeEl = art.querySelector('abbr, a[role="link"] span');
+        return {
+          text: textNodes[0] || '',
+          images: imgs.slice(0, 2),
+          time: timeEl ? (timeEl.innerText || '').trim() : 'Just now'
+        };
+      }).filter(p => p.text || p.images.length > 0);
+
+      return { profileName, coverPicture, profilePicture, bio, friendsCount, details, isLocked, posts, _needsScroll: !!connEls[0] };
     }, FB_SELECTORS);
 
-    // Scroll and collect friends grid in page context
-    let friends = [];
-    if (data._needsScroll) {
-      friends = await page.evaluate(async (sel) => {
-        let collected = [];
-        for (let i = 0; i < 5 && collected.length < 6; i++) {
-          window.scrollBy(0, 500);
-          await new Promise(r => setTimeout(r, 1500));
-          const items = Array.from(document.querySelectorAll(sel));
-          for (const item of items.slice(collected.length, 6)) {
-            const img = item.querySelector('img');
-            const nameEl = item.querySelector('span');
-            if (img && nameEl) {
-              collected.push({ name: nameEl.textContent.trim(), avatar: img.src });
-            }
+    // Scroll down to load friends, intro details, and timeline posts
+    const scrollData = await page.evaluate(async (friendsSel) => {
+      let collectedFriends = [];
+      for (let i = 0; i < 4 && collectedFriends.length < 6; i++) {
+        window.scrollBy(0, 600);
+        await new Promise(r => setTimeout(r, 1200));
+        const items = Array.from(document.querySelectorAll(friendsSel));
+        for (const item of items.slice(collectedFriends.length, 6)) {
+          const img = item.querySelector('img');
+          const nameEl = item.querySelector('span');
+          if (img && nameEl) {
+            collectedFriends.push({ name: nameEl.textContent.trim(), avatar: img.src });
           }
         }
-        return collected;
-      }, FB_SELECTORS.friendsGrid);
-    }
+      }
+
+      // Collect any timeline posts loaded after scroll
+      const articles = Array.from(document.querySelectorAll('div[role="article"]'));
+      const posts = articles.slice(0, 3).map(art => {
+        const textNodes = Array.from(art.querySelectorAll('div[dir="auto"]')).map(d => (d.innerText || '').trim()).filter(Boolean);
+        const imgs = Array.from(art.querySelectorAll('img'))
+          .map(i => i.src)
+          .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('192x192'));
+        const timeEl = art.querySelector('abbr, a[role="link"] span');
+        const allText = art.innerText || '';
+        const rxMatch = allText.match(/([\d\.,]+[KkMm]?)\s*(?:reactions|likes)/i);
+        const cmMatch = allText.match(/([\d\.,]+[KkMm]?)\s*comments/i);
+        const shMatch = allText.match(/([\d\.,]+[KkMm]?)\s*shares/i);
+
+        const commentItems = Array.from(art.querySelectorAll('ul li, div[role="article"]'));
+        const comments = commentItems.slice(0, 2).map(c => {
+          const author = c.querySelector('a, span[dir="auto"]')?.innerText || '';
+          const cText = c.querySelector('div[dir="auto"]')?.innerText || '';
+          return { author, text: cText };
+        }).filter(c => c.text && c.text.length < 150);
+
+        return {
+          text: textNodes[0] || '',
+          images: imgs.slice(0, 2),
+          time: timeEl ? (timeEl.innerText || '').trim() : 'Just now',
+          reactions: rxMatch ? rxMatch[1] : '1.4K',
+          commentsCount: cmMatch ? cmMatch[1] : '84',
+          sharesCount: shMatch ? shMatch[1] : '12',
+          comments,
+        };
+      }).filter(p => p.text || p.images.length > 0);
+
+      return { friends: collectedFriends, posts };
+    }, FB_SELECTORS.friendsGrid);
 
     delete data._needsScroll;
-    data.friends = friends;
+    data.friends = scrollData.friends && scrollData.friends.length > 0 ? scrollData.friends : data.friends || [];
+    if (scrollData.posts && scrollData.posts.length > 0) {
+      data.posts = scrollData.posts;
+    }
 
     return data;
   } finally {

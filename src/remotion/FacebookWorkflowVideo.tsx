@@ -27,6 +27,9 @@ import {
   MetaMoreDotsIcon,
   MetaEditPencilIcon,
   MetaCameraIcon,
+  MetaGraduationIcon,
+  MetaLocationIcon,
+  MetaFollowersIcon,
 } from '@/components/apps/MetaFacebookSvg';
 import {Globe2, X, Search} from 'lucide-react';
 
@@ -35,6 +38,16 @@ const asset = (path: string) => staticFile(path);
 
 type FbTab = 'feed' | 'watch' | 'friends' | 'market' | 'notifications' | 'menu' | 'profile';
 
+type FbPost = {
+  text: string;
+  images: string[];
+  time?: string;
+  reactions?: string;
+  commentsCount?: string;
+  sharesCount?: string;
+  comments?: {author: string; text: string}[];
+};
+
 type FbProfileData = {
   profileName: string;
   coverPicture: string | null;
@@ -42,6 +55,9 @@ type FbProfileData = {
   bio: string | null;
   friendsCount: string | null;
   friends: {name: string; avatar: string}[];
+  details?: string[];
+  isLocked?: boolean;
+  posts?: FbPost[];
 };
 
 const tabForFrame = (frame: number, hasFbProfile: boolean): FbTab => {
@@ -347,6 +363,105 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
               </div>
             </div>
           )}
+
+          {/* Details Section */}
+          {fbProfile.details && fbProfile.details.length > 0 && (
+            <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
+              <h3 className="mb-2.5 text-[17px] font-bold text-[#080809]">Details</h3>
+              <div className="flex flex-col gap-2.5">
+                {fbProfile.details.map((d, i) => (
+                  <div key={i} className="flex items-center gap-3 text-[14px] text-[#080809]">
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center text-[#65686C]">
+                      {/studied|studies|went to/i.test(d) ? (
+                        <MetaGraduationIcon size={20} />
+                      ) : /lives in|from/i.test(d) ? (
+                        <MetaLocationIcon size={20} />
+                      ) : /followed by/i.test(d) ? (
+                        <MetaFollowersIcon size={20} />
+                      ) : (
+                        <span className="text-[14px]">ℹ</span>
+                      )}
+                    </div>
+                    <span>{d}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Locked Profile Card */}
+          {fbProfile.isLocked && (
+            <div className="mt-4 rounded-xl border border-[#1877F2]/25 bg-[#E7F3FF] p-3 text-left">
+              <div className="flex items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#1877F2] text-white">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                    <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 5a3 3 0 0 1 6 0v3H9V7zm3 7a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V19a1 1 0 1 1-2 0v-1.27c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-[15px] font-bold text-[#080809]">{fbProfile.profileName} locked their profile</div>
+                  <div className="text-[12px] text-[#65676B]">Only their friends can see what they share on their profile.</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Posts Section */}
+          <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-[17px] font-bold text-[#080809]">Posts</h3>
+              <span className="rounded-lg bg-[#E4E6EB] px-3 py-1 text-[13px] font-semibold text-[#080809]">Filters</span>
+            </div>
+
+            {fbProfile.posts && fbProfile.posts.length > 0 ? (
+              <div className="flex flex-col gap-3">
+                {fbProfile.posts.map((post, pIdx) => (
+                  <div key={pIdx} className="rounded-xl border border-[#ced0d4]/60 bg-white p-3 shadow-xs">
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
+                        className="h-9 w-9 rounded-full object-cover"
+                        alt=""
+                      />
+                      <div>
+                        <div className="text-[14px] font-bold text-[#080809]">{fbProfile.profileName}</div>
+                        <div className="text-[11px] text-[#65676B]">{post.time || '2h'} · 🌐</div>
+                      </div>
+                    </div>
+                    {post.text && <p className="mt-2 text-[13px] leading-relaxed text-[#080809]">{post.text}</p>}
+                    {post.images && post.images.length > 0 && (
+                      <div className="mt-2 overflow-hidden rounded-lg">
+                        <img src={post.images[0]} className="max-h-[220px] w-full object-cover" alt="" />
+                      </div>
+                    )}
+                    <div className="mt-2 flex items-center justify-between border-b border-[#ced0d4]/40 pb-2 text-[12px] text-[#65676B]">
+                      <span>👍 ❤️ {post.reactions || '1.4K'}</span>
+                      <span>{post.commentsCount || '12'} comments · {post.sharesCount || '4'} shares</span>
+                    </div>
+                    <div className="mt-1 flex justify-around pt-1 text-[13px] font-semibold text-[#65676B]">
+                      <span className="flex items-center gap-1.5"><MetaLikeThumbIcon size={16} /> Like</span>
+                      <span className="flex items-center gap-1.5"><MetaCommentIcon size={16} /> Comment</span>
+                      <span className="flex items-center gap-1.5"><MetaShareIcon size={16} /> Share</span>
+                    </div>
+                    {post.comments && post.comments.length > 0 && (
+                      <div className="mt-2 flex flex-col gap-1.5 border-t border-[#ced0d4]/40 pt-2">
+                        {post.comments.map((c, cIdx) => (
+                          <div key={cIdx} className="rounded-lg bg-[#F0F2F5] p-2 text-[12px]">
+                            <span className="mr-1 font-bold text-[#080809]">{c.author}:</span>
+                            <span className="text-[#050505]">{c.text}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-6 text-center text-[14px] text-[#65676B]">
+                {fbProfile.isLocked ? 'No posts available' : 'No recent public posts'}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
