@@ -389,28 +389,56 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
             </div>
           )}
 
-          {/* Locked Profile Card */}
-          {fbProfile.isLocked && (
-            <div className="mt-4 rounded-xl border border-[#1877F2]/25 bg-[#E7F3FF] p-3 text-left">
-              <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#1877F2] text-white">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                    <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 5a3 3 0 0 1 6 0v3H9V7zm3 7a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V19a1 1 0 1 1-2 0v-1.27c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-[15px] font-bold text-[#080809]">{fbProfile.profileName} locked their profile</div>
-                  <div className="text-[12px] text-[#65676B]">Only their friends can see what they share on their profile.</div>
-                </div>
-              </div>
+          {/* People You May Know Section */}
+          <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
+            <div className="mb-2.5 flex items-center justify-between">
+              <h3 className="text-[17px] font-bold text-[#080809]">People you may know</h3>
+              <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
             </div>
-          )}
+            <div className="flex gap-2.5 overflow-x-auto pb-2 [scrollbar-width:none]">
+              {[
+                { name: 'Tanvir Ahmed', mutual: '14 mutual friends', avatar: '/facebook/user/aki.webp' },
+                { name: 'Sadia Islam', mutual: '8 mutual friends', avatar: '/facebook/user/baongan.webp' },
+                { name: 'Mehedi Hasan', mutual: '23 mutual friends', avatar: '/facebook/user/ddh.webp' },
+                { name: 'Nusrat Jahan', mutual: '5 mutual friends', avatar: '/facebook/user/halinh.webp' },
+              ].map((p, pIdx) => (
+                <div key={pIdx} className="w-[140px] shrink-0 overflow-hidden rounded-xl border border-[#ced0d4]/70 bg-white shadow-xs">
+                  <div className="aspect-square w-full overflow-hidden bg-[#e4e6eb]">
+                    <img src={asset(p.avatar)} className="h-full w-full object-cover" alt="" />
+                  </div>
+                  <div className="p-2.5">
+                    <div className="truncate text-[13px] font-bold text-[#080809]">{p.name}</div>
+                    <div className="truncate text-[11px] text-[#65686C]">{p.mutual}</div>
+                    <div className="mt-2.5 flex h-[30px] w-full items-center justify-center rounded-lg bg-[#0866FF] text-[12px] font-semibold text-white">
+                      Add friend
+                    </div>
+                    <div className="mt-1 flex h-[28px] w-full items-center justify-center rounded-lg bg-[#E4E6EB] text-[12px] font-semibold text-[#080809]">
+                      Remove
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* Posts Section */}
           <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-[17px] font-bold text-[#080809]">Posts</h3>
               <span className="rounded-lg bg-[#E4E6EB] px-3 py-1 text-[13px] font-semibold text-[#080809]">Filters</span>
+            </div>
+
+            {/* Profile Post Composer */}
+            <div className="mb-3 flex items-center gap-2.5 rounded-xl border border-[#ced0d4]/60 bg-white p-2.5 shadow-xs">
+              <img
+                src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
+                className="h-9 w-9 rounded-full object-cover"
+                alt=""
+              />
+              <div className="flex-1 text-[13px] text-[#65686C]">
+                What&apos;s on your mind?
+              </div>
+              <MetaComposerPhotoIcon size={22} />
             </div>
 
             {fbProfile.posts && fbProfile.posts.length > 0 ? (
