@@ -157,26 +157,44 @@ export async function scrapeFacebookProfile(facebookUrl) {
         }
       }
 
-      // Collect any timeline posts loaded after scroll
-      const articles = Array.from(document.querySelectorAll('div[role="article"]'));
-      const posts = articles.slice(0, 3).map(art => {
-        const textNodes = Array.from(art.querySelectorAll('div[dir="auto"]')).map(d => (d.innerText || '').trim()).filter(Boolean);
-        const imgs = Array.from(art.querySelectorAll('img, image'))
+      // Collect real primary timeline posts (exclude comments)
+      let msgEls = Array.from(document.querySelectorAll('div[data-ad-preview="message"], div[data-ad-rendering-role="profile_post"]'));
+      if (msgEls.length === 0) {
+        const articles = Array.from(document.querySelectorAll('div[role="article"]'));
+        msgEls = articles
+          .filter(a => !a.innerText.includes('Reply') && !a.closest('ul'))
+          .map(a => a.querySelector('div[dir="auto"]'))
+          .filter(Boolean);
+      }
+
+      const posts = msgEls.slice(0, 3).map(el => {
+        let card = el;
+        for (let i = 0; i < 12 && card; i++) {
+          card = card.parentElement;
+          if (card && card.getAttribute('role') === 'article') break;
+        }
+
+        const text = (el.innerText || '').trim();
+        const imgs = card ? Array.from(card.querySelectorAll('img, image'))
           .map(i => i.src || i.getAttribute('href'))
-          .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('192x192'));
-        const spans = Array.from(art.querySelectorAll('span, a')).map(s => (s.innerText || '').trim());
-        const time = spans.find(t => /^(\d+[smhdwy]|yesterday|just now)/i.test(t)) || '2h';
-        const rx = spans.find(s => /^[\d\.]+[KkMm]$/.test(s) || (/^\d+$/.test(s) && parseInt(s) > 5)) || '1.4K';
-        const cmMatch = (art.innerText || '').match(/([\d\.,]+[KkMm]?)\s*comments/i);
-        const shMatch = (art.innerText || '').match(/([\d\.,]+[KkMm]?)\s*shares/i);
+          .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('s60x60') && !s.includes('p50x50')) : [];
+
+        const cardText = card ? card.innerText : '';
+        const timeMatch = cardText.match(/\b(\d+[smhdwy]|yesterday|just now)\b/i);
+        const time = timeMatch ? timeMatch[1] : '1w';
+
+        const rxMatch = cardText.match(/([\d\.,]+[KkMm]?)\s*(?:reactions|likes)/i)
+          || cardText.match(/\b([\d\.,]+[KkMm]?)\b/);
+        const cmMatch = cardText.match(/([\d\.,]+[KkMm]?)\s*comments/i);
+        const shMatch = cardText.match(/([\d\.,]+[KkMm]?)\s*shares/i);
 
         return {
-          text: textNodes[0] || '',
+          text,
           images: imgs.slice(0, 2),
           time,
-          reactions: rx,
-          commentsCount: cmMatch ? cmMatch[1] : '84',
-          sharesCount: shMatch ? shMatch[1] : '12',
+          reactions: rxMatch ? rxMatch[1] : '2.4K',
+          commentsCount: cmMatch ? cmMatch[1] : '150',
+          sharesCount: shMatch ? shMatch[1] : '42',
         };
       }).filter(p => p.text || p.images.length > 0);
 

@@ -316,7 +316,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
   const scroll = interpolate(frame, [450, 560], [0, -680], clamp);
   return (
-    <div className="min-h-full bg-white text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
+    <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-full"><MetaFacebookLogo size={36} /></div>
         <div className="flex items-center gap-1.5">
@@ -324,15 +324,31 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E4E6EB] text-[#080809]"><MetaMessengerIcon size={18} /></div>
         </div>
       </div>
-      <div className="relative bg-white pb-3">
+
+      {/* 1. Header / Hero Section */}
+      <div className="relative bg-white pb-3 border-b border-[#ced0d4]/60">
         <div className="relative h-[180px] w-full bg-gradient-to-b from-[#8a919a] to-[#cbd2d9] overflow-hidden">
-          {fbProfile.coverPicture ? <img src={fbProfile.coverPicture} className="h-full w-full object-cover" alt="" /> : <img src={asset('/facebook/user/lcd-cover.webp')} className="h-full w-full object-cover" alt="" />}
-          <div className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white shadow-md border border-[#D0D3D7]/60"><MetaCameraIcon size={17} /></div>
+          {fbProfile.coverPicture ? (
+            <img src={fbProfile.coverPicture} className="h-full w-full object-cover" alt="" />
+          ) : (
+            <img src={asset('/facebook/user/lcd-cover.webp')} className="h-full w-full object-cover" alt="" />
+          )}
+          <div className="absolute bottom-3 right-3 flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white shadow-md border border-[#D0D3D7]/60">
+            <MetaCameraIcon size={17} />
+          </div>
         </div>
         <div className="relative flex justify-center -mt-[65px]">
           <div className="relative">
-            <div className="h-[130px] w-[130px] rounded-full border-[4px] border-white bg-white shadow-md overflow-hidden">{fbProfile.profilePicture ? <img src={fbProfile.profilePicture} className="h-full w-full object-cover" alt="" /> : <img src={asset('/facebook/user/lcd.webp')} className="h-full w-full object-cover" alt="" />}</div>
-            <div className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#E4E6EB] shadow-md text-[#080809]"><MetaCameraIcon size={16} /></div>
+            <div className="h-[130px] w-[130px] rounded-full border-[4px] border-white bg-white shadow-md overflow-hidden">
+              {fbProfile.profilePicture ? (
+                <img src={fbProfile.profilePicture} className="h-full w-full object-cover" alt="" />
+              ) : (
+                <img src={asset('/facebook/user/lcd.webp')} className="h-full w-full object-cover" alt="" />
+              )}
+            </div>
+            <div className="absolute bottom-1 right-1 flex h-[34px] w-[34px] items-center justify-center rounded-full border-[2px] border-white bg-[#E4E6EB] shadow-md text-[#080809]">
+              <MetaCameraIcon size={16} />
+            </div>
           </div>
         </div>
         <div className="px-4 pt-2 text-center">
@@ -340,171 +356,195 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
             <span>{fbProfile.profileName || 'Facebook User'}</span>
             {fbProfile.isVerified && <MetaVerifiedBadge size={18} />}
           </h1>
-          <div className="mt-1 flex items-center justify-center gap-1.5 text-[14px] text-[#65686C]"><span className="font-semibold text-[#080809]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} followers` : '1,150 followers'}</span><span>•</span><span className="font-semibold text-[#080809]">480 following</span></div>
+          <div className="mt-1 flex items-center justify-center gap-1.5 text-[14px] text-[#65686C]">
+            <span className="font-semibold text-[#080809]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} followers` : '1,150 followers'}</span>
+            <span>•</span>
+            <span className="font-semibold text-[#080809]">480 following</span>
+          </div>
           {fbProfile.bio && <p className="mt-2 text-[14px] text-[#080809]">{fbProfile.bio}</p>}
-          <div className="mt-4 flex gap-2 px-2">
-            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white"><MetaPlusIcon size={16} fill="#ffffff" /><span>Add to story</span></div>
-            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]"><MetaEditPencilIcon size={16} fill="#050505" /><span>Edit profile</span></div>
-          </div>
-          {fbProfile.friends && fbProfile.friends.length > 0 && (
-            <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
-              <div className="mb-2 flex items-baseline justify-between">
-                <div>
-                  <h3 className="text-[17px] font-bold text-[#080809]">Friends</h3>
-                  <span className="text-[13px] text-[#65686C]">{fbProfile.friendsCount || `${fbProfile.friends.length} friends`}</span>
-                </div>
-                <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {fbProfile.friends.slice(0, 6).map((f) => (
-                  <div key={f.name} className="overflow-hidden">
-                    <div className="aspect-square w-full overflow-hidden rounded-lg bg-[#e4e6eb]">
-                      <img src={f.avatar} className="h-full w-full object-cover" alt="" />
-                    </div>
-                    <span className="mt-1 block truncate text-[12px] font-medium text-[#080809]">{f.name}</span>
-                  </div>
-                ))}
-              </div>
+          <div className="mt-4 flex gap-2">
+            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white">
+              <MetaPlusIcon size={16} fill="#ffffff" />
+              <span>Add to story</span>
             </div>
-          )}
-
-          {/* Details Section */}
-          {fbProfile.details && fbProfile.details.length > 0 && (
-            <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
-              <h3 className="mb-2.5 text-[17px] font-bold text-[#080809]">Details</h3>
-              <div className="flex flex-col gap-2.5">
-                {fbProfile.details.map((d, i) => (
-                  <div key={i} className="flex items-center gap-3 text-[14px] text-[#080809]">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center text-[#65686C]">
-                      {/studied|studies|went to/i.test(d) ? (
-                        <MetaGraduationIcon size={20} />
-                      ) : /lives in|from/i.test(d) ? (
-                        <MetaLocationIcon size={20} />
-                      ) : /followed by/i.test(d) ? (
-                        <MetaFollowersIcon size={20} />
-                      ) : (
-                        <span className="text-[14px]">ℹ</span>
-                      )}
-                    </div>
-                    <span>{d}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
+              <MetaEditPencilIcon size={16} fill="#050505" />
+              <span>Edit profile</span>
             </div>
-          )}
-
-          {/* People You May Know Section */}
-          <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
-            <div className="mb-2.5 flex items-center justify-between">
-              <h3 className="text-[17px] font-bold text-[#080809]">People you may know</h3>
-              <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
-            </div>
-            <div className="flex gap-2.5 overflow-x-auto pb-2 [scrollbar-width:none]">
-              {[
-                { name: 'Tanvir Ahmed', mutual: '14 mutual friends', avatar: '/facebook/user/aki.webp' },
-                { name: 'Sadia Islam', mutual: '8 mutual friends', avatar: '/facebook/user/baongan.webp' },
-                { name: 'Mehedi Hasan', mutual: '23 mutual friends', avatar: '/facebook/user/ddh.webp' },
-                { name: 'Nusrat Jahan', mutual: '5 mutual friends', avatar: '/facebook/user/halinh.webp' },
-              ].map((p, pIdx) => (
-                <div key={pIdx} className="w-[140px] shrink-0 overflow-hidden rounded-xl border border-[#ced0d4]/70 bg-white shadow-xs">
-                  <div className="aspect-square w-full overflow-hidden bg-[#e4e6eb]">
-                    <img src={asset(p.avatar)} className="h-full w-full object-cover" alt="" />
-                  </div>
-                  <div className="p-2.5">
-                    <div className="truncate text-[13px] font-bold text-[#080809]">{p.name}</div>
-                    <div className="truncate text-[11px] text-[#65686C]">{p.mutual}</div>
-                    <div className="mt-2.5 flex h-[30px] w-full items-center justify-center rounded-lg bg-[#0866FF] text-[12px] font-semibold text-white">
-                      Add friend
-                    </div>
-                    <div className="mt-1 flex h-[28px] w-full items-center justify-center rounded-lg bg-[#E4E6EB] text-[12px] font-semibold text-[#080809]">
-                      Remove
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Posts Section */}
-          <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
-            <div className="mb-3 flex items-center justify-between">
-              <h3 className="text-[17px] font-bold text-[#080809]">Posts</h3>
-              <span className="rounded-lg bg-[#E4E6EB] px-3 py-1 text-[13px] font-semibold text-[#080809]">Filters</span>
-            </div>
-
-            {/* Profile Post Composer */}
-            <div className="mb-3 flex items-center gap-2.5 rounded-xl border border-[#ced0d4]/60 bg-white p-2.5 shadow-xs">
-              <img
-                src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
-                className="h-9 w-9 rounded-full object-cover"
-                alt=""
-              />
-              <div className="flex-1 text-[13px] text-[#65686C]">
-                What&apos;s on your mind?
-              </div>
-              <MetaComposerPhotoIcon size={22} />
-            </div>
-
-            {fbProfile.posts && fbProfile.posts.length > 0 ? (
-              <div className="flex flex-col gap-3">
-                {fbProfile.posts.map((post, pIdx) => (
-                  <div key={pIdx} className="rounded-xl border border-[#ced0d4]/60 bg-white p-3 shadow-xs">
-                    <div className="flex items-center gap-2.5">
-                      <img
-                        src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
-                        className="h-9 w-9 rounded-full object-cover"
-                        alt=""
-                      />
-                      <div>
-                        <div className="flex items-center gap-1 text-[14px] font-bold text-[#080809]">
-                          <span>{fbProfile.profileName}</span>
-                          {fbProfile.isVerified && <MetaVerifiedBadge size={13} />}
-                        </div>
-                        <div className="text-[11px] text-[#65676B]">{post.time || '2h'} · 🌐</div>
-                      </div>
-                    </div>
-                    {post.text && <p className="mt-2 text-[13px] leading-relaxed text-[#080809]">{post.text}</p>}
-                    {post.images && post.images.length > 0 && (
-                      <div className="mt-2 overflow-hidden rounded-lg">
-                        <img src={post.images[0]} className="max-h-[220px] w-full object-cover" alt="" />
-                      </div>
-                    )}
-                    <div className="mt-2 flex items-center justify-between border-b border-[#ced0d4]/40 pb-2 text-[12px] text-[#65676B]">
-                      <div className="flex items-center gap-1">
-                        <div className="flex items-center -space-x-1">
-                          <img src={asset('/facebook/reactions/like.webp')} className="h-[18px] w-[18px]" alt="" />
-                          <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px]" alt="" />
-                        </div>
-                        <span className="ml-1 font-medium text-[13px] text-[#65676B]">{post.reactions || '1.4K'}</span>
-                      </div>
-                      <span>{post.commentsCount || '12'} comments · {post.sharesCount || '4'} shares</span>
-                    </div>
-                    <div className="mt-1 flex justify-around pt-1 text-[13px] font-semibold text-[#65676B]">
-                      <span className="flex items-center gap-1.5"><MetaLikeThumbIcon size={16} /> Like</span>
-                      <span className="flex items-center gap-1.5"><MetaCommentIcon size={16} /> Comment</span>
-                      <span className="flex items-center gap-1.5"><MetaShareIcon size={16} /> Share</span>
-                    </div>
-                    {post.comments && post.comments.length > 0 && (
-                      <div className="mt-2 flex flex-col gap-1.5 border-t border-[#ced0d4]/40 pt-2">
-                        {post.comments.map((c, cIdx) => (
-                          <div key={cIdx} className="rounded-lg bg-[#F0F2F5] p-2 text-[12px]">
-                            <span className="mr-1 font-bold text-[#080809]">{c.author}:</span>
-                            <span className="text-[#050505]">{c.text}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="py-6 text-center text-[14px] text-[#65676B]">
-                {fbProfile.isLocked ? 'No posts available' : 'No recent public posts'}
-              </div>
-            )}
           </div>
         </div>
       </div>
+
+      {/* 2. Friends Section */}
+      {fbProfile.friends && fbProfile.friends.length > 0 && (
+        <div className="mt-2.5 w-full bg-white px-4 py-3 border-y border-[#ced0d4]/60">
+          <div className="mb-2 flex items-baseline justify-between">
+            <div>
+              <h3 className="text-[17px] font-bold text-[#080809]">Friends</h3>
+              <span className="text-[13px] text-[#65686C]">{fbProfile.friendsCount || `${fbProfile.friends.length} friends`}</span>
+            </div>
+            <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {fbProfile.friends.slice(0, 6).map((f) => (
+              <div key={f.name} className="overflow-hidden">
+                <div className="aspect-square w-full overflow-hidden rounded-lg bg-[#e4e6eb]">
+                  <img src={f.avatar} className="h-full w-full object-cover" alt="" />
+                </div>
+                <span className="mt-1 block truncate text-[12px] font-medium text-[#080809]">{f.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 3. Details Section */}
+      {fbProfile.details && fbProfile.details.length > 0 && (
+        <div className="mt-2.5 w-full bg-white px-4 py-3 border-y border-[#ced0d4]/60">
+          <h3 className="mb-2.5 text-[17px] font-bold text-[#080809]">Details</h3>
+          <div className="flex flex-col gap-2.5">
+            {fbProfile.details.map((d, i) => (
+              <div key={i} className="flex items-center gap-3 text-[14px] text-[#080809]">
+                <div className="flex h-5 w-5 shrink-0 items-center justify-center text-[#65686C]">
+                  {/studied|studies|went to/i.test(d) ? (
+                    <MetaGraduationIcon size={20} />
+                  ) : /lives in|from/i.test(d) ? (
+                    <MetaLocationIcon size={20} />
+                  ) : /followed by/i.test(d) ? (
+                    <MetaFollowersIcon size={20} />
+                  ) : (
+                    <span className="text-[14px]">ℹ</span>
+                  )}
+                </div>
+                <span>{d}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 4. People You May Know Section */}
+      <div className="mt-2.5 w-full bg-white px-4 py-3 border-y border-[#ced0d4]/60">
+        <div className="mb-2.5 flex items-center justify-between">
+          <h3 className="text-[17px] font-bold text-[#080809]">People you may know</h3>
+          <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
+        </div>
+        <div className="flex gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none]">
+          {[
+            { name: 'Tanvir Ahmed', mutual: '14 mutual friends', avatar: '/facebook/user/aki.webp' },
+            { name: 'Sadia Islam', mutual: '8 mutual friends', avatar: '/facebook/user/baongan.webp' },
+            { name: 'Mehedi Hasan', mutual: '23 mutual friends', avatar: '/facebook/user/ddh.webp' },
+            { name: 'Nusrat Jahan', mutual: '5 mutual friends', avatar: '/facebook/user/halinh.webp' },
+          ].map((p, pIdx) => (
+            <div key={pIdx} className="w-[140px] shrink-0 overflow-hidden rounded-xl border border-[#ced0d4]/70 bg-white shadow-xs">
+              <div className="aspect-square w-full overflow-hidden bg-[#e4e6eb]">
+                <img src={asset(p.avatar)} className="h-full w-full object-cover" alt="" />
+              </div>
+              <div className="p-2.5">
+                <div className="truncate text-[13px] font-bold text-[#080809]">{p.name}</div>
+                <div className="truncate text-[11px] text-[#65686C]">{p.mutual}</div>
+                <div className="mt-2.5 flex h-[30px] w-full items-center justify-center rounded-lg bg-[#0866FF] text-[12px] font-semibold text-white">
+                  Add friend
+                </div>
+                <div className="mt-1 flex h-[28px] w-full items-center justify-center rounded-lg bg-[#E4E6EB] text-[12px] font-semibold text-[#080809]">
+                  Remove
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 5. Posts Header & Composer */}
+      <div className="mt-2.5 w-full bg-white border-y border-[#ced0d4]/60 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-[18px] font-bold text-[#080809]">Posts</h3>
+          <span className="rounded-lg bg-[#E4E6EB] px-3 py-1 text-[13px] font-semibold text-[#080809]">Filters</span>
+        </div>
+        <div className="mt-3 flex items-center gap-2.5 rounded-full bg-[#F0F2F5] px-3.5 py-2">
+          <img
+            src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
+            className="h-8 w-8 rounded-full object-cover"
+            alt=""
+          />
+          <span className="flex-1 text-[14px] text-[#65686C]">What&apos;s on your mind?</span>
+          <MetaComposerPhotoIcon size={20} />
+        </div>
+      </div>
+
+      {/* 6. Timeline Posts (100% Full-bleed width edge to edge) */}
+      {fbProfile.posts && fbProfile.posts.length > 0 ? (
+        <div className="w-full pb-8">
+          {fbProfile.posts.map((post, pIdx) => (
+            <article key={pIdx} className="w-full bg-white mt-2.5 border-y border-[#ced0d4]/60 text-[#050505]">
+              {/* Author header */}
+              <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-2">
+                <img
+                  src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
+                  className="h-10 w-10 rounded-full object-cover"
+                  alt=""
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5 text-[15px] font-bold text-[#050505] leading-tight">
+                    <span>{fbProfile.profileName}</span>
+                    {fbProfile.isVerified && <MetaVerifiedBadge size={14} />}
+                  </div>
+                  <div className="flex items-center gap-1 text-[12px] text-[#65676B] pt-0.5">
+                    <span>{post.time || '1w'}</span> · <Globe2 size={12} />
+                  </div>
+                </div>
+                <MetaMoreDotsIcon size={18} />
+              </div>
+
+              {/* Post Text */}
+              {post.text && (
+                <p className="whitespace-pre-line px-3.5 pt-1 pb-2.5 text-[14px] leading-snug text-[#050505]">
+                  {post.text}
+                </p>
+              )}
+
+              {/* Full-bleed Photo */}
+              {post.images && post.images.length > 0 && (
+                <div className="w-full overflow-hidden bg-[#e4e6eb]">
+                  <img src={post.images[0]} className="w-full max-h-[380px] object-cover" alt="" />
+                </div>
+              )}
+
+              {/* Reactions & engagement counts */}
+              <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676B]">
+                <div className="flex items-center gap-1">
+                  <div className="flex items-center -space-x-1">
+                    <img src={asset('/facebook/reactions/like.webp')} className="h-[18px] w-[18px]" alt="" />
+                    <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px]" alt="" />
+                  </div>
+                  <span className="ml-1 font-medium">{post.reactions || '1.4K'}</span>
+                </div>
+                <div>{post.commentsCount ? `${post.commentsCount} comments` : '84 comments'} · {post.sharesCount ? `${post.sharesCount} shares` : '12 shares'}</div>
+              </div>
+
+              {/* Action Bar */}
+              <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4]/50 py-1 text-center text-[13px] font-semibold text-[#65676B]">
+                <div className="flex items-center justify-center gap-1.5 py-2">
+                  <MetaLikeThumbIcon size={18} />
+                  <span>Like</span>
+                </div>
+                <div className="flex items-center justify-center gap-1.5 py-2">
+                  <MetaCommentIcon size={18} />
+                  <span>Comment</span>
+                </div>
+                <div className="flex items-center justify-center gap-1.5 py-2">
+                  <MetaShareIcon size={18} />
+                  <span>Share</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="w-full bg-white mt-2.5 py-8 text-center text-[14px] text-[#65676B] border-y border-[#ced0d4]/60">
+          {fbProfile.isLocked ? 'No posts available' : 'No recent public posts'}
+        </div>
+      )}
     </div>
   );
 };
