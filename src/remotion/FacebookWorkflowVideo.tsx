@@ -61,28 +61,37 @@ const tabForFrame = (frame: number, hasFbProfile: boolean): FbTab => {
   return 'feed';
 };
 
-const FacebookNav: React.FC<{tab: FbTab}> = ({tab}) => (
-  <div className="grid h-[48px] shrink-0 grid-cols-6 border-b border-[#ced0d4] bg-white">
-    <div className={`relative grid place-items-center ${tab === 'feed' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavHomeIcon active={tab === 'feed'} size={24} />
+const FacebookNav: React.FC<{tab: FbTab; fbProfile?: FbProfileData}> = ({tab, fbProfile}) => {
+  const avatar = fbProfile?.profilePicture;
+  return (
+    <div className="grid h-[48px] shrink-0 grid-cols-6 border-b border-[#ced0d4] bg-white">
+      <div className={`relative grid place-items-center ${tab === 'feed' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
+        <MetaNavHomeIcon active={tab === 'feed'} size={24} />
+      </div>
+      <div className={`relative grid place-items-center ${tab === 'watch' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
+        <MetaNavWatchIcon active={tab === 'watch'} size={24} />
+      </div>
+      <div className={`relative grid place-items-center ${tab === 'friends' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
+        <MetaNavFriendsIcon active={tab === 'friends'} size={24} />
+      </div>
+      <div className={`relative grid place-items-center ${tab === 'market' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
+        <MetaNavMarketIcon active={tab === 'market'} size={24} />
+      </div>
+      <div className={`relative grid place-items-center ${tab === 'notifications' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
+        <MetaNavBellIcon active={tab === 'notifications'} size={24} />
+      </div>
+      <div className={`relative grid place-items-center ${tab === 'menu' || tab === 'profile' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
+        {avatar ? (
+          <div className={`h-7 w-7 rounded-full overflow-hidden border ${tab === 'menu' || tab === 'profile' ? 'border-[#0866FF] ring-2 ring-[#0866FF]/30' : 'border-[#ced0d4]'}`}>
+            <img src={avatar.startsWith('http') ? avatar : asset(avatar)} className="h-full w-full object-cover" alt="" />
+          </div>
+        ) : (
+          <MetaNavMenuIcon active={tab === 'menu'} size={24} />
+        )}
+      </div>
     </div>
-    <div className={`relative grid place-items-center ${tab === 'watch' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavWatchIcon active={tab === 'watch'} size={24} />
-    </div>
-    <div className={`relative grid place-items-center ${tab === 'friends' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavFriendsIcon active={tab === 'friends'} size={24} />
-    </div>
-    <div className={`relative grid place-items-center ${tab === 'market' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavMarketIcon active={tab === 'market'} size={24} />
-    </div>
-    <div className={`relative grid place-items-center ${tab === 'notifications' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavBellIcon active={tab === 'notifications'} size={24} />
-    </div>
-    <div className={`relative grid place-items-center ${tab === 'menu' ? 'after:absolute after:bottom-0 after:h-[3.5px] after:w-full after:bg-[#0866FF]' : ''}`}>
-      <MetaNavMenuIcon active={tab === 'menu'} size={24} />
-    </div>
-  </div>
-);
+  );
+};
 
 const TopBar: React.FC = () => (
   <div className="flex h-[52px] shrink-0 items-center justify-between bg-white px-3 text-[#080809]">
@@ -105,23 +114,33 @@ const TopBar: React.FC = () => (
   </div>
 );
 
-const Composer: React.FC = () => (
-  <div className="bg-white px-3 py-2.5 text-[#080809]">
-    <div className="flex items-center gap-2.5">
-      <img src={asset('/facebook/user/lcd.webp')} className="h-10 w-10 rounded-full object-cover" alt="" />
-      <div className="flex-1 rounded-full border border-[#ced0d4] bg-white px-4 py-2 text-[15px] text-[#65676b]">
-        What&apos;s on your mind?
-      </div>
-      <div className="p-1 shrink-0">
-        <MetaComposerPhotoIcon size={24} />
+const Composer: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
+  const avatar = fbProfile?.profilePicture || asset('/facebook/user/lcd.webp');
+  const firstName = fbProfile?.profileName ? fbProfile.profileName.split(' ')[0] : '';
+  const placeholder = firstName ? `What's on your mind, ${firstName}?` : "What's on your mind?";
+  return (
+    <div className="bg-white px-3 py-2.5 text-[#080809]">
+      <div className="flex items-center gap-2.5">
+        <img
+          src={avatar.startsWith('http') ? avatar : asset(avatar)}
+          className="h-10 w-10 rounded-full object-cover"
+          alt=""
+        />
+        <div className="flex-1 rounded-full border border-[#ced0d4] bg-white px-4 py-2 text-[15px] text-[#65676b]">
+          {placeholder}
+        </div>
+        <div className="p-1 shrink-0">
+          <MetaComposerPhotoIcon size={24} />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-const Stories: React.FC = () => {
+const Stories: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
+  const ownAvatar = fbProfile?.profilePicture || asset('/facebook/user/lcd.webp');
   const stories = [
-    { name: 'Create story', cover: '/facebook/user/lcd.webp', avatar: '/facebook/user/lcd.webp', own: true },
+    { name: 'Create story', cover: ownAvatar, avatar: ownAvatar, own: true },
     { name: 'Bente Othman', cover: '/facebook/story/1.webp', avatar: '/facebook/user/khanhvy.webp' },
     { name: 'Jordan Jones', cover: '/facebook/story/2.webp', avatar: '/facebook/user/messi.webp' },
     { name: 'Sarah Jenkins', cover: '/facebook/story/3.webp', avatar: '/facebook/user/minhhuong.webp' },
@@ -132,7 +151,11 @@ const Stories: React.FC = () => {
         {stories.map((story) => (
           <div key={story.name} className="relative h-[190px] w-[110px] shrink-0 overflow-hidden rounded-2xl border border-[#ced0d4] bg-white text-left shadow-xs">
             <div className="h-[125px] w-full overflow-hidden bg-[#e4e6eb]">
-              <img src={asset(story.cover)} className="h-full w-full object-cover" alt="" />
+              <img
+                src={story.cover.startsWith('http') ? story.cover : asset(story.cover)}
+                className="h-full w-full object-cover"
+                alt=""
+              />
             </div>
             {story.own ? (
               <>
@@ -147,7 +170,11 @@ const Stories: React.FC = () => {
               <>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
                 <div className="absolute left-2.5 top-2.5 h-10 w-10 rounded-full border-[3px] border-[#0866FF] overflow-hidden bg-white shadow-xs">
-                  <img src={asset(story.avatar)} className="h-full w-full object-cover" alt="" />
+                  <img
+                    src={story.avatar.startsWith('http') ? story.avatar : asset(story.avatar)}
+                    className="h-full w-full object-cover"
+                    alt=""
+                  />
                 </div>
                 <div className="absolute bottom-2.5 left-2.5 right-1.5 text-[13px] font-bold leading-tight text-white drop-shadow-sm">
                   {story.name}
@@ -208,12 +235,12 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
   </article>
 );
 
-const Feed: React.FC<{frame: number}> = ({frame}) => {
+const Feed: React.FC<{frame: number; fbProfile?: FbProfileData}> = ({frame, fbProfile}) => {
   const scroll = interpolate(frame, [180, 260], [0, -720], clamp);
   return (
     <div style={{transform: `translateY(${scroll}px)`}} className="bg-[#f0f2f5] pb-4">
-      <Composer />
-      <Stories />
+      <Composer fbProfile={fbProfile} />
+      <Stories fbProfile={fbProfile} />
       <Post />
       <Post second />
     </div>
@@ -247,13 +274,27 @@ const Notifications: React.FC = () => (
   </div>
 );
 
-const MenuScreen: React.FC = () => (
-  <div className="min-h-full bg-[#f0f2f5] p-3 text-[#050505]">
-    <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Menu</h2>
-    <div className="my-3 flex items-center gap-3 rounded-xl bg-white p-3 shadow-xs border border-[#ced0d4]/60"><img src={asset('/facebook/user/lcd.webp')} className="h-12 w-12 rounded-full object-cover" alt=""/><div><div className="font-bold text-[16px]">Lê Công Đắt</div><div className="text-xs text-[#65676b]">See your profile</div></div></div>
-    <div className="grid grid-cols-2 gap-2">{[['Friends','friends.png'],['Memories','memory.png'],['Saved','saved.png'],['Marketplace','market.png'],['Video','video.png'],['Events','event.png']].map(([n,i])=><div key={n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-[14px] font-semibold shadow-xs border border-[#ced0d4]/60"><img src={asset(`/facebook/menu/${i}`)} className="h-7 w-7 object-contain" alt=""/>{n}</div>)}</div>
-  </div>
-);
+const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
+  const avatar = fbProfile?.profilePicture || asset('/facebook/user/lcd.webp');
+  const name = fbProfile?.profileName || 'Facebook User';
+  return (
+    <div className="min-h-full bg-[#f0f2f5] p-3 text-[#050505]">
+      <h2 className="text-2xl font-bold font-['Optimistic_Display',sans-serif]">Menu</h2>
+      <div className="my-3 flex items-center gap-3 rounded-xl bg-white p-3 shadow-xs border border-[#ced0d4]/60">
+        <img
+          src={avatar.startsWith('http') ? avatar : asset(avatar)}
+          className="h-12 w-12 rounded-full object-cover"
+          alt=""
+        />
+        <div>
+          <div className="font-bold text-[16px]">{name}</div>
+          <div className="text-xs text-[#65676b]">See your profile</div>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2">{[['Friends','friends.png'],['Memories','memory.png'],['Saved','saved.png'],['Marketplace','market.png'],['Video','video.png'],['Events','event.png']].map(([n,i])=><div key={n} className="flex items-center gap-3 rounded-xl bg-white p-3 text-[14px] font-semibold shadow-xs border border-[#ced0d4]/60"><img src={asset(`/facebook/menu/${i}`)} className="h-7 w-7 object-contain" alt=""/>{n}</div>)}</div>
+    </div>
+  );
+};
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
   const scroll = interpolate(frame, [440, 500], [0, -400], clamp);
@@ -285,6 +326,27 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
             <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white"><MetaPlusIcon size={16} fill="#ffffff" /><span>Add to story</span></div>
             <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]"><MetaEditPencilIcon size={16} fill="#050505" /><span>Edit profile</span></div>
           </div>
+          {fbProfile.friends && fbProfile.friends.length > 0 && (
+            <div className="mt-4 border-t border-[#ced0d4]/60 px-2 pt-3 text-left">
+              <div className="mb-2 flex items-baseline justify-between">
+                <div>
+                  <h3 className="text-[17px] font-bold text-[#080809]">Friends</h3>
+                  <span className="text-[13px] text-[#65686C]">{fbProfile.friendsCount || `${fbProfile.friends.length} friends`}</span>
+                </div>
+                <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {fbProfile.friends.slice(0, 6).map((f) => (
+                  <div key={f.name} className="overflow-hidden">
+                    <div className="aspect-square w-full overflow-hidden rounded-lg bg-[#e4e6eb]">
+                      <img src={f.avatar} className="h-full w-full object-cover" alt="" />
+                    </div>
+                    <span className="mt-1 block truncate text-[12px] font-medium text-[#080809]">{f.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -304,14 +366,14 @@ const FacebookScreen: React.FC<{frame:number; fbProfile?: FbProfileData}> = ({fr
   return (
     <div className="flex h-full flex-col overflow-hidden bg-[#f0f2f5] font-['Optimistic_Text',sans-serif]">
       {tab==='feed'&&<TopBar/>}
-      {tab!=='profile'&&<FacebookNav tab={tab}/>}
+      {tab!=='profile'&&<FacebookNav tab={tab} fbProfile={fbProfile}/>}
       <div className="min-h-0 flex-1 overflow-hidden">
-        {tab==='feed'&&<Feed frame={frame}/>}
+        {tab==='feed'&&<Feed frame={frame} fbProfile={fbProfile}/>}
         {tab==='watch'&&<Watch/>}
         {tab==='friends'&&<FriendsTabScreen/>}
         {tab==='market'&&<MarketScreen/>}
         {tab==='notifications'&&<Notifications/>}
-        {tab==='menu'&&<MenuScreen/>}
+        {tab==='menu'&&<MenuScreen fbProfile={fbProfile}/>}
         {tab==='profile'&&fbProfile&&<ProfileScreen fbProfile={fbProfile} frame={frame}/>}
       </div>
     </div>
