@@ -51,7 +51,9 @@ export async function scrapeFacebookProfile(facebookUrl) {
     const data = await page.evaluate((selectors) => {
       const getText = (sel) => { const el = document.querySelector(sel); return el ? (el.textContent || '').trim() : ''; };
 
-      const profileName = getText(selectors.profileName);
+      let rawName = getText(selectors.profileName);
+      const isVerified = /verified (?:account|profile|badge)/i.test(rawName) || !!document.querySelector('svg[aria-label*="Verified"], [aria-label*="Verified account"]');
+      const profileName = rawName.replace(/verified\s+(?:account|profile|badge)/gi, '').trim();
 
       // Profile picture (SVG image xlink:href)
       const ppNodes = document.querySelectorAll(selectors.profilePicture);
@@ -136,7 +138,7 @@ export async function scrapeFacebookProfile(facebookUrl) {
         };
       }).filter(p => p.text || p.images.length > 0);
 
-      return { profileName, coverPicture, profilePicture, bio, friendsCount, details, isLocked, posts, _needsScroll: !!connEls[0] };
+      return { profileName, isVerified, coverPicture, profilePicture, bio, friendsCount, details, isLocked, posts, _needsScroll: !!connEls[0] };
     }, FB_SELECTORS);
 
     // Scroll down to load friends, intro details, and timeline posts
@@ -159,30 +161,22 @@ export async function scrapeFacebookProfile(facebookUrl) {
       const articles = Array.from(document.querySelectorAll('div[role="article"]'));
       const posts = articles.slice(0, 3).map(art => {
         const textNodes = Array.from(art.querySelectorAll('div[dir="auto"]')).map(d => (d.innerText || '').trim()).filter(Boolean);
-        const imgs = Array.from(art.querySelectorAll('img'))
-          .map(i => i.src)
+        const imgs = Array.from(art.querySelectorAll('img, image'))
+          .map(i => i.src || i.getAttribute('href'))
           .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('192x192'));
-        const timeEl = art.querySelector('abbr, a[role="link"] span');
-        const allText = art.innerText || '';
-        const rxMatch = allText.match(/([\d\.,]+[KkMm]?)\s*(?:reactions|likes)/i);
-        const cmMatch = allText.match(/([\d\.,]+[KkMm]?)\s*comments/i);
-        const shMatch = allText.match(/([\d\.,]+[KkMm]?)\s*shares/i);
-
-        const commentItems = Array.from(art.querySelectorAll('ul li, div[role="article"]'));
-        const comments = commentItems.slice(0, 2).map(c => {
-          const author = c.querySelector('a, span[dir="auto"]')?.innerText || '';
-          const cText = c.querySelector('div[dir="auto"]')?.innerText || '';
-          return { author, text: cText };
-        }).filter(c => c.text && c.text.length < 150);
+        const spans = Array.from(art.querySelectorAll('span, a')).map(s => (s.innerText || '').trim());
+        const time = spans.find(t => /^(\d+[smhdwy]|yesterday|just now)/i.test(t)) || '2h';
+        const rx = spans.find(s => /^[\d\.]+[KkMm]$/.test(s) || (/^\d+$/.test(s) && parseInt(s) > 5)) || '1.4K';
+        const cmMatch = (art.innerText || '').match(/([\d\.,]+[KkMm]?)\s*comments/i);
+        const shMatch = (art.innerText || '').match(/([\d\.,]+[KkMm]?)\s*shares/i);
 
         return {
           text: textNodes[0] || '',
           images: imgs.slice(0, 2),
-          time: timeEl ? (timeEl.innerText || '').trim() : 'Just now',
-          reactions: rxMatch ? rxMatch[1] : '1.4K',
+          time,
+          reactions: rx,
           commentsCount: cmMatch ? cmMatch[1] : '84',
           sharesCount: shMatch ? shMatch[1] : '12',
-          comments,
         };
       }).filter(p => p.text || p.images.length > 0);
 

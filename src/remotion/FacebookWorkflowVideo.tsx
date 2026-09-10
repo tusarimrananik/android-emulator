@@ -30,6 +30,7 @@ import {
   MetaGraduationIcon,
   MetaLocationIcon,
   MetaFollowersIcon,
+  MetaVerifiedBadge,
 } from '@/components/apps/MetaFacebookSvg';
 import {Globe2, X, Search} from 'lucide-react';
 
@@ -50,6 +51,7 @@ type FbPost = {
 
 type FbProfileData = {
   profileName: string;
+  isVerified?: boolean;
   coverPicture: string | null;
   profilePicture: string | null;
   bio: string | null;
@@ -334,7 +336,10 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
           </div>
         </div>
         <div className="px-4 pt-2 text-center">
-          <h1 className="text-[24px] font-bold text-[#080809]">{fbProfile.profileName || 'Facebook User'}</h1>
+          <h1 className="flex items-center justify-center gap-1.5 text-[24px] font-bold text-[#080809]">
+            <span>{fbProfile.profileName || 'Facebook User'}</span>
+            {fbProfile.isVerified && <MetaVerifiedBadge size={18} />}
+          </h1>
           <div className="mt-1 flex items-center justify-center gap-1.5 text-[14px] text-[#65686C]"><span className="font-semibold text-[#080809]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} followers` : '1,150 followers'}</span><span>•</span><span className="font-semibold text-[#080809]">480 following</span></div>
           {fbProfile.bio && <p className="mt-2 text-[14px] text-[#080809]">{fbProfile.bio}</p>}
           <div className="mt-4 flex gap-2 px-2">
@@ -451,7 +456,10 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
                         alt=""
                       />
                       <div>
-                        <div className="text-[14px] font-bold text-[#080809]">{fbProfile.profileName}</div>
+                        <div className="flex items-center gap-1 text-[14px] font-bold text-[#080809]">
+                          <span>{fbProfile.profileName}</span>
+                          {fbProfile.isVerified && <MetaVerifiedBadge size={13} />}
+                        </div>
                         <div className="text-[11px] text-[#65676B]">{post.time || '2h'} · 🌐</div>
                       </div>
                     </div>
