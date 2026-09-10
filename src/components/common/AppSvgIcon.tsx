@@ -20,10 +20,10 @@ const APP_BRAND_COLORS: Record<string, { bg: string; fg: string }> = {
   play_store: { bg: '#ffffff', fg: '#0086f8' },
   photos: { bg: '#ffffff', fg: '#ea4335' },
   gmail: { bg: '#ffffff', fg: '#ea4335' },
-  settings: { bg: '#5f6368', fg: '#ffffff' },
+  settings: { bg: '#1a73e8', fg: '#ffffff' },
   maps: { bg: '#ffffff', fg: '#34a853' },
   youtube: { bg: '#ff0000', fg: '#ffffff' },
-  spotify: { bg: '#121212', fg: '#1ed760' },
+  spotify: { bg: '#1ed760', fg: '#121212' },
   clock: { bg: '#1a73e8', fg: '#ffffff' },
   calculator: { bg: '#1a73e8', fg: '#ffffff' },
   calendar: { bg: '#ffffff', fg: '#ea4335' },
@@ -34,7 +34,7 @@ const APP_BRAND_COLORS: Record<string, { bg: string; fg: string }> = {
   discord: { bg: '#5865f2', fg: '#ffffff' },
   github: { bg: '#24292e', fg: '#ffffff' },
   whatsapp: { bg: '#25d366', fg: '#ffffff' },
-  yt_music: { bg: '#000000', fg: '#ff0000' },
+  yt_music: { bg: '#ff0000', fg: '#ffffff' },
   recorder: { bg: '#ea4335', fg: '#ffffff' },
   contacts: { bg: '#1a73e8', fg: '#ffffff' },
   pixel_tips: { bg: '#ea4335', fg: '#ffffff' },
@@ -152,5 +152,5 @@ function cleanLawniconsSvg(svgText: string, color: string): string {
     .replace(/<svg[^>]*>/i, '')
     .replace(/<\/svg>/i, '');
 
-  return `<svg viewBox="${viewBox}" width="100%" height="100%" fill="none" stroke="${color}" stroke-linecap="round" stroke-linejoin="round">${innerContent}</svg>`;
+  return `<svg viewBox="${viewBox}" width="100%" height="100%" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">${innerContent}</svg>`;
 }
