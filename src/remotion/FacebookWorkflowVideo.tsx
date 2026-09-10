@@ -470,7 +470,13 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
                       </div>
                     )}
                     <div className="mt-2 flex items-center justify-between border-b border-[#ced0d4]/40 pb-2 text-[12px] text-[#65676B]">
-                      <span>👍 ❤️ {post.reactions || '1.4K'}</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex items-center -space-x-1">
+                          <img src={asset('/facebook/reactions/like.webp')} className="h-[18px] w-[18px]" alt="" />
+                          <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px]" alt="" />
+                        </div>
+                        <span className="ml-1 font-medium text-[13px] text-[#65676B]">{post.reactions || '1.4K'}</span>
+                      </div>
                       <span>{post.commentsCount || '12'} comments · {post.sharesCount || '4'} shares</span>
                     </div>
                     <div className="mt-1 flex justify-around pt-1 text-[13px] font-semibold text-[#65676B]">
