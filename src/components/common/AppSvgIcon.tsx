@@ -79,13 +79,46 @@ export const AppSvgIcon: React.FC<AppSvgIconProps> = ({
   const brand = APP_BRAND_COLORS[appId] || { bg: '#1e88e5', fg: '#ffffff' };
 
   if (appId === 'facebook') {
+    const fbSvg = (
+      <svg viewBox="0 0 192 192" width="100%" height="100%" fill="currentColor">
+        <path d="M125.8 107.5l4.3-28.3h-27.1v-18.4c0-7.8 3.8-15.4 16.1-15.4h12.5V41.3c-2.6-.4-11.6-1.3-22-1.3-22.5 0-37.1 13.7-37.1 38.3v20.9H47.5v28.3h25v68.5h30.9v-68.5h22.4z" />
+      </svg>
+    );
+
+    if (isThemed) {
+      return (
+        <div
+          className={`relative flex items-center justify-center transition-all duration-300 ${shapeClass} ${className}`}
+          style={{
+            width: size,
+            height: size,
+            backgroundColor: 'var(--md-primary-container)',
+            color: 'var(--md-on-primary-container)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+          }}
+        >
+          <div className="w-[58%] h-[58%] flex items-center justify-center fill-current">
+            {fbSvg}
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <img
-        src="/app-icons/facebook.png"
-        alt="Facebook"
-        className={`object-cover shadow-md ${shapeClass} ${className}`}
-        style={{ width: size, height: size }}
-      />
+      <div
+        className={`relative flex items-center justify-center overflow-hidden transition-all duration-300 shadow-md ${shapeClass} ${className}`}
+        style={{
+          width: size,
+          height: size,
+          backgroundColor: '#1877f2',
+          color: '#ffffff',
+          boxShadow: '0 3px 10px rgba(24,119,242,0.35)',
+        }}
+      >
+        <div className="w-[58%] h-[58%] flex items-center justify-center fill-current">
+          {fbSvg}
+        </div>
+      </div>
     );
   }
 
