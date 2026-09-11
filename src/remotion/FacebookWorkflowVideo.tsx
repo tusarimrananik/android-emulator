@@ -47,7 +47,7 @@ type FbPost = {
   reactions?: string;
   commentsCount?: string;
   sharesCount?: string;
-  comments?: {author: string; text: string}[];
+  comments?: {author: string; text: string; avatar?: string; likes?: string}[];
 };
 
 type FbProfileData = {
@@ -315,7 +315,139 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const scroll = interpolate(frame, [60, 560], [0, -740], clamp);
+  const scroll = interpolate(frame, [40, 570], [0, -3200], clamp);
+
+  const sampleTenPosts: FbPost[] = [
+    {
+      text: "কলেজ শুরুর আগে ৫টি life changing advice",
+      time: "6d",
+      isVideo: true,
+      images: [asset('/facebook/post/1.webp')],
+      reactions: "5.8K",
+      commentsCount: "150",
+      sharesCount: "42",
+      comments: [
+        { author: "Munna Islam", text: "ভাইয়া অনেক ধন্যবাদ! পরামর্শগুলো আসলেই কাজে লাগবে ❤️", likes: "15" },
+        { author: "Tanvir Ahmed", text: "Best advice as always! 🔥", likes: "8" }
+      ]
+    },
+    {
+      text: "কেন স্কুল মাস্টার হলাম? 🥹",
+      time: "1w",
+      isVideo: true,
+      images: [asset('/facebook/post/2.webp')],
+      reactions: "14.2K",
+      commentsCount: "520",
+      sharesCount: "120",
+      comments: [
+        { author: "Sadia Rahman", text: "আপনার এই জার্নি আমাদের সবার জন্য অনেক বড় অনুপ্রেরণা! 🙌", likes: "34" }
+      ]
+    },
+    {
+      text: "আমার স্কুলমাস্টার হয়ে ওঠার ফার্স্ট স্টেপ ছিল স্টুডেন্ট লাইফে টিউশন শুরু করা। সেই এক্সপেরিয়েন্স থেকে স্টুডেন্ট লাইফে টিউশন শুরু করার জন্য ১০টি টিপস শেয়ার করেছি আজকে। 🔥\n\nShare the video with your friends. 🙌",
+      time: "2w",
+      isVideo: false,
+      images: [asset('/facebook/post/3.webp')],
+      reactions: "8.4K",
+      commentsCount: "310",
+      sharesCount: "85",
+      comments: [
+        { author: "Mehedi Hasan", text: "টিপসগুলো দারুণ ছিল ভাইয়া! ধন্যবাদ", likes: "12" }
+      ]
+    },
+    {
+      text: "কেন আমি আজও কোটিপতি নই? :(\nসফলতার চেয়ে মানসিক শান্তি আর সততা অনেক বেশি মূল্যবান।",
+      time: "3w",
+      isVideo: true,
+      images: [asset('/facebook/post/1.webp')],
+      reactions: "19.5K",
+      commentsCount: "840",
+      sharesCount: "210",
+      comments: [
+        { author: "Arif Hossain", text: "একদম মনের কথা বললেন ভাইয়া ❤️", likes: "45" }
+      ]
+    },
+    {
+      text: "যারা কলেজ লাইফ শুরু করতে যাচ্ছো, এই ৬টি কাজ অবশ্যই করবে। পড়াশোনার পাশাপাশি স্কিল ডেভেলপমেন্ট শুরু করো আজ থেকেই।",
+      time: "1m",
+      isVideo: false,
+      images: [asset('/facebook/post/2.webp')],
+      reactions: "11.2K",
+      commentsCount: "412",
+      sharesCount: "94",
+      comments: [
+        { author: "Nusrat Jahan", text: "Bookmarked for my brother! 👌", likes: "19" }
+      ]
+    },
+    {
+      text: "SSC রেজাল্টের পর কলেজ শুরুর আগে আমার ভাই সাদমানকে যে ৪টা Advice দিয়েছিলাম। সময়ের সঠিক ব্যবহারই এগিয়ে রাখবে।",
+      time: "1m",
+      isVideo: true,
+      images: [asset('/facebook/post/3.webp')],
+      reactions: "22.1K",
+      commentsCount: "980",
+      sharesCount: "350",
+      comments: [
+        { author: "Farhan Kabir", text: "অসাধারণ গাইডলাইন!", likes: "28" }
+      ]
+    },
+    {
+      text: "কীভাবে ফ্রিল্যান্সিং শুরু করবেন ২০২৬ সালে? স্কিল ছাড়া শুধু একাউন্ট খুলে বসে থাকলে কাজ পাবেন না। শিখুন, প্র্যাকটিস করুন।",
+      time: "2m",
+      isVideo: true,
+      images: [asset('/facebook/post/1.webp')],
+      reactions: "16.8K",
+      commentsCount: "640",
+      sharesCount: "180",
+      comments: [
+        { author: "Kamrul Islam", text: "অনেক কিছু শিখতে পারলাম।", likes: "14" }
+      ]
+    },
+    {
+      text: "স্পোকেন ইংলিশ শেখার সবচেয়ে সহজ ৩টি টেকনিক: ১. প্রতিদিন ১৫ মিনিট জোরে পড়ুন ২. বন্ধুদের সাথে ইংরেজিতে কথা বলুন ৩. সাবটাইটেল সহ ইংলিশ মুভি দেখুন।",
+      time: "2m",
+      isVideo: true,
+      images: [asset('/facebook/post/2.webp')],
+      reactions: "25.4K",
+      commentsCount: "1.2K",
+      sharesCount: "410",
+      comments: [
+        { author: "Tasnim Anjum", text: "১ নম্বর পয়েন্টটা অনেক কাজে দেয় ❤️", likes: "52" }
+      ]
+    },
+    {
+      text: "জীবনে সফল হতে হলে যে ৩টি অভ্যাস আজই ত্যাগ করতে হবে: অতিরিক্ত চিন্তা করা, কাজ পিছিয়ে দেওয়া, এবং অন্য কারো সাথে নিজেকে তুলনা করা।",
+      time: "3m",
+      isVideo: false,
+      images: [asset('/facebook/post/3.webp')],
+      reactions: "9.6K",
+      commentsCount: "280",
+      sharesCount: "65",
+      comments: [
+        { author: "Rony Ahmed", text: "একদম খাঁটি কথা ভাইয়া।", likes: "16" }
+      ]
+    },
+    {
+      text: "১০ মিনিট স্কুলের কৃতি শিক্ষার্থী সংবর্ধনা ২০২৫-এর কিছু স্মরণীয় মুহূর্ত ❤️ সবার জন্য অনেক শুভকামনা!",
+      time: "3m",
+      isVideo: false,
+      images: [asset('/facebook/post/1.webp')],
+      reactions: "34.2K",
+      commentsCount: "1.8K",
+      sharesCount: "620",
+      comments: [
+        { author: "Sakib Al Hasan", text: "অভিনন্দন সবাইকে! 👏", likes: "67" }
+      ]
+    }
+  ];
+
+  const displayPosts = (fbProfile.posts && fbProfile.posts.length >= 10)
+    ? fbProfile.posts
+    : [
+        ...(fbProfile.posts || []),
+        ...sampleTenPosts.slice(fbProfile.posts ? fbProfile.posts.length : 0, 10)
+      ];
+
   return (
     <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
@@ -473,10 +605,10 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
         </div>
       </div>
 
-      {/* 6. Timeline Posts (100% Full-bleed width edge to edge) */}
-      {fbProfile.posts && fbProfile.posts.length > 0 ? (
+      {/* 6. Timeline Posts (100% Full-bleed width edge to edge, all 10 posts) */}
+      {displayPosts && displayPosts.length > 0 ? (
         <div className="w-full pb-8">
-          {fbProfile.posts.map((post, pIdx) => (
+          {displayPosts.map((post, pIdx) => (
             <article key={pIdx} className="w-full bg-white mt-2.5 border-y border-[#ced0d4]/60 text-[#050505]">
               {/* Author header */}
               <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-2">
@@ -547,6 +679,29 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
                   <span>Share</span>
                 </div>
               </div>
+
+              {/* Top Comments on post */}
+              {post.comments && post.comments.length > 0 && (
+                <div className="border-t border-[#ced0d4]/40 bg-[#F7F8FA] px-3.5 py-2.5 flex flex-col gap-2">
+                  {post.comments.map((c, cIdx) => (
+                    <div key={cIdx} className="flex items-start gap-2">
+                      <div className="h-7 w-7 shrink-0 rounded-full bg-[#E4E6EB] flex items-center justify-center font-bold text-[11px] text-[#65676B] overflow-hidden">
+                        {c.author[0] || 'U'}
+                      </div>
+                      <div className="rounded-2xl bg-white px-3 py-1.5 shadow-2xs border border-[#ced0d4]/30 max-w-[85%]">
+                        <div className="text-[12px] font-bold text-[#080809]">{c.author}</div>
+                        <div className="text-[13px] text-[#050505] leading-snug">{c.text}</div>
+                        {c.likes && (
+                          <div className="mt-1 flex items-center gap-1 text-[11px] text-[#65676B]">
+                            <img src={asset('/facebook/reactions/like.webp')} className="h-[12px] w-[12px]" alt="" />
+                            <span>{c.likes}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </article>
           ))}
         </div>
