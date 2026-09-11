@@ -74,15 +74,13 @@ export async function scrapeFacebookProfile(facebookUrl) {
       }
 
       // Friends / Followers count
+      const connEls = document.querySelectorAll(selectors.friends);
       const bodyText = document.body ? document.body.innerText : '';
       const fMatch = bodyText.match(/([\d\.,]+[KkMm]?)\s*followers/i);
       let friendsCount = fMatch ? fMatch[1] : null;
-      if (!friendsCount) {
-        const connEls = document.querySelectorAll(selectors.friends);
-        if (connEls[0]) {
-          const parts = connEls[0].innerText.trim().split(/\s+/);
-          if (parts.length >= 1 && !/forgot/i.test(parts[0])) friendsCount = parts[0];
-        }
+      if (!friendsCount && connEls[0]) {
+        const parts = connEls[0].innerText.trim().split(/\s+/);
+        if (parts.length >= 1 && !/forgot/i.test(parts[0])) friendsCount = parts[0];
       }
 
       // Friends grid (first 6)
