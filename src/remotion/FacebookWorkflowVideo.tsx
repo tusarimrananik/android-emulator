@@ -315,7 +315,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const scroll = interpolate(frame, [60, 560], [0, -640], clamp);
+  const scroll = interpolate(frame, [60, 560], [0, -740], clamp);
   return (
     <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
