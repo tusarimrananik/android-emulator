@@ -55,10 +55,15 @@ export async function scrapeFacebookProfile(facebookUrl) {
       const isVerified = /verified (?:account|profile|badge)/i.test(rawName) || !!document.querySelector('svg[aria-label*="Verified"], [aria-label*="Verified account"]');
       const profileName = rawName.replace(/verified\s+(?:account|profile|badge)/gi, '').trim();
 
-      // Profile picture (SVG image xlink:href)
-      const ppNodes = document.querySelectorAll(selectors.profilePicture);
-      const profilePicture = ppNodes.length > 1
-        ? ppNodes[1].getAttributeNS('http://www.w3.org/1999/xlink', 'href')
+      // Profile picture (SVG image href or img)
+      const ppNodes = Array.from(document.querySelectorAll('.x1rg5ohu image, svg image, [role="img"] image, img'));
+      const avatarEl = ppNodes.find(el => {
+        const w = el.width?.baseVal?.value || el.getAttribute('width') || el.width;
+        return Number(w) >= 100;
+      }) || ppNodes[1] || null;
+
+      const profilePicture = avatarEl
+        ? (avatarEl.getAttribute('href') || avatarEl.href?.baseVal || avatarEl.src || avatarEl.getAttribute('xlink:href'))
         : null;
 
       // Cover photo
