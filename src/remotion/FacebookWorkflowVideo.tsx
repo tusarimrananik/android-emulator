@@ -43,6 +43,7 @@ type FbPost = {
   text: string;
   images: string[];
   time?: string;
+  isVideo?: boolean;
   reactions?: string;
   commentsCount?: string;
   sharesCount?: string;
@@ -314,7 +315,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const scroll = interpolate(frame, [450, 560], [0, -680], clamp);
+  const scroll = interpolate(frame, [60, 560], [0, -1150], clamp);
   return (
     <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
@@ -503,10 +504,19 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
                 </p>
               )}
 
-              {/* Full-bleed Photo */}
+              {/* Full-bleed Photo or Video Thumbnail */}
               {post.images && post.images.length > 0 && (
-                <div className="w-full overflow-hidden bg-[#e4e6eb]">
+                <div className="relative w-full overflow-hidden bg-[#e4e6eb]">
                   <img src={post.images[0]} className="w-full max-h-[380px] object-cover" alt="" />
+                  {post.isVideo && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-white shadow-lg backdrop-blur-xs">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -578,37 +588,23 @@ const FacebookScreen: React.FC<{frame:number; fbProfile?: FbProfileData}> = ({fr
 
 export const FacebookWorkflowVideo: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile: fbProfileProp}) => {
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
   const fbProfile = fbProfileProp || (typeof window !== 'undefined' && (window as any).__REMOTION_INPUT_PROPS?.fbProfile) || undefined;
-  const facebookVisible = frame >= 45;
-  const appOpen = spring({frame: frame - 45, fps, config: {damping: 18, stiffness: 125}});
-  const appScale = interpolate(appOpen, [0, 1], [0.18, 1], clamp);
 
   return (
     <LawnchairProvider>
       <AbsoluteFill style={{background: '#0a0c10', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
         <div style={{transform: 'scale(2)', transformOrigin: 'center'}}>
           <DeviceFrame isFrameEnabled={false}>
-            <div className="relative flex h-full w-full flex-col justify-between overflow-hidden select-none bg-black text-white">
-              <div
-                className="absolute inset-0 z-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url(${WALLPAPERS[0].url})`,
-                  filter: facebookVisible ? 'brightness(.55) blur(3px)' : 'none',
-                }}
-              />
-              <StatusBar darkIcons={false} />
-              <HomeScreen />
-              <Dock />
-              <NavigationBar dark={false} />
-              {facebookVisible && (
-                <div
-                  style={{transform: `scale(${appScale})`, transformOrigin: 'center'}}
-                  className="absolute inset-0 z-30"
-                >
-                  <FacebookScreen frame={frame} fbProfile={fbProfile} />
-                </div>
-              )}
+            <div className="relative flex h-full w-full flex-col justify-between overflow-hidden select-none bg-[#F0F2F5] text-[#080809]">
+              <StatusBar darkIcons={true} />
+              <div className="relative flex-1 overflow-hidden">
+                {fbProfile ? (
+                  <ProfileScreen fbProfile={fbProfile} frame={frame} />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-[#65676B]">Loading profile...</div>
+                )}
+              </div>
+              <NavigationBar dark={true} />
             </div>
           </DeviceFrame>
         </div>
