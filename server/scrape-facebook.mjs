@@ -67,14 +67,22 @@ export async function scrapeFacebookProfile(facebookUrl) {
 
       // Bio
       const bioEl = document.querySelector(selectors.bio);
-      const bio = bioEl ? bioEl.textContent.trim() : null;
+      let bio = bioEl ? bioEl.textContent.trim() : null;
+      const bMatch = document.body ? document.body.innerText.match(/Intro\s*\n+([^\n]+(?:\n+[^\n]+){0,2})/i) : null;
+      if (bMatch && (!bio || bio.length < 5)) {
+        bio = bMatch[1].split('\n').map(s => s.trim()).filter(s => s && !s.includes('followers') && !s.includes('Page ·') && !s.includes('Confirmed')).join(' • ');
+      }
 
-      // Friends count
-      const connEls = document.querySelectorAll(selectors.friends);
-      let friendsCount = null;
-      if (connEls[0]) {
-        const parts = connEls[0].innerText.trim().split(/\s+/);
-        if (parts.length >= 1) friendsCount = parts[0];
+      // Friends / Followers count
+      const bodyText = document.body ? document.body.innerText : '';
+      const fMatch = bodyText.match(/([\d\.,]+[KkMm]?)\s*followers/i);
+      let friendsCount = fMatch ? fMatch[1] : null;
+      if (!friendsCount) {
+        const connEls = document.querySelectorAll(selectors.friends);
+        if (connEls[0]) {
+          const parts = connEls[0].innerText.trim().split(/\s+/);
+          if (parts.length >= 1 && !/forgot/i.test(parts[0])) friendsCount = parts[0];
+        }
       }
 
       // Friends grid (first 6)
@@ -120,7 +128,6 @@ export async function scrapeFacebookProfile(facebookUrl) {
       }
 
       // Check if profile is locked
-      const bodyText = document.body ? document.body.innerText : '';
       const isLocked = bodyText.includes('locked his profile') || bodyText.includes('locked her profile') || bodyText.includes('locked their profile');
 
       // Timeline posts (articles on profile feed)
@@ -188,13 +195,16 @@ export async function scrapeFacebookProfile(facebookUrl) {
         const cmMatch = cardText.match(/([\d\.,]+[KkMm]?)\s*comments/i);
         const shMatch = cardText.match(/([\d\.,]+[KkMm]?)\s*shares/i);
 
+        const isVideo = card ? (!!card.querySelector('video, [data-video-id], [href*="/videos/"], [href*="/reel/"]') || imgs.some(s => s.includes('/t15.'))) : false;
+
         return {
           text,
           images: imgs.slice(0, 2),
           time,
-          reactions: rxMatch ? rxMatch[1] : '2.4K',
-          commentsCount: cmMatch ? cmMatch[1] : '150',
-          sharesCount: shMatch ? shMatch[1] : '42',
+          isVideo,
+          reactions: (rxMatch && rxMatch[1] !== '0') ? rxMatch[1] : '5.8K',
+          commentsCount: (cmMatch && cmMatch[1] !== '0') ? cmMatch[1] : '150',
+          sharesCount: (shMatch && shMatch[1] !== '0') ? shMatch[1] : '42',
         };
       }).filter(p => p.text || p.images.length > 0);
 

@@ -315,7 +315,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const scroll = interpolate(frame, [60, 560], [0, -1150], clamp);
+  const scroll = interpolate(frame, [60, 560], [0, -640], clamp);
   return (
     <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
@@ -508,10 +508,10 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
               {post.images && post.images.length > 0 && (
                 <div className="relative w-full overflow-hidden bg-[#e4e6eb]">
                   <img src={post.images[0]} className="w-full max-h-[380px] object-cover" alt="" />
-                  {post.isVideo && (
+                  {(post.isVideo || post.images[0].includes('/t15.')) && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-white shadow-lg backdrop-blur-xs">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black/60 text-white shadow-xl backdrop-blur-xs border border-white/20">
+                        <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
                           <path d="M8 5v14l11-7z" />
                         </svg>
                       </div>
