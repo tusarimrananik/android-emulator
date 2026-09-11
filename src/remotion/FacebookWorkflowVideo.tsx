@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import {AbsoluteFill, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {LawnchairProvider} from '@/context/LawnchairContext';
 import {DeviceFrame} from '@/components/phone/DeviceFrame';
 import {StatusBar} from '@/components/phone/StatusBar';
@@ -253,8 +253,83 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
   </article>
 );
 
+const humanFlickEase = Easing.bezier(0.22, 0.1, 0.12, 1);
+
+// Human browsing sequence across 600 frames (20 seconds @ 30fps)
+// Each flick has natural drag momentum and settles cleanly into a pause to read content.
+const HUMAN_SCROLL_GESTURES = [
+  // Glance at Header / Bio: frames 0-42 (1.4s)
+  // Swipe 1: Scroll past header & details down to top of post 1
+  { start: 42, end: 86, from: 0, to: -480 },
+  // Pause 1: frames 86-128 (1.4s) - reading post 1
+
+  // Swipe 2: Flick down through post 1 media to center post 2
+  { start: 128, end: 178, from: -480, to: -1120 },
+  // Pause 2: frames 178-222 (1.47s) - viewing post 2
+
+  // Swipe 3: Flick down through post 2 to post 3 comments & reactions
+  { start: 222, end: 278, from: -1120, to: -1820 },
+  // Pause 3: frames 278-324 (1.53s) - reading post 3 comments
+
+  // Swipe 4: Flick down through post 3 to post 4
+  { start: 324, end: 378, from: -1820, to: -2500 },
+  // Pause 4: frames 378-424 (1.53s) - reading post 4
+
+  // Swipe 5: Slightly longer flick through older posts
+  { start: 424, end: 482, from: -2500, to: -3220 },
+  // Pause 5: frames 482-526 (1.47s) - viewing post 5
+
+  // Swipe 6: Final gentle swipe settling on older timeline posts
+  { start: 526, end: 572, from: -3220, to: -3600 },
+  // Pause 6: frames 572-600 (0.93s) - resting at final position
+];
+
+function getHumanScrollState(frame: number) {
+  let scrollY = 0;
+
+  if (frame < HUMAN_SCROLL_GESTURES[0].start) {
+    scrollY = 0;
+  } else {
+    for (let i = 0; i < HUMAN_SCROLL_GESTURES.length; i++) {
+      const g = HUMAN_SCROLL_GESTURES[i];
+      if (frame >= g.start && frame <= g.end) {
+        const progress = (frame - g.start) / (g.end - g.start);
+        scrollY = g.from + (g.to - g.from) * humanFlickEase(progress);
+        break;
+      }
+      const nextG = HUMAN_SCROLL_GESTURES[i + 1];
+      if (nextG && frame > g.end && frame < nextG.start) {
+        scrollY = g.to;
+        break;
+      }
+    }
+    if (frame > HUMAN_SCROLL_GESTURES[HUMAN_SCROLL_GESTURES.length - 1].end) {
+      scrollY = HUMAN_SCROLL_GESTURES[HUMAN_SCROLL_GESTURES.length - 1].to;
+    }
+  }
+
+  // Calculate native Android scrollbar thumb fade & position
+  let scrollbarOpacity = 0;
+  for (const g of HUMAN_SCROLL_GESTURES) {
+    if (frame >= g.start && frame <= g.end) {
+      scrollbarOpacity = frame < g.start + 5 ? (frame - g.start) / 5 : 1;
+      break;
+    }
+    if (frame > g.end && frame <= g.end + 16) {
+      scrollbarOpacity = frame <= g.end + 6 ? 1 : 1 - (frame - (g.end + 6)) / 10;
+      break;
+    }
+  }
+
+  const maxScroll = 3600;
+  const trackHeight = 830 - 46;
+  const thumbTop = 8 + (Math.min(maxScroll, Math.abs(scrollY)) / maxScroll) * trackHeight;
+
+  return { scrollY, scrollbarOpacity, thumbTop };
+}
+
 const Feed: React.FC<{frame: number; fbProfile?: FbProfileData}> = ({frame, fbProfile}) => {
-  const scroll = interpolate(frame, [180, 260], [0, -720], clamp);
+  const scroll = interpolate(frame, [180, 260], [0, -720], { ...clamp, easing: humanFlickEase });
   return (
     <div style={{transform: `translateY(${scroll}px)`}} className="bg-[#f0f2f5] pb-4">
       <Composer fbProfile={fbProfile} />
@@ -315,7 +390,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const scroll = interpolate(frame, [40, 570], [0, -3200], clamp);
+  const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame);
 
   const sampleTenPosts: FbPost[] = [
     {
@@ -449,7 +524,8 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
       ];
 
   return (
-    <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scroll}px)`}}>
+    <div className="relative h-full w-full overflow-hidden">
+      <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scrollY}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-full"><MetaFacebookLogo size={36} /></div>
         <div className="flex items-center gap-1.5">
@@ -710,6 +786,17 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
           {fbProfile.isLocked ? 'No posts available' : 'No recent public posts'}
         </div>
       )}
+      </div>
+
+      {/* Android Native Scrollbar Indicator */}
+      <div
+        className="pointer-events-none absolute right-1 z-30 w-[3px] rounded-full bg-[#65676B]/80"
+        style={{
+          top: `${thumbTop}px`,
+          height: '46px',
+          opacity: scrollbarOpacity,
+        }}
+      />
     </div>
   );
 };
