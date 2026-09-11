@@ -516,12 +516,9 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
     }
   ];
 
-  const displayPosts = (fbProfile.posts && fbProfile.posts.length >= 10)
+  const displayPosts = (fbProfile.posts && fbProfile.posts.length > 0)
     ? fbProfile.posts
-    : [
-        ...(fbProfile.posts || []),
-        ...sampleTenPosts.slice(fbProfile.posts ? fbProfile.posts.length : 0, 10)
-      ];
+    : (fbProfile.isLocked ? [] : sampleTenPosts);
 
   return (
     <div className="relative h-full w-full overflow-hidden">
