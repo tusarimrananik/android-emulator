@@ -16,6 +16,7 @@ import {
   MetaNavMenuIcon,
   MetaComposerPhotoIcon,
   MetaPlusIcon,
+  MetaVerifiedBadge,
 } from './MetaFacebookSvg';
 import { FacebookProfile } from './FacebookProfile';
 import { Globe2, X } from 'lucide-react';
@@ -197,9 +198,7 @@ function PostCard({ post }: { post: (typeof posts)[number] }) {
           <div className="flex items-center gap-1.5 text-[15px] font-bold text-[#050505] leading-tight">
             <span>{post.user}</span>
             {post.verified && (
-              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#0866FF] text-white text-[9px] font-bold">
-                ✓
-              </span>
+              <MetaVerifiedBadge size={16} />
             )}
           </div>
           <div className="flex items-center gap-1 text-[12px] text-[#65676b] pt-0.5">

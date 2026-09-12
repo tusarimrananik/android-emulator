@@ -218,7 +218,7 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 text-[15px] font-bold text-[#050505] leading-tight">
           <span>{second ? 'Leo Messi' : 'Google Ads'}</span>
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#0866FF] text-white text-[9px] font-bold">✓</span>
+          <MetaVerifiedBadge size={16} />
         </div>
         <div className="flex items-center gap-1 text-[12px] text-[#65676b] pt-0.5">
           <span>{second ? '4h' : 'Sponsored'}</span> · <Globe2 size={12} />
