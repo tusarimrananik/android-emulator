@@ -564,38 +564,36 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
       )}
 
       {/* 4. People You May Know Section */}
-      {!fbProfile.isLocked && (
-        <div className="mt-2.5 w-full bg-white px-4 py-3 border-y border-[#ced0d4]/60">
-          <div className="mb-2 flex items-baseline justify-between">
-            <h3 className="text-[17px] font-bold text-[#080809]">People you may know</h3>
-            <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
-          </div>
-          <div className="flex gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none]">
-            {[
-              { name: 'Tanvir Ahmed', mutual: '14 mutual friends', avatar: '/facebook/user/aki.webp' },
-              { name: 'Sadia Islam', mutual: '8 mutual friends', avatar: '/facebook/user/baongan.webp' },
-              { name: 'Mehedi Hasan', mutual: '23 mutual friends', avatar: '/facebook/user/ddh.webp' },
-              { name: 'Nusrat Jahan', mutual: '5 mutual friends', avatar: '/facebook/user/halinh.webp' },
-            ].map((p, pIdx) => (
-              <div key={pIdx} className="w-[140px] shrink-0 overflow-hidden rounded-xl border border-[#ced0d4]/70 bg-white shadow-xs">
-                <div className="aspect-square w-full overflow-hidden bg-[#e4e6eb]">
-                  <img src={asset(p.avatar)} className="h-full w-full object-cover" alt="" />
+      <div className="mt-2.5 w-full bg-white px-4 py-3 border-y border-[#ced0d4]/60">
+        <div className="mb-2 flex items-baseline justify-between">
+          <h3 className="text-[17px] font-bold text-[#080809]">People you may know</h3>
+          <span className="text-[14px] font-semibold text-[#0866FF]">See all</span>
+        </div>
+        <div className="flex gap-2.5 overflow-x-auto pb-1 [scrollbar-width:none]">
+          {[
+            { name: 'Tanvir Ahmed', mutual: '14 mutual friends', avatar: '/facebook/user/aki.webp' },
+            { name: 'Sadia Islam', mutual: '8 mutual friends', avatar: '/facebook/user/baongan.webp' },
+            { name: 'Mehedi Hasan', mutual: '23 mutual friends', avatar: '/facebook/user/ddh.webp' },
+            { name: 'Nusrat Jahan', mutual: '5 mutual friends', avatar: '/facebook/user/halinh.webp' },
+          ].map((p, pIdx) => (
+            <div key={pIdx} className="w-[140px] shrink-0 overflow-hidden rounded-xl border border-[#ced0d4]/70 bg-white shadow-xs">
+              <div className="aspect-square w-full overflow-hidden bg-[#e4e6eb]">
+                <img src={asset(p.avatar)} className="h-full w-full object-cover" alt="" />
+              </div>
+              <div className="p-2.5">
+                <div className="truncate text-[13px] font-bold text-[#080809]">{p.name}</div>
+                <div className="truncate text-[11px] text-[#65686C]">{p.mutual}</div>
+                <div className="mt-2.5 flex h-[30px] w-full items-center justify-center rounded-lg bg-[#0866FF] text-[12px] font-semibold text-white">
+                  Add friend
                 </div>
-                <div className="p-2.5">
-                  <div className="truncate text-[13px] font-bold text-[#080809]">{p.name}</div>
-                  <div className="truncate text-[11px] text-[#65686C]">{p.mutual}</div>
-                  <div className="mt-2.5 flex h-[30px] w-full items-center justify-center rounded-lg bg-[#0866FF] text-[12px] font-semibold text-white">
-                    Add friend
-                  </div>
-                  <div className="mt-1 flex h-[28px] w-full items-center justify-center rounded-lg bg-[#E4E6EB] text-[12px] font-semibold text-[#080809]">
-                    Remove
-                  </div>
+                <div className="mt-1 flex h-[28px] w-full items-center justify-center rounded-lg bg-[#E4E6EB] text-[12px] font-semibold text-[#080809]">
+                  Remove
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
 
       {/* 5. Posts Header & Composer */}
       <div className="mt-2.5 w-full bg-white border-y border-[#ced0d4]/60 px-4 py-3">
