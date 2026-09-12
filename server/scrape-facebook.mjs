@@ -220,6 +220,9 @@ export async function scrapeFacebookProfile(facebookUrl) {
           .filter(l => !/^[a-zA-Z0-9\u0300-\u036f]{1,2}$/.test(l));
 
         let postText = lines[0] || '';
+        postText = postText.replace(/^.*?Shared with\s*(?:Public|Friends|Only me)?/i, '')
+                           .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
+                           .trim();
         if (/[\u0300-\u036f]/.test(postText)) {
           postText = postText.split(/[\u0300-\u036f]/)[0].trim().replace(/[a-zA-Z]$/, '').trim();
         }
