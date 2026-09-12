@@ -216,19 +216,31 @@ export async function scrapeFacebookProfile(facebookUrl) {
         if (primaryImage && seenImages.has(primaryImage)) return;
         if (primaryImage) seenImages.add(primaryImage);
 
-        const rawText = getVisibleText(card);
-        const lines = rawText.split('\n')
-          .map(l => l.trim())
-          .filter(l => l && l.length > 2)
-          .filter(l => !/^(Facebook|Write a comment|Create Ad|No insights to show|Shared with|Like|Comment|Share|Send in Messenger)/i.test(l))
-          .filter(l => !/^[a-zA-Z0-9\u0300-\u036f]{1,2}$/.test(l));
+        // Extract candidate caption text directly from post body elements
+        const candidateTextEls = Array.from(card.querySelectorAll('div[dir="auto"], span[dir="auto"]'))
+          .filter(el => !el.closest('[aria-label*="comment" i], [role="button"], blockquote, form, ul, [data-visualcompletion="ignore-dynamic"]'))
+          .map(el => {
+            const clone = el.cloneNode(true);
+            clone.querySelectorAll('[aria-hidden="true"]').forEach(d => d.remove());
+            return clone.innerText.trim();
+          })
+          .filter(t => t.length > 5 && !/^(Facebook|Write a comment|Shared with|Create Ad|No insights|Public|Friends)/i.test(t));
 
-        let postText = lines[0] || '';
+        let postText = candidateTextEls[0] || '';
+        if (!postText) {
+          const rawText = getVisibleText(card);
+          const lines = rawText.split('\n')
+            .map(l => l.trim())
+            .filter(l => l && l.length > 2)
+            .filter(l => !/^(Facebook|Write a comment|Create Ad|No insights to show|Shared with|Like|Comment|Share|Send in Messenger)/i.test(l))
+            .filter(l => !/^[a-zA-Z0-9\u0300-\u036f]{1,2}$/.test(l));
+          postText = lines[0] || '';
+        }
+
         postText = postText.replace(/^.*?Shared with\s*(?:Public|Friends|Only me)?/i, '')
                            .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
                            .trim();
-        postText = postText.split(/\s*(\.\.\.\s*See more|\.\.\.\s*see more|See more|see more)\b/i)[0].trim();
-        // Strip trailing domain link previews and tracking tokens
+        postText = postText.split(/\.\.\.\s*See more|See more/i)[0].trim();
         postText = postText.split(/[a-zA-Z0-9_\-]+\.(?:com|net|org|io|co|me)\b/i)[0].trim();
         if (/[\u0300-\u036f]/.test(postText)) {
           postText = postText.split(/[\u0300-\u036f]/)[0].trim().replace(/[a-zA-Z]$/, '').trim();
