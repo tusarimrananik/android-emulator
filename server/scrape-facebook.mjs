@@ -171,12 +171,6 @@ export async function scrapeFacebookProfile(facebookUrl) {
         }
       }
 
-      // Scroll deeper to trigger dynamic loading of timeline posts
-      for (let i = 0; i < 6; i++) {
-        window.scrollBy(0, 1200);
-        await new Promise(r => setTimeout(r, 1200));
-      }
-
       // Helper to clone element and strip aria-hidden decoy spans injected by Facebook
       const getVisibleText = (root) => {
         try {
@@ -189,87 +183,97 @@ export async function scrapeFacebookProfile(facebookUrl) {
         }
       };
 
-      const commentInputs = Array.from(document.querySelectorAll('[aria-label*="Write a comment"], [placeholder*="Write a comment"]'));
-      const posts = [];
-      const seenImages = new Set();
-      const seenTexts = new Set();
+      const postsMap = new Map();
 
-      commentInputs.forEach((input) => {
-        let card = input;
-        for (let i = 0; i < 30 && card; i++) {
-          card = card.parentElement;
-          if (!card) break;
-          const txt = card.innerText || '';
-          if (txt.includes('Shared with') || (txt.includes('Like') && txt.includes('Comment'))) {
-            if (card.parentElement && (card.parentElement.innerText.match(/Write a comment/g) || []).length > 1) {
-              break;
+      const extractCurrentBatch = () => {
+        const commentInputs = Array.from(document.querySelectorAll('[aria-label*="Write a comment"], [placeholder*="Write a comment"]'));
+        commentInputs.forEach((input) => {
+          let card = input;
+          for (let i = 0; i < 30 && card; i++) {
+            card = card.parentElement;
+            if (!card) break;
+            const txt = card.innerText || '';
+            if (txt.includes('Shared with') || (txt.includes('Like') && txt.includes('Comment'))) {
+              if (card.parentElement && (card.parentElement.innerText.match(/Write a comment/g) || []).length > 1) {
+                break;
+              }
             }
           }
-        }
-        if (!card) return;
+          if (!card) return;
 
-        const imgs = Array.from(card.querySelectorAll('img'))
-          .map(i => i.src)
-          .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('s60x60') && !s.includes('p50x50'));
+          const imgs = Array.from(card.querySelectorAll('img'))
+            .map(i => i.src)
+            .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('s60x60') && !s.includes('p50x50'));
 
-        const primaryImage = imgs[0] || null;
-        if (primaryImage && seenImages.has(primaryImage)) return;
-        if (primaryImage) seenImages.add(primaryImage);
+          const primaryImage = imgs[0] || null;
 
-        // Extract candidate caption text directly from post body elements
-        const candidateTextEls = Array.from(card.querySelectorAll('div[dir="auto"], span[dir="auto"]'))
-          .filter(el => !el.closest('[aria-label*="comment" i], [role="button"], blockquote, form, ul, [data-visualcompletion="ignore-dynamic"]'))
-          .map(el => {
-            const clone = el.cloneNode(true);
-            clone.querySelectorAll('[aria-hidden="true"]').forEach(d => d.remove());
-            return clone.innerText.trim();
-          })
-          .filter(t => t.length > 5 && !/^(Facebook|Write a comment|Shared with|Create Ad|No insights|Public|Friends)/i.test(t));
+          // Extract candidate caption text directly from post body elements
+          const candidateTextEls = Array.from(card.querySelectorAll('div[dir="auto"], span[dir="auto"]'))
+            .filter(el => !el.closest('[aria-label*="comment" i], [role="button"], blockquote, form, ul, [data-visualcompletion="ignore-dynamic"]'))
+            .map(el => {
+              const clone = el.cloneNode(true);
+              clone.querySelectorAll('[aria-hidden="true"]').forEach(d => d.remove());
+              return clone.innerText.trim();
+            })
+            .filter(t => t.length > 5 && !/^(Facebook|Write a comment|Shared with|Create Ad|No insights|Public|Friends)/i.test(t));
 
-        let postText = candidateTextEls[0] || '';
-        if (!postText) {
-          const rawText = getVisibleText(card);
-          const lines = rawText.split('\n')
-            .map(l => l.trim())
-            .filter(l => l && l.length > 2)
-            .filter(l => !/^(Facebook|Write a comment|Create Ad|No insights to show|Shared with|Like|Comment|Share|Send in Messenger)/i.test(l))
-            .filter(l => !/^[a-zA-Z0-9\u0300-\u036f]{1,2}$/.test(l));
-          postText = lines[0] || '';
-        }
+          let postText = candidateTextEls[0] || '';
+          if (!postText) {
+            const rawText = getVisibleText(card);
+            const lines = rawText.split('\n')
+              .map(l => l.trim())
+              .filter(l => l && l.length > 2)
+              .filter(l => !/^(Facebook|Write a comment|Create Ad|No insights to show|Shared with|Like|Comment|Share|Send in Messenger)/i.test(l))
+              .filter(l => !/^[a-zA-Z0-9\u0300-\u036f]{1,2}$/.test(l));
+            postText = lines[0] || '';
+          }
 
-        postText = postText.replace(/^.*?Shared with\s*(?:Public|Friends|Only me)?/i, '')
-                           .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
-                           .trim();
-        postText = postText.split(/\.\.\.\s*See more|See more/i)[0].trim();
-        postText = postText.split(/[a-zA-Z0-9_\-]+\.(?:com|net|org|io|co|me)\b/i)[0].trim();
-        if (/[\u0300-\u036f]/.test(postText)) {
-          postText = postText.split(/[\u0300-\u036f]/)[0].trim().replace(/[a-zA-Z]$/, '').trim();
-        }
+          postText = postText.replace(/^.*?Shared with\s*(?:Public|Friends|Only me)?/i, '')
+                             .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
+                             .trim();
+          postText = postText.split(/\.\.\.\s*See more|See more/i)[0].trim();
+          postText = postText.split(/[a-zA-Z0-9_\-]+\.(?:com|net|org|io|co|me)\b/i)[0].trim();
+          if (/[\u0300-\u036f]/.test(postText)) {
+            postText = postText.split(/[\u0300-\u036f]/)[0].trim().replace(/[a-zA-Z]$/, '').trim();
+          }
 
-        if (postText && seenTexts.has(postText) && !primaryImage) return;
-        if (postText) seenTexts.add(postText);
+          if (!postText && !primaryImage) return;
 
-        const cardText = card.innerText || '';
-        const timeMatch = cardText.match(/\b(\d+[smhdwy]|yesterday|just now)\b/i);
-        const time = timeMatch ? timeMatch[1] : 'Recently';
+          const key = postText || primaryImage;
+          if (postsMap.has(key)) return;
 
-        const rxMatch = cardText.match(/([\d.,]+[KkMm]?)\s*(?:reactions|likes)/i);
-        const cmMatch = cardText.match(/([\d.,]+[KkMm]?)\s*comments/i);
-        const shMatch = cardText.match(/([\d.,]+[KkMm]?)\s*shares/i);
+          const cardText = card.innerText || '';
+          const timeMatch = cardText.match(/\b(\d+[smhdwy]|yesterday|just now)\b/i);
+          const time = timeMatch ? timeMatch[1] : 'Recently';
 
-        const isVideo = !!card.querySelector('video, [data-video-id], [href*="/videos/"], [href*="/reel/"]') || imgs.some(s => s.includes('/t15.'));
+          const rxMatch = cardText.match(/([\d.,]+[KkMm]?)\s*(?:reactions|likes)/i);
+          const cmMatch = cardText.match(/([\d.,]+[KkMm]?)\s*comments/i);
+          const shMatch = cardText.match(/([\d.,]+[KkMm]?)\s*shares/i);
 
-        posts.push({
-          text: postText,
-          images: primaryImage ? [primaryImage] : [],
-          time,
-          isVideo,
-          reactions: rxMatch ? rxMatch[1] : '1.4K',
-          commentsCount: cmMatch ? cmMatch[1] : '54',
-          sharesCount: shMatch ? shMatch[1] : '16',
+          const isVideo = !!card.querySelector('video, [data-video-id], [href*="/videos/"], [href*="/reel/"]') || imgs.some(s => s.includes('/t15.'));
+
+          postsMap.set(key, {
+            text: postText,
+            images: primaryImage ? [primaryImage] : [],
+            time,
+            isVideo,
+            reactions: rxMatch ? rxMatch[1] : '1.4K',
+            commentsCount: cmMatch ? cmMatch[1] : '54',
+            sharesCount: shMatch ? shMatch[1] : '16',
+          });
         });
-      });
+      };
 
+      // Progressive scrolling loop to accumulate at least 10–12 unique posts
+      for (let i = 0; i < 14; i++) {
+        extractCurrentBatch();
+        if (postsMap.size >= 12) break;
+        window.scrollBy(0, 1000);
+        await new Promise(r => setTimeout(r, 1000));
+      }
+      extractCurrentBatch();
+
+      const posts = Array.from(postsMap.values());
       return { friends: collectedFriends, posts };
     }, FB_SELECTORS.friendsGrid);
 
