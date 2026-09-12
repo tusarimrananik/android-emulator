@@ -27,8 +27,13 @@ import {
   MetaMoreDotsIcon,
   MetaEditPencilIcon,
   MetaCameraIcon,
+  MetaWorkIcon,
   MetaGraduationIcon,
   MetaLocationIcon,
+  MetaHomeTownIcon,
+  MetaHeartIcon,
+  MetaClockIcon,
+  MetaGlobeIcon,
   MetaFollowersIcon,
   MetaVerifiedBadge,
 } from '@/components/apps/MetaFacebookSvg';
@@ -639,14 +644,24 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
             {fbProfile.details.map((d, i) => (
               <div key={i} className="flex items-center gap-3 text-[14px] text-[#080809]">
                 <div className="flex h-5 w-5 shrink-0 items-center justify-center text-[#65686C]">
-                  {/studied|studies|went to/i.test(d) ? (
+                  {/founder|ceo|works at|worked at|working at|job|manager|director|engineer|developer|specialist/i.test(d) ? (
+                    <MetaWorkIcon size={20} />
+                  ) : /studied|studies|went to|school|college|university|student|alumnus|graduated/i.test(d) ? (
                     <MetaGraduationIcon size={20} />
-                  ) : /lives in|from/i.test(d) ? (
+                  ) : /lives in|living in|located in|current city/i.test(d) ? (
                     <MetaLocationIcon size={20} />
-                  ) : /followed by/i.test(d) ? (
+                  ) : /from|hometown/i.test(d) ? (
+                    <MetaHomeTownIcon size={20} />
+                  ) : /married|relationship|engaged|single|widowed|partner/i.test(d) ? (
+                    <MetaHeartIcon size={20} />
+                  ) : /followed by|followers/i.test(d) ? (
                     <MetaFollowersIcon size={20} />
+                  ) : /joined/i.test(d) ? (
+                    <MetaClockIcon size={20} />
+                  ) : /https?:\/\/|\.com|\.org|\.net|\.io/i.test(d) ? (
+                    <MetaGlobeIcon size={20} />
                   ) : (
-                    <span className="text-[14px]">ℹ</span>
+                    <MetaLocationIcon size={20} />
                   )}
                 </div>
                 <span>{d}</span>

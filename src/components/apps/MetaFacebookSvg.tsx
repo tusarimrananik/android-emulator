@@ -161,6 +161,12 @@ export const MetaArrowBackIcon: React.FC<{ className?: string; size?: number }> 
   </svg>
 );
 
+export const MetaWorkIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#65676B' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M10 2a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v3.5a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8a2 2 0 0 0-2-2h-4V4a2 2 0 0 0-2-2h-4zm0 2h4v2h-4V4zm-8 8.5V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6.5h-7v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-1H2z" />
+  </svg>
+);
+
 export const MetaGraduationIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
     <path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3zM3.45 13.47 12 18.13l8.55-4.66v3.13L12 21.26 3.45 16.6v-3.13z" />
@@ -170,6 +176,30 @@ export const MetaGraduationIcon: React.FC<{ className?: string; size?: number }>
 export const MetaLocationIcon: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 20 }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="#65676B" className={className}>
     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+  </svg>
+);
+
+export const MetaHomeTownIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#65676B' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M12 2.5 2 11.5h3v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9h3L12 2.5z" />
+  </svg>
+);
+
+export const MetaHeartIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#65676B' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+  </svg>
+);
+
+export const MetaClockIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#65676B' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+  </svg>
+);
+
+export const MetaGlobeIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#65676B' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.93 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14a7.82 7.82 0 0 1 0-4h3.38a16.52 16.52 0 0 0-.14 2c0 .68.05 1.36.14 2zm.81 2h2.95a15.65 15.65 0 0 0 1.38 3.56A8.03 8.03 0 0 1 5.07 16zm2.95-8H5.07a8.03 8.03 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.02 8zm3.98 11.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM10.04 14a14.76 14.76 0 0 1-.14-2c0-.68.05-1.36.14-2h3.92c.09.64.14 1.32.14 2 0 .68-.05 1.36-.14 2zm4.89 5.56A15.65 15.65 0 0 0 16.31 16h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14a16.52 16.52 0 0 0 .14-2c0-.68-.05-1.36-.14-2h3.38a7.82 7.82 0 0 1 0 4z" />
   </svg>
 );
 
