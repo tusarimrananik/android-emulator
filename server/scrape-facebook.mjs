@@ -56,11 +56,15 @@ export async function scrapeFacebookProfile(facebookUrl) {
       const profileName = rawName.replace(/verified\s+(?:account|profile|badge)/gi, '').trim();
 
       // Profile picture (SVG image href or img)
-      const ppNodes = Array.from(document.querySelectorAll('.x1rg5ohu image, svg image, [role="img"] image, img'));
-      const avatarEl = ppNodes.find(el => {
-        const w = el.width?.baseVal?.value || el.getAttribute('width') || el.width;
-        return Number(w) >= 100;
-      }) || ppNodes[1] || null;
+      const allCandidateImgs = Array.from(document.querySelectorAll('.x1rg5ohu image, svg image, [role="img"] image, img'));
+      const avatarEl = allCandidateImgs.find(el => {
+        const w = Number(el.width?.baseVal?.value || el.getAttribute('width') || el.width || 0);
+        const h = Number(el.height?.baseVal?.value || el.getAttribute('height') || el.height || 0);
+        return w >= 100 && w <= 250 && Math.abs(w - h) < 10;
+      }) || allCandidateImgs.find(el => {
+        const w = Number(el.width?.baseVal?.value || el.getAttribute('width') || el.width || 0);
+        return w >= 100 && w <= 250;
+      }) || allCandidateImgs[1] || null;
 
       const profilePicture = avatarEl
         ? (avatarEl.getAttribute('href') || avatarEl.href?.baseVal || avatarEl.src || avatarEl.getAttribute('xlink:href'))
@@ -223,6 +227,7 @@ export async function scrapeFacebookProfile(facebookUrl) {
         postText = postText.replace(/^.*?Shared with\s*(?:Public|Friends|Only me)?/i, '')
                            .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
                            .trim();
+        postText = postText.split(/\s*(\.\.\.\s*See more|\.\.\.\s*see more|See more|see more)\b/i)[0].trim();
         if (/[\u0300-\u036f]/.test(postText)) {
           postText = postText.split(/[\u0300-\u036f]/)[0].trim().replace(/[a-zA-Z]$/, '').trim();
         }
