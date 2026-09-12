@@ -164,8 +164,8 @@ const Stories: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
   const ownAvatar = fbProfile?.profilePicture || asset('/facebook/user/lcd.webp');
   const stories = [
     { name: 'Create story', cover: ownAvatar, avatar: ownAvatar, own: true },
+    { name: 'Google Ads', cover: '/facebook/post/google_ads_creative.webp', avatar: '/facebook/user/google_ads_avatar.webp' },
     { name: 'Leo Messi', cover: '/facebook/story/2.webp', avatar: '/facebook/user/messi.webp' },
-    { name: 'NASA', cover: '/facebook/post/nasa_deep_space.webp', avatar: '/facebook/user/nasa_logo.webp' },
     { name: 'National Geographic', cover: '/facebook/story/1.webp', avatar: '/facebook/user/goal.webp' },
   ];
   return (
@@ -214,14 +214,14 @@ const Stories: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 const Post: React.FC<{second?: boolean}> = ({second}) => (
   <article className="mt-2 bg-white text-[#050505] shadow-xs">
     <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-2">
-      <img src={asset(second ? '/facebook/user/messi.webp' : '/facebook/user/nasa_logo.webp')} className="h-10 w-10 rounded-full object-cover" alt="" />
+      <img src={asset(second ? '/facebook/user/messi.webp' : '/facebook/user/google_ads_avatar.webp')} className="h-10 w-10 rounded-full object-cover" alt="" />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 text-[15px] font-bold text-[#050505] leading-tight">
-          <span>{second ? 'Leo Messi' : 'NASA - National Aeronautics and Space Administration'}</span>
+          <span>{second ? 'Leo Messi' : 'Google Ads'}</span>
           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#0866FF] text-white text-[9px] font-bold">✓</span>
         </div>
         <div className="flex items-center gap-1 text-[12px] text-[#65676b] pt-0.5">
-          <span>{second ? '4h' : '2h'}</span> · <Globe2 size={12} />
+          <span>{second ? '4h' : 'Sponsored'}</span> · <Globe2 size={12} />
         </div>
       </div>
       <MetaMoreDotsIcon size={18} />
@@ -230,9 +230,23 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
     <p className="whitespace-pre-line px-3.5 pt-1 pb-2.5 text-[14px] leading-snug text-[#050505]">
       {second 
         ? '🏆 Gran victoria en equipo hoy! Seguimos trabajando juntos para los próximos desafíos. Gracias a todos por el apoyo de siempre! ⚽🔥\n(Great team win today! Moving forward together. Thank you all for the support! 🇦🇷)' 
-        : 'Journey through the cosmos. 🌌✨ This deep-field view captured by the James Webb Space Telescope reveals thousands of galaxies—including the faintest objects ever observed in the infrared.\n#NASA #JWST #Space #Universe'}
+        : 'Get more out of your advertising budget with Google Ads – pay for results.'}
     </p>
-    <img src={asset(second ? '/facebook/post/2.webp' : '/facebook/post/nasa_deep_space.webp')} className="max-h-[380px] w-full object-cover" alt="" />
+    <img src={asset(second ? '/facebook/post/2.webp' : '/facebook/post/google_ads_creative.webp')} className="max-h-[380px] w-full object-cover" alt="" />
+
+    {/* Sponsored Call-To-Action Link Bar */}
+    {!second && (
+      <div className="flex items-center justify-between border-t border-[#ced0d4]/60 bg-[#F0F2F5] px-3.5 py-2.5">
+        <div className="min-w-0 flex-1 pr-2">
+          <div className="text-[11px] font-semibold text-[#65676B] tracking-wider uppercase">ADS.GOOGLE.COM</div>
+          <div className="truncate text-[14px] font-bold text-[#050505] leading-snug">Sign up for Google Ads now</div>
+        </div>
+        <div className="shrink-0 rounded-md bg-[#E4E6EB] px-3.5 py-1.5 text-[13px] font-semibold text-[#050505]">
+          Sign up
+        </div>
+      </div>
+    )}
+
     <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676b]">
       <div className="flex items-center gap-1.5">
         <div className="flex items-center -space-x-1">
@@ -240,9 +254,9 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
           <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="love" />
           <img src={asset(second ? '/facebook/reactions/care.webp' : '/facebook/reactions/wow.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="reaction" />
         </div>
-        <span className="ml-1 font-medium">{second ? '142K' : '94.2K'}</span>
+        <span className="ml-1 font-medium">{second ? '142K' : '650'}</span>
       </div>
-      <div>{second ? '8.5K comments · 4.2K shares' : '4.3K comments · 12K shares'}</div>
+      <div>{second ? '8.5K comments · 4.2K shares' : '196 comments · 27 shares'}</div>
     </div>
     <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4] py-1 text-center text-[13px] font-semibold text-[#65676b]">
       <div className="flex items-center justify-center gap-1.5 py-2 text-[#0866FF]">
