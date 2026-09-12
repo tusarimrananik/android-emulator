@@ -216,7 +216,17 @@ export const MetaMenuGridIcon: React.FC<{ className?: string; size?: number }> =
 );
 
 export const MetaVerifiedBadge: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 16 }) => (
-  <svg viewBox="0 0 24 24" width={size} height={size} fill="#0866FF" className={`inline-block shrink-0 ${className}`} aria-label="Verified account" role="img">
-    <path d="M8.004 1.183a1.5 1.5 0 0 1 2.049-.55L12 1.759 13.947.634a1.5 1.5 0 0 1 2.05.549L17.045 3H19.5A1.5 1.5 0 0 1 21 4.5v2.453l1.817 1.05a1.5 1.5 0 0 1 .55 2.049L22.241 12l1.124 1.947a1.5 1.5 0 0 1-.55 2.05L21 17.044V19.5a1.5 1.5 0 0 1-1.5 1.5h-2.454l-1.05 1.817a1.5 1.5 0 0 1-2.048.549L12 22.241l-1.948 1.125a1.5 1.5 0 0 1-2.049-.549L6.955 21H4.5A1.5 1.5 0 0 1 3 19.5v-2.455l-1.817-1.049a1.5 1.5 0 0 1-.549-2.049L1.758 12 .634 10.053a1.5 1.5 0 0 1 .549-2.05L3 6.954V4.5A1.5 1.5 0 0 1 4.5 3h2.454l1.05-1.817zm9.703 9.024a1 1 0 0 0-1.414-1.414l-5.44 5.44a.5.5 0 0 1-.707 0l-2.439-2.44a1 1 0 0 0-1.414 1.414l2.44 2.44a2.5 2.5 0 0 0 3.535 0l5.44-5.44z" />
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" className={`inline-block shrink-0 ${className}`} aria-label="Verified account" role="img">
+    <path
+      d="M10.2 1.3a2.3 2.3 0 0 1 3.6 0l.7.8c.4.5 1 .7 1.6.6l1.1-.2a2.3 2.3 0 0 1 2.7 2.7l-.2 1.1c-.1.6.1 1.2.6 1.6l.8.7a2.3 2.3 0 0 1 0 3.6l-.8.7c-.5.4-.7 1-.6 1.6l.2 1.1a2.3 2.3 0 0 1-2.7 2.7l-1.1-.2c-.6-.1-1.2.1-1.6.6l-.7.8a2.3 2.3 0 0 1-3.6 0l-.7-.8c-.4-.5-1-.7-1.6-.6l-1.1.2a2.3 2.3 0 0 1-2.7-2.7l.2-1.1c.1-.6-.1-1.2-.6-1.6l-.8-.7a2.3 2.3 0 0 1 0-3.6l.8-.7c.5-.4.7-1 .6-1.6l-.2-1.1a2.3 2.3 0 0 1 2.7-2.7l1.1.2c.6.1 1.2-.1 1.6-.6l.7-.8z"
+      fill="#0866FF"
+    />
+    <path
+      d="M7.8 11.8l2.7 2.7 5.7-5.7"
+      stroke="#FFFFFF"
+      strokeWidth="2.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
