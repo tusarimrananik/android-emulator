@@ -419,163 +419,11 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame);
+  const isLocked = Boolean(fbProfile.isLocked);
+  const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame, isLocked);
 
-  const sampleTenPosts: FbPost[] = [
-    {
-      text: "কলেজ শুরুর আগে ৫টি life changing advice",
-      time: "6d",
-      isVideo: true,
-      images: [asset('/facebook/post/1.webp')],
-      reactions: "5.8K",
-      commentsCount: "150",
-      sharesCount: "42",
-      comments: [
-        { author: "Munna Islam", text: "ভাইয়া অনেক ধন্যবাদ! পরামর্শগুলো আসলেই কাজে লাগবে ❤️", likes: "15" },
-        { author: "Tanvir Ahmed", text: "Best advice as always! 🔥", likes: "8" }
-      ]
-    },
-    {
-      text: "কেন স্কুল মাস্টার হলাম? 🥹",
-      time: "1w",
-      isVideo: true,
-      images: [asset('/facebook/post/2.webp')],
-      reactions: "14.2K",
-      commentsCount: "520",
-      sharesCount: "120",
-      comments: [
-        { author: "Sadia Rahman", text: "আপনার এই জার্নি আমাদের সবার জন্য অনেক বড় অনুপ্রেরণা! 🙌", likes: "34" }
-      ]
-    },
-    {
-      text: "আমার স্কুলমাস্টার হয়ে ওঠার ফার্স্ট স্টেপ ছিল স্টুডেন্ট লাইফে টিউশন শুরু করা। সেই এক্সপেরিয়েন্স থেকে স্টুডেন্ট লাইফে টিউশন শুরু করার জন্য ১০টি টিপস শেয়ার করেছি আজকে। 🔥\n\nShare the video with your friends. 🙌",
-      time: "2w",
-      isVideo: false,
-      images: [asset('/facebook/post/3.webp')],
-      reactions: "8.4K",
-      commentsCount: "310",
-      sharesCount: "85",
-      comments: [
-        { author: "Mehedi Hasan", text: "টিপসগুলো দারুণ ছিল ভাইয়া! ধন্যবাদ", likes: "12" }
-      ]
-    },
-    {
-      text: "কেন আমি আজও কোটিপতি নই? :(\nসফলতার চেয়ে মানসিক শান্তি আর সততা অনেক বেশি মূল্যবান।",
-      time: "3w",
-      isVideo: true,
-      images: [asset('/facebook/post/1.webp')],
-      reactions: "19.5K",
-      commentsCount: "840",
-      sharesCount: "210",
-      comments: [
-        { author: "Arif Hossain", text: "একদম মনের কথা বললেন ভাইয়া ❤️", likes: "45" }
-      ]
-    },
-    {
-      text: "যারা কলেজ লাইফ শুরু করতে যাচ্ছো, এই ৬টি কাজ অবশ্যই করবে। পড়াশোনার পাশাপাশি স্কিল ডেভেলপমেন্ট শুরু করো আজ থেকেই।",
-      time: "1m",
-      isVideo: false,
-      images: [asset('/facebook/post/2.webp')],
-      reactions: "11.2K",
-      commentsCount: "412",
-      sharesCount: "94",
-      comments: [
-        { author: "Nusrat Jahan", text: "Bookmarked for my brother! 👌", likes: "19" }
-      ]
-    },
-    {
-      text: "SSC রেজাল্টের পর কলেজ শুরুর আগে আমার ভাই সাদমানকে যে ৪টা Advice দিয়েছিলাম। সময়ের সঠিক ব্যবহারই এগিয়ে রাখবে।",
-      time: "1m",
-      isVideo: true,
-      images: [asset('/facebook/post/3.webp')],
-      reactions: "22.1K",
-      commentsCount: "980",
-      sharesCount: "350",
-      comments: [
-        { author: "Farhan Kabir", text: "অসাধারণ গাইডলাইন!", likes: "28" }
-      ]
-    },
-    {
-      text: "কীভাবে ফ্রিল্যান্সিং শুরু করবেন ২০২৬ সালে? স্কিল ছাড়া শুধু একাউন্ট খুলে বসে থাকলে কাজ পাবেন না। শিখুন, প্র্যাকটিস করুন।",
-      time: "2m",
-      isVideo: true,
-      images: [asset('/facebook/post/1.webp')],
-      reactions: "16.8K",
-      commentsCount: "640",
-      sharesCount: "180",
-      comments: [
-        { author: "Kamrul Islam", text: "অনেক কিছু শিখতে পারলাম।", likes: "14" }
-      ]
-    },
-    {
-      text: "স্পোকেন ইংলিশ শেখার সবচেয়ে সহজ ৩টি টেকনিক: ১. প্রতিদিন ১৫ মিনিট জোরে পড়ুন ২. বন্ধুদের সাথে ইংরেজিতে কথা বলুন ৩. সাবটাইটেল সহ ইংলিশ মুভি দেখুন।",
-      time: "2m",
-      isVideo: true,
-      images: [asset('/facebook/post/2.webp')],
-      reactions: "25.4K",
-      commentsCount: "1.2K",
-      sharesCount: "410",
-      comments: [
-        { author: "Tasnim Anjum", text: "১ নম্বর পয়েন্টটা অনেক কাজে দেয় ❤️", likes: "52" }
-      ]
-    },
-    {
-      text: "জীবনে সফল হতে হলে যে ৩টি অভ্যাস আজই ত্যাগ করতে হবে: অতিরিক্ত চিন্তা করা, কাজ পিছিয়ে দেওয়া, এবং অন্য কারো সাথে নিজেকে তুলনা করা।",
-      time: "3m",
-      isVideo: false,
-      images: [asset('/facebook/post/3.webp')],
-      reactions: "9.6K",
-      commentsCount: "280",
-      sharesCount: "65",
-      comments: [
-        { author: "Rony Ahmed", text: "একদম খাঁটি কথা ভাইয়া।", likes: "16" }
-      ]
-    },
-    {
-      text: "১০ মিনিট স্কুলের কৃতি শিক্ষার্থী সংবর্ধনা ২০২৫-এর কিছু স্মরণীয় মুহূর্ত ❤️ সবার জন্য অনেক শুভকামনা!",
-      time: "3m",
-      isVideo: false,
-      images: [asset('/facebook/post/1.webp')],
-      reactions: "34.2K",
-      commentsCount: "1.8K",
-      sharesCount: "620",
-      comments: [
-        { author: "Sakib Al Hasan", text: "অভিনন্দন সবাইকে! 👏", likes: "67" }
-      ]
-    }
-  ];
-
-  const ensureTenPosts = (posts?: FbPost[]): FbPost[] => {
-    const list: FbPost[] = posts && posts.length > 0 ? [...posts] : [];
-    if (list.length >= 10) return list;
-
-    const name = fbProfile.profileName || 'User';
-    const avatar = fbProfile.profilePicture;
-    const cover = fbProfile.coverPicture;
-
-    // Authentic contextual updates for this user if account has fewer than 10 timeline posts
-    const userUpdates: FbPost[] = [
-      { text: `${name} updated their profile picture.`, images: avatar ? [avatar] : [], time: '18w', reactions: '2.4K', commentsCount: '92', sharesCount: '18' },
-      { text: `${name} updated their cover photo.`, images: cover ? [cover] : [], time: '24w', reactions: '1.8K', commentsCount: '45', sharesCount: '12' },
-      { text: `Grateful for all the support and messages from everyone! 🙏✨`, images: [], time: '30w', reactions: '3.1K', commentsCount: '120', sharesCount: '24' },
-      { text: `Looking forward to the exciting milestones and projects ahead. Stay tuned! 🚀`, images: [], time: '38w', reactions: '1.5K', commentsCount: '64', sharesCount: '9' },
-      { text: `${name} added a life event.`, images: [], time: '48w', reactions: '4.2K', commentsCount: '180', sharesCount: '35' },
-      { text: `Throwback to an unforgettable journey. Time flies! 📸`, images: list[0]?.images?.length ? list[0].images : (cover ? [cover] : []), time: '1y', reactions: '2.9K', commentsCount: '110', sharesCount: '15' },
-      { text: `${name} updated their bio details.`, images: [], time: '1y', reactions: '1.1K', commentsCount: '34', sharesCount: '5' },
-      { text: `Great day with amazing people! 🌟`, images: [], time: '2y', reactions: '2.2K', commentsCount: '78', sharesCount: '11' },
-      { text: `${name} is feeling motivated.`, images: [], time: '2y', reactions: '1.9K', commentsCount: '51', sharesCount: '8' },
-      { text: `Reflecting on all the lessons and progress so far. The journey continues! 💫`, images: [], time: '3y', reactions: '3.5K', commentsCount: '142', sharesCount: '29' },
-    ];
-
-    let idx = 0;
-    while (list.length < 10 && idx < userUpdates.length) {
-      list.push(userUpdates[idx]);
-      idx++;
-    }
-    return list;
-  };
-
-  const displayPosts = ensureTenPosts(fbProfile.posts);
+  // If locked, or no posts scraped, use ONLY real scraped posts. Zero fake/sample posts.
+  const displayPosts = fbProfile.posts || [];
 
   return (
     <div className="relative h-full w-full overflow-hidden">
@@ -885,7 +733,7 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
         </div>
       ) : (
         <div className="w-full bg-white mt-2.5 py-8 text-center text-[14px] text-[#65676B] border-y border-[#ced0d4]/60">
-          No recent public posts
+          {fbProfile.isLocked ? 'No posts available' : 'No recent public posts'}
         </div>
       )}
       </div>
