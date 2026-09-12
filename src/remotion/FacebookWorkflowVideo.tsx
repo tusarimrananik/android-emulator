@@ -257,32 +257,28 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
 const humanFlickEase = Easing.bezier(0.22, 0.1, 0.12, 1);
 
 // Human browsing sequence across 600 frames (20 seconds @ 30fps)
-// Each flick has natural drag momentum and settles cleanly into a pause to read content.
+// Starts after the Home Feed -> Profile navigation transition at frame 128.
 const HUMAN_SCROLL_GESTURES = [
-  // Glance at Header / Bio: frames 0-42 (1.4s)
+  // Glance at Header / Bio: frames 128-175 (1.57s)
   // Swipe 1: Scroll past header & details down to top of post 1
-  { start: 42, end: 86, from: 0, to: -480 },
-  // Pause 1: frames 86-128 (1.4s) - reading post 1
+  { start: 175, end: 218, from: 0, to: -480 },
+  // Pause 1: frames 218-260 (1.4s) - reading post 1
 
   // Swipe 2: Flick down through post 1 media to center post 2
-  { start: 128, end: 178, from: -480, to: -1120 },
-  // Pause 2: frames 178-222 (1.47s) - viewing post 2
+  { start: 260, end: 308, from: -480, to: -1120 },
+  // Pause 2: frames 308-350 (1.4s) - viewing post 2
 
   // Swipe 3: Flick down through post 2 to post 3 comments & reactions
-  { start: 222, end: 278, from: -1120, to: -1820 },
-  // Pause 3: frames 278-324 (1.53s) - reading post 3 comments
+  { start: 350, end: 402, from: -1120, to: -1820 },
+  // Pause 3: frames 402-445 (1.43s) - reading post 3 comments
 
   // Swipe 4: Flick down through post 3 to post 4
-  { start: 324, end: 378, from: -1820, to: -2500 },
-  // Pause 4: frames 378-424 (1.53s) - reading post 4
+  { start: 445, end: 498, from: -1820, to: -2500 },
+  // Pause 4: frames 498-540 (1.4s) - reading post 4
 
-  // Swipe 5: Slightly longer flick through older posts
-  { start: 424, end: 482, from: -2500, to: -3220 },
-  // Pause 5: frames 482-526 (1.47s) - viewing post 5
-
-  // Swipe 6: Final gentle swipe settling on older timeline posts
-  { start: 526, end: 572, from: -3220, to: -3600 },
-  // Pause 6: frames 572-600 (0.93s) - resting at final position
+  // Swipe 5: Final gentle swipe settling on older timeline posts
+  { start: 540, end: 580, from: -2500, to: -3200 },
+  // Pause 5: frames 580-600 (0.67s) - resting at final position
 ];
 
 function getHumanScrollState(frame: number) {
@@ -847,6 +843,22 @@ export const FacebookWorkflowVideo: React.FC<{fbProfile?: FbProfileData}> = ({fb
   const frame = useCurrentFrame();
   const fbProfile = fbProfileProp || (typeof window !== 'undefined' && (window as any).__REMOTION_INPUT_PROPS?.fbProfile) || undefined;
 
+  // Home feed natural scroll before transitioning to profile (frames 0 to 125)
+  const feedScroll = interpolate(frame, [35, 78], [0, -380], {
+    ...clamp,
+    easing: humanFlickEase,
+  });
+
+  // Tap ripple effect on the profile tab right before transition (frames 102-115)
+  const tapScale = interpolate(frame, [102, 108, 114], [0, 1.3, 0], clamp);
+  const tapOpacity = interpolate(frame, [102, 108, 114], [0, 0.4, 0], clamp);
+
+  // Native slide transition from Home to Profile
+  const profileSlideX = interpolate(frame, [115, 128], [100, 0], {
+    ...clamp,
+    easing: humanFlickEase,
+  });
+
   return (
     <LawnchairProvider>
       <AbsoluteFill style={{background: '#0a0c10', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden'}}>
@@ -855,9 +867,52 @@ export const FacebookWorkflowVideo: React.FC<{fbProfile?: FbProfileData}> = ({fb
             <div className="relative flex h-full w-full flex-col justify-between overflow-hidden select-none bg-[#F0F2F5] text-[#080809]">
               <StatusBar darkIcons={true} />
               <div className="relative flex-1 overflow-hidden">
-                {fbProfile ? (
-                  <ProfileScreen fbProfile={fbProfile} frame={frame} />
-                ) : (
+                {/* 1. HOME SCREEN / FEED (Visible at start: frames 0 to 128) */}
+                <div
+                  className="absolute inset-0 flex flex-col overflow-hidden bg-[#f0f2f5]"
+                  style={{
+                    transform: `translateX(${interpolate(frame, [115, 128], [0, -30], clamp)}%)`,
+                    opacity: interpolate(frame, [120, 128], [1, 0], clamp),
+                    pointerEvents: frame >= 128 ? 'none' : 'auto',
+                  }}
+                >
+                  <TopBar />
+                  <div className="relative">
+                    <FacebookNav tab={frame < 108 ? 'feed' : 'profile'} fbProfile={fbProfile} />
+                    {/* Simulated user finger tap on the profile tab */}
+                    {frame >= 102 && frame <= 116 && (
+                      <div
+                        className="pointer-events-none absolute right-3.5 top-1.5 h-9 w-9 rounded-full bg-[#0866FF]"
+                        style={{
+                          transform: `scale(${tapScale})`,
+                          opacity: tapOpacity,
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div className="min-h-0 flex-1 overflow-hidden">
+                    <div style={{transform: `translateY(${feedScroll}px)`}} className="bg-[#f0f2f5] pb-4">
+                      <Composer fbProfile={fbProfile} />
+                      <Stories fbProfile={fbProfile} />
+                      <Post />
+                      <Post second />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. PROFILE SCREEN (Slides in from frame 115 and active till frame 600) */}
+                {frame >= 115 && fbProfile && (
+                  <div
+                    className="absolute inset-0 bg-[#F0F2F5]"
+                    style={{
+                      transform: `translateX(${profileSlideX}%)`,
+                      boxShadow: '-10px 0 25px rgba(0,0,0,0.25)',
+                    }}
+                  >
+                    <ProfileScreen fbProfile={fbProfile} frame={frame} />
+                  </div>
+                )}
+                {!fbProfile && (
                   <div className="flex h-full items-center justify-center text-[#65676B]">Loading profile...</div>
                 )}
               </div>
