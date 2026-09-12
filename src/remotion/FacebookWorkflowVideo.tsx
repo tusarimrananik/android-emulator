@@ -419,7 +419,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame, Boolean(fbProfile.isLocked));
+  const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame);
 
   const sampleTenPosts: FbPost[] = [
     {
@@ -546,7 +546,6 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
   ];
 
   const ensureTenPosts = (posts?: FbPost[]): FbPost[] => {
-    if (fbProfile.isLocked) return [];
     const list: FbPost[] = posts && posts.length > 0 ? [...posts] : [];
     if (list.length >= 10) return list;
 
@@ -628,34 +627,16 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
           {fbProfile.bio && <p className="mt-2 text-[14px] text-[#080809]">{fbProfile.bio}</p>}
           <div className="mt-4 flex gap-2">
             <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white">
-              {fbProfile.isLocked ? (
-                <>
-                  <MetaNavFriendsIcon size={18} active={false} />
-                  <span className="text-white">Add friend</span>
-                </>
-              ) : (
-                <>
-                  <MetaPlusIcon size={16} fill="#ffffff" />
-                  <span>Add to story</span>
-                </>
-              )}
+              <MetaPlusIcon size={16} fill="#ffffff" />
+              <span>Add to story</span>
             </div>
             <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
-              {fbProfile.isLocked ? (
-                <>
-                  <MetaMessengerIcon size={18} />
-                  <span>Message</span>
-                </>
-              ) : (
-                <>
-                  <MetaEditPencilIcon size={16} fill="#050505" />
-                  <span>Edit profile</span>
-                </>
-              )}
+              <MetaEditPencilIcon size={16} fill="#050505" />
+              <span>Edit profile</span>
             </div>
           </div>
 
-          {/* Official Facebook Locked Profile Header Notice */}
+          {/* Official Facebook Locked Profile Header Notice (Owner Perspective) */}
           {fbProfile.isLocked && (
             <div className="mt-3.5 flex items-start gap-3 rounded-xl bg-[#EBF5FF] p-3 text-left border border-[#0866FF]/20">
               <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#0866FF] text-white">
@@ -665,10 +646,10 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
               </div>
               <div className="min-w-0 flex-1 pt-0.5">
                 <h4 className="text-[14px] font-bold text-[#080809] leading-tight">
-                  {fbProfile.profileName || 'User'} locked his profile
+                  You locked your profile
                 </h4>
                 <p className="mt-0.5 text-[12px] text-[#65686C] leading-snug">
-                  Only his friends can see what he shares on his profile, including his photos and posts. <span className="font-semibold text-[#0866FF]">Learn more</span>
+                  Only your friends can see the photos, posts and stories on your profile. <span className="font-semibold text-[#0866FF]">Learn more</span>
                 </p>
               </div>
             </div>
@@ -769,23 +750,21 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
       )}
 
       {/* 5. Posts Header & Composer */}
-      {!fbProfile.isLocked && (
-        <div className="mt-2.5 w-full bg-white border-y border-[#ced0d4]/60 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-[18px] font-bold text-[#080809]">Posts</h3>
-            <span className="rounded-lg bg-[#E4E6EB] px-3 py-1 text-[13px] font-semibold text-[#080809]">Filters</span>
-          </div>
-          <div className="mt-3 flex items-center gap-2.5 rounded-full bg-[#F0F2F5] px-3.5 py-2">
-            <img
-              src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
-              className="h-8 w-8 rounded-full object-cover"
-              alt=""
-            />
-            <span className="flex-1 text-[14px] text-[#65676C]">What&apos;s on your mind?</span>
-            <MetaComposerPhotoIcon size={20} />
-          </div>
+      <div className="mt-2.5 w-full bg-white border-y border-[#ced0d4]/60 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-[18px] font-bold text-[#080809]">Posts</h3>
+          <span className="rounded-lg bg-[#E4E6EB] px-3 py-1 text-[13px] font-semibold text-[#080809]">Filters</span>
         </div>
-      )}
+        <div className="mt-3 flex items-center gap-2.5 rounded-full bg-[#F0F2F5] px-3.5 py-2">
+          <img
+            src={fbProfile.profilePicture || asset('/facebook/user/lcd.webp')}
+            className="h-8 w-8 rounded-full object-cover"
+            alt=""
+          />
+          <span className="flex-1 text-[14px] text-[#65676C]">What&apos;s on your mind?</span>
+          <MetaComposerPhotoIcon size={20} />
+        </div>
+      </div>
 
       {/* 6. Timeline Posts (100% Full-bleed width edge to edge, all 10 posts) */}
       {displayPosts && displayPosts.length > 0 ? (
@@ -903,23 +882,6 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
               )}
             </article>
           ))}
-        </div>
-      ) : fbProfile.isLocked ? (
-        <div className="mt-2.5 w-full bg-white px-6 py-10 text-center border-y border-[#ced0d4]/60">
-          <div className="mx-auto mb-3.5 grid h-14 w-14 place-items-center rounded-full bg-[#EBF5FF] text-[#0866FF]">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-              <path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6a3 3 0 0 1 3 3v1h1a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h1v-1a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1z"/>
-            </svg>
-          </div>
-          <h3 className="text-[17px] font-bold text-[#080809]">
-            Only his friends can see what he shares on his profile.
-          </h3>
-          <p className="mx-auto mt-1.5 max-w-[280px] text-[13px] text-[#65676B] leading-relaxed">
-            Photos and posts are hidden to protect his privacy.
-          </p>
-          <div className="mt-3.5 text-[13px] font-semibold text-[#0866FF]">
-            Learn more about profile locking
-          </div>
         </div>
       ) : (
         <div className="w-full bg-white mt-2.5 py-8 text-center text-[14px] text-[#65676B] border-y border-[#ced0d4]/60">
