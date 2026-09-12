@@ -160,8 +160,8 @@ const Stories: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
   const stories = [
     { name: 'Create story', cover: ownAvatar, avatar: ownAvatar, own: true },
     { name: 'Leo Messi', cover: '/facebook/story/2.webp', avatar: '/facebook/user/messi.webp' },
-    { name: 'Bangladesh Cricket', cover: '/facebook/post/bcb_tigers.webp', avatar: '/facebook/user/bcb_logo.webp' },
-    { name: 'ESPNcricinfo', cover: '/facebook/story/1.webp', avatar: '/facebook/user/goal.webp' },
+    { name: 'NASA', cover: '/facebook/post/nasa_deep_space.webp', avatar: '/facebook/user/nasa_logo.webp' },
+    { name: 'National Geographic', cover: '/facebook/story/1.webp', avatar: '/facebook/user/goal.webp' },
   ];
   return (
     <div className="bg-white py-3 border-y border-[#ced0d4]/60">
@@ -209,10 +209,10 @@ const Stories: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 const Post: React.FC<{second?: boolean}> = ({second}) => (
   <article className="mt-2 bg-white text-[#050505] shadow-xs">
     <div className="flex items-center gap-2.5 px-3.5 pt-3 pb-2">
-      <img src={asset(second ? '/facebook/user/messi.webp' : '/facebook/user/bcb_logo.webp')} className="h-10 w-10 rounded-full object-cover" alt="" />
+      <img src={asset(second ? '/facebook/user/messi.webp' : '/facebook/user/nasa_logo.webp')} className="h-10 w-10 rounded-full object-cover" alt="" />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 text-[15px] font-bold text-[#050505] leading-tight">
-          <span>{second ? 'Leo Messi' : 'Bangladesh Cricket : The Tigers'}</span>
+          <span>{second ? 'Leo Messi' : 'NASA - National Aeronautics and Space Administration'}</span>
           <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#0866FF] text-white text-[9px] font-bold">✓</span>
         </div>
         <div className="flex items-center gap-1 text-[12px] text-[#65676b] pt-0.5">
@@ -225,19 +225,19 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
     <p className="whitespace-pre-line px-3.5 pt-1 pb-2.5 text-[14px] leading-snug text-[#050505]">
       {second 
         ? '🏆 Gran victoria en equipo hoy! Seguimos trabajando juntos para los próximos desafíos. Gracias a todos por el apoyo de siempre! ⚽🔥\n(Great team win today! Moving forward together. Thank you all for the support! 🇦🇷)' 
-        : 'ঐতিহাসিক জয়! 🐯🇧🇩 অলরাউন্ড নৈপুণ্যে স্মরণীয় এক জয় ছিনিয়ে নিলো বাংলাদেশ টাইগার্স। Congratulations Bangladesh! ❤️🔥\n#BangladeshCricket #Tigers #Victory'}
+        : 'Journey through the cosmos. 🌌✨ This deep-field view captured by the James Webb Space Telescope reveals thousands of galaxies—including the faintest objects ever observed in the infrared.\n#NASA #JWST #Space #Universe'}
     </p>
-    <img src={asset(second ? '/facebook/post/2.webp' : '/facebook/post/bcb_tigers.webp')} className="max-h-[380px] w-full object-cover" alt="" />
+    <img src={asset(second ? '/facebook/post/2.webp' : '/facebook/post/nasa_deep_space.webp')} className="max-h-[380px] w-full object-cover" alt="" />
     <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676b]">
       <div className="flex items-center gap-1.5">
         <div className="flex items-center -space-x-1">
           <img src={asset('/facebook/reactions/like.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="like" />
           <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="love" />
-          <img src={asset(second ? '/facebook/reactions/care.webp' : '/facebook/reactions/haha.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="reaction" />
+          <img src={asset(second ? '/facebook/reactions/care.webp' : '/facebook/reactions/wow.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="reaction" />
         </div>
-        <span className="ml-1 font-medium">{second ? '142K' : '38.4K'}</span>
+        <span className="ml-1 font-medium">{second ? '142K' : '94.2K'}</span>
       </div>
-      <div>{second ? '8.5K comments · 4.2K shares' : '2.8K comments · 840 shares'}</div>
+      <div>{second ? '8.5K comments · 4.2K shares' : '4.3K comments · 12K shares'}</div>
     </div>
     <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4] py-1 text-center text-[13px] font-semibold text-[#65676b]">
       <div className="flex items-center justify-center gap-1.5 py-2 text-[#0866FF]">
