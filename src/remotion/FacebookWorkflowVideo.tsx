@@ -302,33 +302,44 @@ const HUMAN_SCROLL_GESTURES = [
   // Pause 5: frames 580-600 (0.67s) - resting at final position
 ];
 
-function getHumanScrollState(frame: number) {
+const LOCKED_SCROLL_GESTURES = [
+  // Glance at Header & Bio: frames 128-185 (1.9s)
+  // Swipe 1: Smooth scroll down to reveal Locked Profile Banner & Details
+  { start: 185, end: 235, from: 0, to: -220 },
+  // Pause 1: frames 235-320 (2.8s) - reading the banner & details
+  // Swipe 2: Gentle secondary scroll centering the locked privacy shield card
+  { start: 320, end: 375, from: -220, to: -360 },
+  // Pause 2: frames 375-600 (7.5s) - resting cleanly on the locked profile privacy shield
+];
+
+function getHumanScrollState(frame: number, isLocked = false) {
+  const gestures = isLocked ? LOCKED_SCROLL_GESTURES : HUMAN_SCROLL_GESTURES;
   let scrollY = 0;
 
-  if (frame < HUMAN_SCROLL_GESTURES[0].start) {
+  if (frame < gestures[0].start) {
     scrollY = 0;
   } else {
-    for (let i = 0; i < HUMAN_SCROLL_GESTURES.length; i++) {
-      const g = HUMAN_SCROLL_GESTURES[i];
+    for (let i = 0; i < gestures.length; i++) {
+      const g = gestures[i];
       if (frame >= g.start && frame <= g.end) {
         const progress = (frame - g.start) / (g.end - g.start);
         scrollY = g.from + (g.to - g.from) * humanFlickEase(progress);
         break;
       }
-      const nextG = HUMAN_SCROLL_GESTURES[i + 1];
+      const nextG = gestures[i + 1];
       if (nextG && frame > g.end && frame < nextG.start) {
         scrollY = g.to;
         break;
       }
     }
-    if (frame > HUMAN_SCROLL_GESTURES[HUMAN_SCROLL_GESTURES.length - 1].end) {
-      scrollY = HUMAN_SCROLL_GESTURES[HUMAN_SCROLL_GESTURES.length - 1].to;
+    if (frame > gestures[gestures.length - 1].end) {
+      scrollY = gestures[gestures.length - 1].to;
     }
   }
 
   // Calculate native Android scrollbar thumb fade & position
   let scrollbarOpacity = 0;
-  for (const g of HUMAN_SCROLL_GESTURES) {
+  for (const g of gestures) {
     if (frame >= g.start && frame <= g.end) {
       scrollbarOpacity = frame < g.start + 5 ? (frame - g.start) / 5 : 1;
       break;
@@ -339,7 +350,7 @@ function getHumanScrollState(frame: number) {
     }
   }
 
-  const maxScroll = 3600;
+  const maxScroll = isLocked ? 500 : 3600;
   const trackHeight = 830 - 46;
   const thumbTop = 8 + (Math.min(maxScroll, Math.abs(scrollY)) / maxScroll) * trackHeight;
 
@@ -408,7 +419,7 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame);
+  const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame, Boolean(fbProfile.isLocked));
 
   const sampleTenPosts: FbPost[] = [
     {
@@ -535,6 +546,7 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
   ];
 
   const ensureTenPosts = (posts?: FbPost[]): FbPost[] => {
+    if (fbProfile.isLocked) return [];
     const list: FbPost[] = posts && posts.length > 0 ? [...posts] : [];
     if (list.length >= 10) return list;
 
@@ -616,14 +628,51 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
           {fbProfile.bio && <p className="mt-2 text-[14px] text-[#080809]">{fbProfile.bio}</p>}
           <div className="mt-4 flex gap-2">
             <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white">
-              <MetaPlusIcon size={16} fill="#ffffff" />
-              <span>Add to story</span>
+              {fbProfile.isLocked ? (
+                <>
+                  <MetaNavFriendsIcon size={18} active={false} />
+                  <span className="text-white">Add friend</span>
+                </>
+              ) : (
+                <>
+                  <MetaPlusIcon size={16} fill="#ffffff" />
+                  <span>Add to story</span>
+                </>
+              )}
             </div>
             <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
-              <MetaEditPencilIcon size={16} fill="#050505" />
-              <span>Edit profile</span>
+              {fbProfile.isLocked ? (
+                <>
+                  <MetaMessengerIcon size={18} />
+                  <span>Message</span>
+                </>
+              ) : (
+                <>
+                  <MetaEditPencilIcon size={16} fill="#050505" />
+                  <span>Edit profile</span>
+                </>
+              )}
             </div>
           </div>
+
+          {/* Official Facebook Locked Profile Header Notice */}
+          {fbProfile.isLocked && (
+            <div className="mt-3.5 flex items-start gap-3 rounded-xl bg-[#EBF5FF] p-3 text-left border border-[#0866FF]/20">
+              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#0866FF] text-white">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6a3 3 0 0 1 3 3v1h1a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h1v-1a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1z"/>
+                </svg>
+              </div>
+              <div className="min-w-0 flex-1 pt-0.5">
+                <h4 className="text-[14px] font-bold text-[#080809] leading-tight">
+                  {fbProfile.profileName || 'User'} locked his profile
+                </h4>
+                <p className="mt-0.5 text-[12px] text-[#65686C] leading-snug">
+                  Only his friends can see what he shares on his profile, including his photos and posts. <span className="font-semibold text-[#0866FF]">Learn more</span>
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -851,9 +900,26 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
             </article>
           ))}
         </div>
+      ) : fbProfile.isLocked ? (
+        <div className="mt-2.5 w-full bg-white px-6 py-10 text-center border-y border-[#ced0d4]/60">
+          <div className="mx-auto mb-3.5 grid h-14 w-14 place-items-center rounded-full bg-[#EBF5FF] text-[#0866FF]">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+              <path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6a3 3 0 0 1 3 3v1h1a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h1v-1a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1z"/>
+            </svg>
+          </div>
+          <h3 className="text-[17px] font-bold text-[#080809]">
+            Only his friends can see what he shares on his profile.
+          </h3>
+          <p className="mx-auto mt-1.5 max-w-[280px] text-[13px] text-[#65676B] leading-relaxed">
+            Photos and posts are hidden to protect his privacy.
+          </p>
+          <div className="mt-3.5 text-[13px] font-semibold text-[#0866FF]">
+            Learn more about profile locking
+          </div>
+        </div>
       ) : (
         <div className="w-full bg-white mt-2.5 py-8 text-center text-[14px] text-[#65676B] border-y border-[#ced0d4]/60">
-          {fbProfile.isLocked ? 'No posts available' : 'No recent public posts'}
+          No recent public posts
         </div>
       )}
       </div>
