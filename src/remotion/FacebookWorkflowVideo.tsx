@@ -227,10 +227,11 @@ const Post: React.FC<{second?: boolean}> = ({second}) => (
     </p>
     <img src={asset(second ? '/facebook/post/2.webp' : '/facebook/post/1.webp')} className="max-h-[380px] w-full object-cover" alt="" />
     <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676b]">
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         <div className="flex items-center -space-x-1">
-          <img src={asset('/facebook/reactions/like.webp')} className="h-[18px] w-[18px]" alt="" />
-          <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px]" alt="" />
+          <img src={asset('/facebook/reactions/like.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="like" />
+          <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="love" />
+          <img src={asset(second ? '/facebook/reactions/care.webp' : '/facebook/reactions/haha.webp')} className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white" alt="reaction" />
         </div>
         <span className="ml-1 font-medium">{second ? '3.8K' : '1.4K'}</span>
       </div>
@@ -727,10 +728,27 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
 
               {/* Reactions & engagement counts */}
               <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676B]">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <div className="flex items-center -space-x-1">
-                    <img src={asset('/facebook/reactions/like.webp')} className="h-[18px] w-[18px]" alt="" />
-                    <img src={asset('/facebook/reactions/love.webp')} className="h-[18px] w-[18px]" alt="" />
+                    {(() => {
+                      const combos = [
+                        ['like', 'love', 'care'],
+                        ['love', 'haha', 'like'],
+                        ['like', 'care', 'love'],
+                        ['love', 'like', 'wow'],
+                        ['haha', 'like', 'love'],
+                        ['like', 'love', 'haha'],
+                      ];
+                      const currentCombo = combos[pIdx % combos.length];
+                      return currentCombo.map((rc, rIdx) => (
+                        <img
+                          key={rIdx}
+                          src={asset(`/facebook/reactions/${rc}.webp`)}
+                          className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white"
+                          alt={rc}
+                        />
+                      ));
+                    })()}
                   </div>
                   <span className="ml-1 font-medium">{post.reactions || '1.4K'}</span>
                 </div>
