@@ -228,6 +228,8 @@ export async function scrapeFacebookProfile(facebookUrl) {
                            .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
                            .trim();
         postText = postText.split(/\s*(\.\.\.\s*See more|\.\.\.\s*see more|See more|see more)\b/i)[0].trim();
+        // Strip trailing domain link previews and tracking tokens
+        postText = postText.split(/[a-zA-Z0-9_\-]+\.(?:com|net|org|io|co|me)\b/i)[0].trim();
         if (/[\u0300-\u036f]/.test(postText)) {
           postText = postText.split(/[\u0300-\u036f]/)[0].trim().replace(/[a-zA-Z]$/, '').trim();
         }
