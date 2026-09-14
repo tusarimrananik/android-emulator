@@ -161,6 +161,18 @@ export const MetaArrowBackIcon: React.FC<{ className?: string; size?: number }> 
   </svg>
 );
 
+export const MetaSettingsGearIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#050505' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7.43-2.92a7.97 7.97 0 0 0 0-1.16l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.99 7.99 0 0 0-1-.58l-.38-2.65A.5.5 0 0 0 14.6 3h-4a.5.5 0 0 0-.49.42l-.38 2.65c-.35.15-.69.34-1 .58l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65a7.97 7.97 0 0 0 0 1.16L3.75 14.43a.5.5 0 0 0-.12.64l2 3.46c.14.25.44.34.61.22l2.49-1c.31.24.65.43 1 .58l.38 2.65c.05.24.26.42.49.42h4a.5.5 0 0 0 .49-.42l.38-2.65c.35-.15.69-.34 1-.58l2.49 1c.17.12.47.03.61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65z" />
+  </svg>
+);
+
+export const MetaShieldLockIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#0866FF' }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
+    <path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6a3 3 0 0 1 3 3v1h1a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h1v-1a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1z" />
+  </svg>
+);
+
 export const MetaWorkIcon: React.FC<{ className?: string; size?: number; fill?: string }> = ({ className = '', size = 20, fill = '#65676B' }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill={fill} className={className}>
     <path d="M10 2a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v3.5a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V8a2 2 0 0 0-2-2h-4V4a2 2 0 0 0-2-2h-4zm0 2h4v2h-4V4zm-8 8.5V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6.5h-7v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-1H2z" />

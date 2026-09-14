@@ -27,6 +27,9 @@ import {
   MetaMoreDotsIcon,
   MetaEditPencilIcon,
   MetaCameraIcon,
+  MetaArrowBackIcon,
+  MetaSettingsGearIcon,
+  MetaShieldLockIcon,
   MetaWorkIcon,
   MetaGraduationIcon,
   MetaLocationIcon,
@@ -418,6 +421,136 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
   );
 };
 
+const ProfileSettingsScreen: React.FC<{fbProfile?: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
+  const avatar = fbProfile?.profilePicture || asset('/facebook/user/lcd.webp');
+  const name = fbProfile?.profileName || 'Anik';
+  const isLocked = Boolean(fbProfile?.isLocked);
+
+  const scrollY = interpolate(frame, [490, 550], [0, -160], {
+    ...clamp,
+    easing: humanFlickEase,
+  });
+
+  return (
+    <div className="flex h-full w-full flex-col bg-[#F0F2F5] text-[#080809]">
+      {/* Top Bar */}
+      <div className="flex h-[52px] items-center gap-3 border-b border-[#D0D3D7] bg-white px-3 shadow-xs">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full active:bg-[#E4E6EB]">
+          <MetaArrowBackIcon size={20} />
+        </div>
+        <h2 className="text-[18px] font-bold text-[#080809]">Profile settings</h2>
+      </div>
+
+      <div className="flex-1 overflow-hidden">
+        <div style={{transform: `translateY(${scrollY}px)`}} className="p-3 flex flex-col gap-3 pb-8">
+          {/* Profile Card */}
+          <div className="flex items-center gap-3 rounded-2xl bg-white p-3.5 border border-[#ced0d4]/60 shadow-xs">
+            <img src={avatar.startsWith('http') ? avatar : asset(avatar)} className="h-12 w-12 rounded-full object-cover" alt="" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 text-[16px] font-bold text-[#080809]">
+                <span>{name}</span>
+                {fbProfile?.isVerified && <MetaVerifiedBadge size={15} />}
+              </div>
+              <div className="text-[12px] text-[#65676B]">Personal account</div>
+            </div>
+            <div className="rounded-lg bg-[#E4E6EB] px-3 py-1.5 text-[13px] font-semibold text-[#080809]">
+              Edit
+            </div>
+          </div>
+
+          {/* Privacy & Profile Locking Section */}
+          <div className="rounded-2xl bg-white p-3.5 border border-[#ced0d4]/60 shadow-xs flex flex-col gap-3.5">
+            <div className="text-[12px] font-bold uppercase tracking-wider text-[#65676B]">Privacy & Controls</div>
+
+            {/* Profile Locking Item */}
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#EBF5FF] text-[#0866FF]">
+                <MetaShieldLockIcon size={20} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="text-[15px] font-bold text-[#080809]">Lock profile</div>
+                  {isLocked && (
+                    <span className="rounded-full bg-[#EBF5FF] px-2.5 py-0.5 text-[11px] font-bold text-[#0866FF]">
+                      Locked
+                    </span>
+                  )}
+                </div>
+                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
+                  {isLocked ? 'Your profile is locked. Only friends see full content.' : 'Lock your profile to protect your photos and posts.'}
+                </div>
+              </div>
+            </div>
+
+            <div className="h-[1px] w-full bg-[#E4E6EB]" />
+
+            {/* Privacy Shortcuts */}
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
+                <MetaLocationIcon size={20} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[15px] font-semibold text-[#080809]">Privacy shortcuts</div>
+                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
+                  Take control of your privacy settings
+                </div>
+              </div>
+            </div>
+
+            <div className="h-[1px] w-full bg-[#E4E6EB]" />
+
+            {/* Profile and Tagging */}
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
+                <MetaNavFriendsIcon size={20} active={false} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[15px] font-semibold text-[#080809]">Profile and tagging</div>
+                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
+                  Decide who can interact with you on Facebook
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Activity & Management */}
+          <div className="rounded-2xl bg-white p-3.5 border border-[#ced0d4]/60 shadow-xs flex flex-col gap-3.5">
+            <div className="text-[12px] font-bold uppercase tracking-wider text-[#65676B]">Your Information</div>
+
+            {/* Activity Log */}
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
+                <MetaClockIcon size={20} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[15px] font-semibold text-[#080809]">Activity log</div>
+                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
+                  View and manage your activity history
+                </div>
+              </div>
+            </div>
+
+            <div className="h-[1px] w-full bg-[#E4E6EB]" />
+
+            {/* Account Status */}
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
+                <MetaWorkIcon size={20} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-[15px] font-semibold text-[#080809]">Account status</div>
+                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
+                  View your account standing and restrictions
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
   const isLocked = Boolean(fbProfile.isLocked);
   const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame, isLocked);
@@ -481,6 +614,13 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
             <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
               <MetaEditPencilIcon size={16} fill="#050505" />
               <span>Edit profile</span>
+            </div>
+            <div className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg bg-[#E4E6EB] text-[#080809]">
+              <MetaMoreDotsIcon size={18} />
+              {/* Simulated user finger tap on the settings menu button right before transition */}
+              {frame >= 418 && frame <= 428 && (
+                <div className="pointer-events-none absolute inset-0 rounded-lg bg-[#0866FF]/30 scale-110" />
+              )}
             </div>
           </div>
 
@@ -837,16 +977,37 @@ export const FacebookWorkflowVideo: React.FC<{fbProfile?: FbProfileData}> = ({fb
                   </div>
                 </div>
 
-                {/* 2. PROFILE SCREEN (Slides in from frame 115 and active till frame 600) */}
+                {/* 2. PROFILE SCREEN (Slides in from frame 115) */}
                 {frame >= 115 && fbProfile && (
                   <div
                     className="absolute inset-0 bg-[#F0F2F5]"
                     style={{
-                      transform: `translateX(${profileSlideX}%)`,
+                      transform: `translateX(${interpolate(frame, [115, 128, 425, 438], [100, 0, 0, -30], {
+                        ...clamp,
+                        easing: humanFlickEase,
+                      })}%)`,
                       boxShadow: '-10px 0 25px rgba(0,0,0,0.25)',
+                      opacity: interpolate(frame, [430, 438], [1, 0], clamp),
+                      pointerEvents: frame >= 438 ? 'none' : 'auto',
                     }}
                   >
                     <ProfileScreen fbProfile={fbProfile} frame={frame} />
+                  </div>
+                )}
+
+                {/* 3. PROFILE SETTINGS SCREEN (Slides in at frame 425 and active through frame 600) */}
+                {frame >= 425 && (
+                  <div
+                    className="absolute inset-0 bg-[#F0F2F5]"
+                    style={{
+                      transform: `translateX(${interpolate(frame, [425, 438], [100, 0], {
+                        ...clamp,
+                        easing: humanFlickEase,
+                      })}%)`,
+                      boxShadow: '-10px 0 25px rgba(0,0,0,0.25)',
+                    }}
+                  >
+                    <ProfileSettingsScreen fbProfile={fbProfile} frame={frame} />
                   </div>
                 )}
                 {!fbProfile && (
