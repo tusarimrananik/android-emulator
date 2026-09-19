@@ -19,3 +19,5 @@ services:
         value: "86400000"
       - key: RENDER_OUTPUT_DIR
         value: /opt/render/project/src/render-output
+      - key: TMPDIR
+        value: /opt/render/project/src/render-output

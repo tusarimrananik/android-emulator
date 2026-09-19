@@ -2,7 +2,57 @@
  * Facebook profile scraper — adapted from editgen-suite.
  * Uses puppeteer-core + system Chrome; cookies from env vars FB_USER_ID & FB_COOKIE.
  */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
+
+const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+export function resolveChromeExecutable() {
+  if (process.env.CHROME_PATH && fs.existsSync(process.env.CHROME_PATH)) {
+    return process.env.CHROME_PATH;
+  }
+
+  // 1. Check Remotion's downloaded headless shell
+  const remotionDirs = [
+    path.join(rootDir, 'node_modules/.remotion/chrome-headless-shell'),
+    path.join(rootDir, '.remotion/chrome-headless-shell'),
+  ];
+  for (const remotionBase of remotionDirs) {
+    if (fs.existsSync(remotionBase)) {
+      const findBinary = (dir) => {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const full = path.join(dir, entry.name);
+          if (entry.isDirectory()) {
+            const res = findBinary(full);
+            if (res) return res;
+          } else if (entry.name === 'chrome-headless-shell' || entry.name === 'chrome-headless-shell.exe' || entry.name === 'headless_shell') {
+            return full;
+          }
+        }
+        return null;
+      };
+      const found = findBinary(remotionBase);
+      if (found) return found;
+    }
+  }
+
+  // 2. Standard system Chrome/Chromium paths
+  const standardPaths = [
+    '/usr/local/bin/google-chrome',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  ];
+  for (const p of standardPaths) {
+    if (fs.existsSync(p)) return p;
+  }
+
+  throw new Error('No Chrome/Chromium executable found. Ensure Remotion browser is installed or set CHROME_PATH.');
+}
 
 const FB_SELECTORS = {
   profileName: 'h1',
@@ -27,14 +77,22 @@ export async function scrapeFacebookProfile(facebookUrl) {
     throw new Error('Not a valid Facebook URL');
   }
 
-  const executablePath = process.env.CHROME_PATH || '/usr/local/bin/google-chrome';
-  const browser = await puppeteer.launch({
-    executablePath,
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
-  });
+  const outputBase = process.env.RENDER_OUTPUT_DIR || path.join(rootDir, 'render-output');
+  const tempBase = path.join(outputBase, '.puppeteer-temp');
+  fs.mkdirSync(tempBase, { recursive: true });
+  const profileDir = fs.mkdtempSync(path.join(tempBase, 'profile-'));
+
+  const executablePath = resolveChromeExecutable();
+  let browser = null;
 
   try {
+    browser = await puppeteer.launch({
+      executablePath,
+      headless: 'new',
+      userDataDir: profileDir,
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
+    });
+
     const page = await browser.newPage();
     await page.setViewport({ width: 412, height: 915 });
     await page.setCookie(
@@ -285,6 +343,19 @@ export async function scrapeFacebookProfile(facebookUrl) {
 
     return data;
   } finally {
-    await browser.close();
+    if (browser) {
+      try {
+        await browser.close();
+      } catch (err) {
+        console.error('[scraper] Error closing browser', err);
+      }
+    }
+    if (profileDir && fs.existsSync(profileDir)) {
+      try {
+        fs.rmSync(profileDir, { recursive: true, force: true });
+      } catch (err) {
+        console.error('[scraper] Error removing temp profile dir', err);
+      }
+    }
   }
 }
