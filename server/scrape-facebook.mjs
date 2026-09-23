@@ -140,15 +140,25 @@ export async function scrapeFacebookProfile(facebookUrl) {
         bio = bMatch[1].split('\n').map(s => s.trim()).filter(s => s && !s.includes('followers') && !s.includes('Page ·') && !s.includes('Confirmed')).join(' • ');
       }
 
-      // Friends / Followers count
+      // Friends / Followers count & Professional Mode detection
       const connEls = document.querySelectorAll(selectors.friends);
       const bodyText = document.body ? document.body.innerText : '';
       const fMatch = bodyText.match(/([\d\.,]+[KkMm]?)\s*followers/i);
-      let friendsCount = fMatch ? fMatch[1] : null;
-      if (!friendsCount && connEls[0]) {
-        const parts = connEls[0].innerText.trim().split(/\s+/);
-        if (parts.length >= 1 && !/forgot/i.test(parts[0])) friendsCount = parts[0];
+      const folMatch = bodyText.match(/([\d\.,]+[KkMm]?)\s*following/i);
+      const frMatch = bodyText.match(/([\d\.,]+[KkMm]?)\s*friends/i);
+      const hasDashboard = /Professional dashboard|View tools|See dashboard|Professional tools|Manage page|Digital creator|Public figure|Creator/i.test(bodyText);
+      const isProfessional = (!!fMatch && !!folMatch) || hasDashboard || (!frMatch && !!fMatch);
+
+      let friendsCount = null;
+      let followingCount = folMatch ? folMatch[1] : null;
+      if (isProfessional) {
+        friendsCount = fMatch ? fMatch[1] : (connEls[0] ? connEls[0].innerText.trim().split(/\s+/)[0] : null);
+      } else {
+        friendsCount = frMatch ? frMatch[1] : (connEls[0] ? connEls[0].innerText.trim().split(/\s+/)[0] : null);
       }
+
+      const catMatch = bodyText.match(/Profile\s*·\s*([A-Za-z\s&]+)|Page\s*·\s*([A-Za-z\s&]+)/i);
+      const category = catMatch ? (catMatch[1] || catMatch[2] || '').trim() : null;
 
       // Friends grid (first 6)
       let friends = [];
@@ -210,7 +220,7 @@ export async function scrapeFacebookProfile(facebookUrl) {
         };
       }).filter(p => p.text || p.images.length > 0);
 
-      return { profileName, isVerified, coverPicture, profilePicture, bio, friendsCount, details, isLocked, posts, _needsScroll: !!connEls[0] };
+      return { profileName, isVerified, isProfessional, followingCount, category, coverPicture, profilePicture, bio, friendsCount, details, isLocked, posts, _needsScroll: !!connEls[0] };
     }, FB_SELECTORS);
 
     // Scroll down to load friends, intro details, and timeline posts

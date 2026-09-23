@@ -85,6 +85,9 @@ type FbProfileData = {
   profilePicture: string | null;
   bio: string | null;
   friendsCount: string | null;
+  followingCount?: string | null;
+  category?: string | null;
+  isProfessional?: boolean;
   friends: {name: string; avatar: string}[];
   details?: string[];
   isLocked?: boolean;
@@ -496,22 +499,26 @@ const ProfileSettingsScreen: React.FC<{fbProfile?: FbProfileData; frame: number}
             <span className="text-[16px] font-medium text-[#050505]">View as</span>
           </div>
 
-          {/* 5. Lock profile */}
+          {/* 5. Lock profile or Turn off professional mode */}
           <div className="flex items-center justify-between px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
             <div className="flex items-center gap-4 min-w-0 flex-1">
               <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
-                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+                {fbProfile?.isProfessional ? (
+                  <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                ) : (
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+                )}
               </svg>
               <div className="min-w-0 flex-1">
                 <div className="text-[16px] font-medium text-[#050505]">
-                  {isLocked ? 'Unlock profile' : 'Lock profile'}
+                  {fbProfile?.isProfessional ? 'Turn off professional mode' : (isLocked ? 'Unlock profile' : 'Lock profile')}
                 </div>
                 <div className="text-[13px] text-[#65676B] truncate">
-                  {isLocked ? 'You locked your profile' : 'Lock your profile to help protect photos and posts'}
+                  {fbProfile?.isProfessional ? 'Manage and review professional tools' : (isLocked ? 'You locked your profile' : 'Lock your profile to help protect photos and posts')}
                 </div>
               </div>
             </div>
-            {isLocked && (
+            {isLocked && !fbProfile?.isProfessional && (
               <span className="shrink-0 rounded-full bg-[#EBF5FF] px-2.5 py-0.5 text-[11px] font-bold text-[#0866FF]">
                 Locked
               </span>
@@ -633,29 +640,68 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
             <span>{fbProfile.profileName || 'Facebook User'}</span>
             {fbProfile.isVerified && <MetaVerifiedBadge size={18} />}
           </h1>
+          {/* Followers / Following for Professional, or Friends count for Normal */}
           <div className="mt-1 flex items-center justify-center gap-1.5 text-[14px] text-[#65686C]">
-            <span className="font-semibold text-[#080809]">{fbProfile.friendsCount ? `${fbProfile.friendsCount} followers` : '1,150 followers'}</span>
-            <span>•</span>
-            <span className="font-semibold text-[#080809]">480 following</span>
+            {fbProfile.isProfessional ? (
+              <>
+                <span className="font-semibold text-[#080809]">
+                  {fbProfile.friendsCount ? `${fbProfile.friendsCount} followers` : '1.2M followers'}
+                </span>
+                <span>•</span>
+                <span className="font-semibold text-[#080809]">
+                  {fbProfile.followingCount ? `${fbProfile.followingCount} following` : '480 following'}
+                </span>
+              </>
+            ) : (
+              <span className="font-semibold text-[#080809]">
+                {fbProfile.friendsCount ? (fbProfile.friendsCount.includes('friend') ? fbProfile.friendsCount : `${fbProfile.friendsCount} friends`) : '1,250 friends'}
+              </span>
+            )}
           </div>
           {fbProfile.bio && <p className="mt-2 text-[14px] text-[#080809]">{fbProfile.bio}</p>}
-          <div className="mt-4 flex gap-2">
-            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white">
-              <MetaPlusIcon size={16} fill="#ffffff" />
-              <span>Add to story</span>
+
+          {/* Normal vs Professional profile action buttons */}
+          {fbProfile.isProfessional ? (
+            <div className="mt-4 flex flex-col gap-2">
+              {/* Row 1: Full-width Professional Dashboard button */}
+              <div className="flex h-[38px] w-full items-center justify-center gap-2 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white shadow-xs">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                </svg>
+                <span>Professional dashboard</span>
+              </div>
+              {/* Row 2: Add to story and More options */}
+              <div className="flex gap-2">
+                <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
+                  <MetaPlusIcon size={16} fill="#050505" />
+                  <span>Add to story</span>
+                </div>
+                <div className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg bg-[#E4E6EB] text-[#080809]">
+                  <MetaMoreDotsIcon size={18} />
+                  {frame >= 418 && frame <= 428 && (
+                    <div className="pointer-events-none absolute inset-0 rounded-lg bg-[#0866FF]/30 scale-110" />
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
-              <MetaEditPencilIcon size={16} fill="#050505" />
-              <span>Edit profile</span>
+          ) : (
+            <div className="mt-4 flex gap-2">
+              <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#0866FF] px-4 text-[14px] font-semibold text-white">
+                <MetaPlusIcon size={16} fill="#ffffff" />
+                <span>Add to story</span>
+              </div>
+              <div className="flex h-[38px] flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#E4E6EB] px-4 text-[14px] font-semibold text-[#080809]">
+                <MetaEditPencilIcon size={16} fill="#050505" />
+                <span>Edit profile</span>
+              </div>
+              <div className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg bg-[#E4E6EB] text-[#080809]">
+                <MetaMoreDotsIcon size={18} />
+                {frame >= 418 && frame <= 428 && (
+                  <div className="pointer-events-none absolute inset-0 rounded-lg bg-[#0866FF]/30 scale-110" />
+                )}
+              </div>
             </div>
-            <div className="relative flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg bg-[#E4E6EB] text-[#080809]">
-              <MetaMoreDotsIcon size={18} />
-              {/* Simulated user finger tap on the settings menu button right before transition */}
-              {frame >= 418 && frame <= 428 && (
-                <div className="pointer-events-none absolute inset-0 rounded-lg bg-[#0866FF]/30 scale-110" />
-              )}
-            </div>
-          </div>
+          )}
 
           {/* Official Facebook Locked Profile Header Notice (Owner Perspective) */}
           {fbProfile.isLocked && (
