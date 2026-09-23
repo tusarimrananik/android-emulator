@@ -493,15 +493,17 @@ export async function scrapeFacebookProfile(facebookUrl) {
       try {
         const cleanBaseUrl = facebookUrl.replace(/\/$/, '').replace(/\/posts\/?$/, '').replace(/\/videos\/?$/, '');
         await page.goto(`${cleanBaseUrl}/videos/?_rdr`, { waitUntil: 'networkidle2', timeout: 20000 });
-        const videoPosts = await page.evaluate(() => {
+        const videoData = await page.evaluate(() => {
           const rawText = document.body ? document.body.innerText : '';
+          const titleName = (document.title || '').replace(/\s*[|•-]\s*Facebook.*/i, '').trim();
+
           const blocks = rawText.split(/\bVideos\b/)[1] || rawText;
           const items = blocks.split(/\n(?=\d+:\d+\n)/).filter(b => /\d+:\d+/.test(b));
 
           const imgs = Array.from(document.querySelectorAll('img'))
             .filter(i => i.src.startsWith('http') && !i.src.includes('rsrc.php') && !i.src.includes('emoji') && i.width > 200);
 
-          return items.map((item, idx) => {
+          const posts = items.map((item, idx) => {
             const lines = item.split('\n').map(l => l.trim()).filter(Boolean);
             const duration = lines[0];
             const caption = lines[1];
@@ -521,13 +523,35 @@ export async function scrapeFacebookProfile(facebookUrl) {
               sharesCount: String(shEstimates[idx % shEstimates.length])
             };
           }).filter(p => p.text && p.text.length > 5);
+
+          const fMatch = rawText.match(/([\d\.,]+[KkMm]?)\s*followers/i);
+          const folMatch = rawText.match(/([\d\.,]+[KkMm]?)\s*following/i);
+
+          return {
+            titleName: !titleName.toLowerCase().includes('log in') ? titleName : '',
+            followers: fMatch ? fMatch[1] : null,
+            following: folMatch ? folMatch[1] : null,
+            posts
+          };
         });
 
-        if (videoPosts && videoPosts.length > 0) {
+        if (videoData.titleName && (!data.profileName || /log in|facebook/i.test(data.profileName))) {
+          data.profileName = videoData.titleName;
+        }
+        if (videoData.followers && !data.friendsCount) {
+          data.friendsCount = videoData.followers;
+        }
+        if (videoData.following && !data.followingCount) {
+          data.followingCount = videoData.following;
+        }
+
+        if (videoData.posts && videoData.posts.length > 0) {
           const existing = data.posts || [];
           const combined = [...existing];
-          for (const vp of videoPosts) {
-            if (!combined.some(p => p.text === vp.text)) {
+          for (const vp of videoData.posts) {
+            const vpKey = (vp.text || '').slice(0, 25).trim();
+            const exists = combined.some(p => (p.text || '').slice(0, 25).trim() === vpKey);
+            if (!exists) {
               combined.push(vp);
             }
           }
