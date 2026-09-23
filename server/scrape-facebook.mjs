@@ -288,9 +288,9 @@ export async function scrapeFacebookProfile(facebookUrl) {
 
           postText = postText.replace(/^.*?Shared with\s*(?:Public|Friends|Only me)?/i, '')
                              .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
+                             .replace(/\bm\.me[A-Za-z0-9_\-]+\b/gi, '')
                              .trim();
           postText = postText.split(/\.\.\.\s*See more|See more/i)[0].trim();
-          postText = postText.split(/[a-zA-Z0-9_\-]+\.(?:com|net|org|io|co|me)\b/i)[0].trim();
           if (/[\u0300-\u036f]/.test(postText)) {
             postText = postText.split(/[\u0300-\u036f]/)[0].trim().replace(/[a-zA-Z]$/, '').trim();
           }
@@ -304,9 +304,75 @@ export async function scrapeFacebookProfile(facebookUrl) {
           const timeMatch = cardText.match(/\b(\d+[smhdwy]|yesterday|just now)\b/i);
           const time = timeMatch ? timeMatch[1] : 'Recently';
 
-          const rxMatch = cardText.match(/([\d.,]+[KkMm]?)\s*(?:reactions|likes)/i);
-          const cmMatch = cardText.match(/([\d.,]+[KkMm]?)\s*comments/i);
-          const shMatch = cardText.match(/([\d.,]+[KkMm]?)\s*shares/i);
+          // Accurate reaction/like count extraction
+          let reactions = '';
+          const likeBtn = card.querySelector('[aria-label="Like"][role="button"], [aria-label*="Like" i][role="button"], [aria-label*="React" i][role="button"]');
+          if (likeBtn && /[\d]/.test(likeBtn.innerText)) {
+            const m = likeBtn.innerText.trim().match(/([\d.,]+[KkMm]?)/);
+            if (m) reactions = m[1];
+          }
+          if (!reactions) {
+            const rxAria = Array.from(card.querySelectorAll('[aria-label*="people" i]'))
+              .map(b => b.getAttribute('aria-label') || '')
+              .find(a => /\b[\d.,]+[KkMm]?\b/.test(a));
+            if (rxAria) {
+              const m = rxAria.match(/([\d.,]+[KkMm]?)\s*people/i);
+              if (m) reactions = m[1];
+            }
+          }
+          if (!reactions) {
+            const rxMatch = cardText.match(/([\d.,]+[KkMm]?)\s*(?:reactions|likes)/i);
+            if (rxMatch) reactions = rxMatch[1];
+          }
+
+          // Accurate comment count extraction
+          let commentsCount = '';
+          const commentBtn = card.querySelector('[aria-label*="Leave a comment" i], [aria-label*="comment" i][role="button"]');
+          if (commentBtn && /[\d]/.test(commentBtn.innerText)) {
+            const m = commentBtn.innerText.trim().match(/([\d.,]+[KkMm]?)/);
+            if (m) commentsCount = m[1];
+          }
+          if (!commentsCount) {
+            const cmMatch = cardText.match(/([\d.,]+[KkMm]?)\s*comments?/i);
+            if (cmMatch) commentsCount = cmMatch[1];
+          }
+          if (!commentsCount) {
+            const bnCmMatch = cardText.match(/([\d.,]+[KkMm]?|[০-৯]+)\s*(?:টি\s*)?মন্তব্য/i);
+            if (bnCmMatch) commentsCount = bnCmMatch[1];
+          }
+
+          // Accurate share count extraction
+          let sharesCount = '';
+          const shareBtn = card.querySelector('[aria-label*="Send this to friends" i], [aria-label*="share" i][role="button"]');
+          if (shareBtn && /[\d]/.test(shareBtn.innerText)) {
+            const m = shareBtn.innerText.trim().match(/([\d.,]+[KkMm]?)/);
+            if (m) sharesCount = m[1];
+          }
+          if (!sharesCount) {
+            const shMatch = cardText.match(/([\d.,]+[KkMm]?)\s*shares?/i);
+            if (shMatch) sharesCount = shMatch[1];
+          }
+          if (!sharesCount) {
+            const bnShMatch = cardText.match(/([\d.,]+[KkMm]?|[০-৯]+)\s*(?:টি\s*)?শেয়ার/i);
+            if (bnShMatch) sharesCount = bnShMatch[1];
+          }
+
+          // External shared link card preview if present
+          let linkCard = null;
+          const externalLink = Array.from(card.querySelectorAll('a[href]')).find(a => {
+            const href = a.href || '';
+            return !href.includes('facebook.com') && !href.includes('fb.com') && !href.startsWith('javascript') && !href.startsWith('blob:') && a.innerText.trim().length > 3;
+          });
+          if (externalLink) {
+            try {
+              const u = new URL(externalLink.href);
+              const domain = u.hostname.replace(/^www\./, '').toUpperCase();
+              const title = externalLink.innerText.trim();
+              if (domain && title) {
+                linkCard = { domain, title, url: externalLink.href };
+              }
+            } catch (_) {}
+          }
 
           const isVideo = !!card.querySelector('video, [data-video-id], [href*="/videos/"], [href*="/reel/"]') || imgs.some(s => s.includes('/t15.'));
 
@@ -315,9 +381,10 @@ export async function scrapeFacebookProfile(facebookUrl) {
             images: primaryImage ? [primaryImage] : [],
             time,
             isVideo,
-            reactions: rxMatch ? rxMatch[1] : '1.4K',
-            commentsCount: cmMatch ? cmMatch[1] : '54',
-            sharesCount: shMatch ? shMatch[1] : '16',
+            reactions: reactions || '',
+            commentsCount: commentsCount || '',
+            sharesCount: sharesCount || '',
+            linkCard: linkCard || null,
           });
         });
       };

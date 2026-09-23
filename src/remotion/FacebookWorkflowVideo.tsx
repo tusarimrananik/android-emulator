@@ -42,6 +42,21 @@ import {
 } from '@/components/apps/MetaFacebookSvg';
 import {Globe2, X, Search} from 'lucide-react';
 
+const renderPostTextWithLinks = (text: string) => {
+  const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?)/g;
+  const parts = text.split(urlRegex);
+  return parts.map((part, i) => {
+    if (urlRegex.test(part)) {
+      return (
+        <span key={i} className="text-[#0866FF] break-all">
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+};
+
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const asset = (path: string) => staticFile(path);
 
@@ -55,6 +70,11 @@ type FbPost = {
   reactions?: string;
   commentsCount?: string;
   sharesCount?: string;
+  linkCard?: {
+    domain: string;
+    title: string;
+    url?: string;
+  };
   comments?: {author: string; text: string; avatar?: string; likes?: string}[];
 };
 
@@ -779,8 +799,22 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
               {/* Post Text */}
               {post.text && (
                 <p className="whitespace-pre-line px-3.5 pt-1 pb-2.5 text-[14px] leading-snug text-[#050505]">
-                  {post.text}
+                  {renderPostTextWithLinks(post.text)}
                 </p>
+              )}
+
+              {/* External Link Preview Card if available */}
+              {post.linkCard && (
+                <div className="mx-3.5 mb-2 overflow-hidden rounded-lg border border-[#ced0d4]/80 bg-[#F0F2F5]">
+                  <div className="px-3 py-2">
+                    <div className="text-[11px] font-semibold uppercase text-[#65676B] tracking-wider">
+                      {post.linkCard.domain}
+                    </div>
+                    <div className="truncate text-[14px] font-bold text-[#050505] leading-snug">
+                      {post.linkCard.title}
+                    </div>
+                  </div>
+                </div>
               )}
 
               {/* Full-bleed Photo or Video Thumbnail */}
@@ -800,33 +834,49 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
               )}
 
               {/* Reactions & engagement counts */}
-              <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676B]">
-                <div className="flex items-center gap-1.5">
-                  <div className="flex items-center -space-x-1">
-                    {(() => {
-                      const combos = [
-                        ['like', 'love', 'care'],
-                        ['love', 'haha', 'like'],
-                        ['like', 'care', 'love'],
-                        ['love', 'like', 'wow'],
-                        ['haha', 'like', 'love'],
-                        ['like', 'love', 'haha'],
-                      ];
-                      const currentCombo = combos[pIdx % combos.length];
-                      return currentCombo.map((rc, rIdx) => (
-                        <img
-                          key={rIdx}
-                          src={asset(`/facebook/reactions/${rc}.webp`)}
-                          className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white"
-                          alt={rc}
-                        />
-                      ));
-                    })()}
+              {((post.reactions && post.reactions !== '0') || (post.commentsCount && post.commentsCount !== '0') || (post.sharesCount && post.sharesCount !== '0')) && (
+                <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676B]">
+                  <div className="flex items-center gap-1.5">
+                    {post.reactions && post.reactions !== '0' && (
+                      <>
+                        <div className="flex items-center -space-x-1">
+                          {(() => {
+                            const combos = [
+                              ['like', 'love', 'care'],
+                              ['love', 'haha', 'like'],
+                              ['like', 'care', 'love'],
+                              ['love', 'like', 'wow'],
+                              ['haha', 'like', 'love'],
+                              ['like', 'love', 'haha'],
+                            ];
+                            const currentCombo = combos[pIdx % combos.length];
+                            return currentCombo.map((rc, rIdx) => (
+                              <img
+                                key={rIdx}
+                                src={asset(`/facebook/reactions/${rc}.webp`)}
+                                className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white"
+                                alt={rc}
+                              />
+                            ));
+                          })()}
+                        </div>
+                        <span className="ml-1 font-medium">{post.reactions}</span>
+                      </>
+                    )}
                   </div>
-                  <span className="ml-1 font-medium">{post.reactions || '1.4K'}</span>
+                  <div>
+                    {post.commentsCount && post.commentsCount !== '0' && (
+                      <span>{post.commentsCount.includes('comment') || post.commentsCount.includes('মন্তব্য') ? post.commentsCount : `${post.commentsCount} comments`}</span>
+                    )}
+                    {post.commentsCount && post.commentsCount !== '0' && post.sharesCount && post.sharesCount !== '0' && (
+                      <span> · </span>
+                    )}
+                    {post.sharesCount && post.sharesCount !== '0' && (
+                      <span>{post.sharesCount.includes('share') || post.sharesCount.includes('শেয়ার') ? post.sharesCount : `${post.sharesCount} shares`}</span>
+                    )}
+                  </div>
                 </div>
-                <div>{post.commentsCount ? `${post.commentsCount} comments` : '84 comments'} · {post.sharesCount ? `${post.sharesCount} shares` : '12 shares'}</div>
-              </div>
+              )}
 
               {/* Action Bar */}
               <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4]/50 py-1 text-center text-[13px] font-semibold text-[#65676B]">
