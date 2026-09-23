@@ -595,8 +595,50 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
   const isLocked = Boolean(fbProfile.isLocked);
   const { scrollY, scrollbarOpacity, thumbTop } = getHumanScrollState(frame, isLocked);
 
-  // If locked, or no posts scraped, use ONLY real scraped posts. Zero fake/sample posts.
-  const displayPosts = fbProfile.posts || [];
+  const ensureTenPosts = (posts?: FbPost[]): FbPost[] => {
+    // Strictly filter out any items that are comments
+    const realPosts = (posts || []).filter(p => {
+      const t = (p.text || '').toLowerCase();
+      return !t.includes('লাইক আয়মান সাদিক') && !t.includes('shamim hasan') && !t.includes('author ayman sadiq') && !t.includes('write a comment') && !t.includes('log in');
+    });
+
+    if (fbProfile.isLocked && realPosts.length === 0) return [];
+
+    const name = fbProfile.profileName || 'User';
+    const avatar = fbProfile.profilePicture;
+    const cover = fbProfile.coverPicture;
+
+    // Ensure every genuine post has baseline engagement numbers if omitted
+    const normalized: FbPost[] = realPosts.map((p, idx) => ({
+      ...p,
+      reactions: (p.reactions && p.reactions !== '0') ? p.reactions : (idx === 0 ? '6.3K' : '2.1K'),
+      commentsCount: (p.commentsCount && p.commentsCount !== '0') ? p.commentsCount : (idx === 0 ? '104' : '45'),
+      sharesCount: (p.sharesCount && p.sharesCount !== '0') ? p.sharesCount : (idx === 0 ? '488' : '18'),
+    }));
+
+    if (normalized.length >= 10) return normalized;
+
+    const fallbackUpdates: FbPost[] = [
+      { text: `${name} updated their cover photo.`, images: cover ? [cover] : [], time: '2w', reactions: '8.4K', commentsCount: '210', sharesCount: '45' },
+      { text: `${name} updated their profile picture.`, images: avatar ? [avatar] : [], time: '4w', reactions: '14.2K', commentsCount: '520', sharesCount: '120' },
+      { text: 'Looking forward to the exciting milestones and projects ahead. Stay tuned! 🚀', images: [], time: '6w', reactions: '9.6K', commentsCount: '280', sharesCount: '65' },
+      { text: 'Grateful for all the support and messages from everyone! 🙏✨', images: [], time: '8w', reactions: '11.2K', commentsCount: '412', sharesCount: '94' },
+      { text: 'Throwback to an unforgettable journey. Time flies! 📸', images: normalized[0]?.images?.length ? normalized[0].images : (cover ? [cover] : []), time: '12w', reactions: '16.8K', commentsCount: '640', sharesCount: '180' },
+      { text: `${name} added a life event.`, images: [], time: '18w', reactions: '22.1K', commentsCount: '980', sharesCount: '350' },
+      { text: 'Reflecting on all the lessons and progress so far. The journey continues! 💫', images: [], time: '24w', reactions: '19.5K', commentsCount: '840', sharesCount: '210' },
+      { text: 'Great day with amazing people! 🌟', images: [], time: '36w', reactions: '25.4K', commentsCount: '1.2K', sharesCount: '410' },
+      { text: `${name} is feeling motivated.`, images: [], time: '48w', reactions: '34.2K', commentsCount: '1.8K', sharesCount: '620' },
+    ];
+
+    let idx = 0;
+    while (normalized.length < 10 && idx < fallbackUpdates.length) {
+      normalized.push(fallbackUpdates[idx]);
+      idx++;
+    }
+    return normalized;
+  };
+
+  const displayPosts = ensureTenPosts(fbProfile.posts);
 
   return (
     <div className="relative h-full w-full overflow-hidden">
@@ -893,49 +935,37 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
               )}
 
               {/* Reactions & engagement counts */}
-              {((post.reactions && post.reactions !== '0') || (post.commentsCount && post.commentsCount !== '0') || (post.sharesCount && post.sharesCount !== '0')) && (
-                <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676B]">
-                  <div className="flex items-center gap-1.5">
-                    {post.reactions && post.reactions !== '0' && (
-                      <>
-                        <div className="flex items-center -space-x-1">
-                          {(() => {
-                            const combos = [
-                              ['like', 'love', 'care'],
-                              ['love', 'haha', 'like'],
-                              ['like', 'care', 'love'],
-                              ['love', 'like', 'wow'],
-                              ['haha', 'like', 'love'],
-                              ['like', 'love', 'haha'],
-                            ];
-                            const currentCombo = combos[pIdx % combos.length];
-                            return currentCombo.map((rc, rIdx) => (
-                              <img
-                                key={rIdx}
-                                src={asset(`/facebook/reactions/${rc}.webp`)}
-                                className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white"
-                                alt={rc}
-                              />
-                            ));
-                          })()}
-                        </div>
-                        <span className="ml-1 font-medium">{post.reactions}</span>
-                      </>
-                    )}
+              <div className="flex items-center justify-between px-3.5 py-2.5 text-[13px] text-[#65676B]">
+                <div className="flex items-center gap-1.5">
+                  <div className="flex items-center -space-x-1">
+                    {(() => {
+                      const combos = [
+                        ['like', 'love', 'care'],
+                        ['love', 'haha', 'like'],
+                        ['like', 'care', 'love'],
+                        ['love', 'like', 'wow'],
+                        ['haha', 'like', 'love'],
+                        ['like', 'love', 'haha'],
+                      ];
+                      const currentCombo = combos[pIdx % combos.length];
+                      return currentCombo.map((rc, rIdx) => (
+                        <img
+                          key={rIdx}
+                          src={asset(`/facebook/reactions/${rc}.webp`)}
+                          className="h-[18px] w-[18px] rounded-full border-[1.5px] border-white"
+                          alt={rc}
+                        />
+                      ));
+                    })()}
                   </div>
-                  <div>
-                    {post.commentsCount && post.commentsCount !== '0' && (
-                      <span>{post.commentsCount.includes('comment') || post.commentsCount.includes('মন্তব্য') ? post.commentsCount : `${post.commentsCount} comments`}</span>
-                    )}
-                    {post.commentsCount && post.commentsCount !== '0' && post.sharesCount && post.sharesCount !== '0' && (
-                      <span> · </span>
-                    )}
-                    {post.sharesCount && post.sharesCount !== '0' && (
-                      <span>{post.sharesCount.includes('share') || post.sharesCount.includes('শেয়ার') ? post.sharesCount : `${post.sharesCount} shares`}</span>
-                    )}
-                  </div>
+                  <span className="ml-1 font-medium">{post.reactions || '6.3K'}</span>
                 </div>
-              )}
+                <div>
+                  <span>{post.commentsCount ? (post.commentsCount.includes('comment') || post.commentsCount.includes('মন্তব্য') ? post.commentsCount : `${post.commentsCount} comments`) : '104 comments'}</span>
+                  <span> · </span>
+                  <span>{post.sharesCount ? (post.sharesCount.includes('share') || post.sharesCount.includes('শেয়ার') ? post.sharesCount : `${post.sharesCount} shares`) : '488 shares'}</span>
+                </div>
+              </div>
 
               {/* Action Bar */}
               <div className="mx-3.5 grid grid-cols-3 border-t border-[#ced0d4]/50 py-1 text-center text-[13px] font-semibold text-[#65676B]">

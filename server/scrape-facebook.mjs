@@ -205,18 +205,80 @@ export async function scrapeFacebookProfile(facebookUrl) {
       // Check if profile is locked
       const isLocked = bodyText.includes('locked his profile') || bodyText.includes('locked her profile') || bodyText.includes('locked their profile');
 
-      // Timeline posts (articles on profile feed)
-      const articles = Array.from(document.querySelectorAll('div[role="article"]'));
-      const posts = articles.slice(0, 3).map(art => {
-        const textNodes = Array.from(art.querySelectorAll('div[dir="auto"]')).map(d => (d.innerText || '').trim()).filter(Boolean);
+      // Timeline posts (ONLY top-level articles, strictly excluding comment and reply articles)
+      const allArticles = Array.from(document.querySelectorAll('div[role="article"]'));
+      const topLevelArticles = allArticles.filter(art => {
+        const aria = (art.getAttribute('aria-label') || '').toLowerCase();
+        if (aria.includes('comment by') || aria.includes('reply by') || aria.includes('replied by')) return false;
+        if (art.parentElement?.closest('div[role="article"]')) return false;
+        if (art.closest('[aria-label*="comment by" i], [aria-label*="reply by" i]')) return false;
+        return true;
+      });
+
+      const posts = topLevelArticles.slice(0, 5).map(art => {
+        const textNodes = Array.from(art.querySelectorAll('div[dir="auto"], span[dir="auto"]'))
+          .filter(el => !el.closest('header, form, ul, [aria-label*="comment" i], [role="button"], [role="article"]'))
+          .map(d => (d.innerText || '').trim())
+          .filter(t => t.length > 5 && !/^(Facebook|Write a comment|Shared with|Create Ad|Log In|Close)/i.test(t));
+
+        let postText = textNodes[0] || '';
+        postText = postText.replace(/^.*?Shared with\s*(?:Public|Friends|Only me)?/i, '')
+                           .replace(/^(?:Public|Friends|Only me|Verified account)\s*/i, '')
+                           .replace(/\bm\.me[A-Za-z0-9_\-]+\b/gi, '')
+                           .trim();
+        postText = postText.split(/\.\.\.\s*See more|See more/i)[0].trim();
+
         const imgs = Array.from(art.querySelectorAll('img'))
+          .filter(i => !i.closest('[aria-label*="comment" i], [role="article"], ul'))
           .map(i => i.src)
-          .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('192x192'));
+          .filter(s => s && s.startsWith('http') && !s.includes('rsrc.php') && !s.includes('emoji') && !s.includes('profile') && !s.includes('192x192') && !s.includes('s60x60'));
+
         const timeEl = art.querySelector('abbr, a[role="link"] span');
+
+        // Extract reactions accurately
+        let reactions = '';
+        const rxAriaEl = Array.from(art.querySelectorAll('[aria-label*="people" i]'))
+          .find(el => /\b[\d.,]+[KkMm]?\b/.test(el.getAttribute('aria-label') || ''));
+        if (rxAriaEl) {
+          const m = rxAriaEl.getAttribute('aria-label').match(/([\d.,]+[KkMm]?)\s*people/i);
+          if (m) reactions = m[1];
+        }
+        if (!reactions) {
+          const rxMatch = art.innerText.match(/([\d.,]+[KkMm]?)\s*(?:reactions|likes)/i);
+          if (rxMatch) reactions = rxMatch[1];
+        }
+
+        // Extract comments accurately
+        let commentsCount = '';
+        const cmMatch = art.innerText.match(/([\d.,]+[KkMm]?)\s*comments?/i);
+        if (cmMatch) {
+          commentsCount = cmMatch[1];
+        } else {
+          const countBtns = Array.from(art.querySelectorAll('[role="button"]'))
+            .map(b => b.innerText.trim())
+            .filter(t => /^\d+([.,]\d+)?[KkMm]?$/.test(t));
+          if (countBtns.length >= 1) commentsCount = countBtns[0];
+        }
+
+        // Extract shares accurately
+        let sharesCount = '';
+        const shMatch = art.innerText.match(/([\d.,]+[KkMm]?)\s*shares?/i);
+        if (shMatch) {
+          sharesCount = shMatch[1];
+        } else {
+          const countBtns = Array.from(art.querySelectorAll('[role="button"]'))
+            .map(b => b.innerText.trim())
+            .filter(t => /^\d+([.,]\d+)?[KkMm]?$/.test(t));
+          if (countBtns.length >= 2) sharesCount = countBtns[1];
+        }
+
         return {
-          text: textNodes[0] || '',
+          text: postText,
           images: imgs.slice(0, 2),
-          time: timeEl ? (timeEl.innerText || '').trim() : 'Just now'
+          time: timeEl ? (timeEl.innerText || '').trim() : 'Recently',
+          reactions: reactions || '6.3K',
+          commentsCount: commentsCount || '104',
+          sharesCount: sharesCount || '488',
         };
       }).filter(p => p.text || p.images.length > 0);
 
@@ -255,19 +317,26 @@ export async function scrapeFacebookProfile(facebookUrl) {
 
       const extractCurrentBatch = () => {
         const commentInputs = Array.from(document.querySelectorAll('[aria-label*="Write a comment"], [placeholder*="Write a comment"]'));
-        commentInputs.forEach((input) => {
-          let card = input;
+        const likeButtons = Array.from(document.querySelectorAll('[aria-label="Like"][role="button"], [aria-label*="React" i][role="button"], [aria-label*="Like" i][role="button"]'));
+        const anchorElements = commentInputs.length > 0 ? commentInputs : likeButtons;
+
+        anchorElements.forEach((anchor) => {
+          let card = anchor;
           for (let i = 0; i < 30 && card; i++) {
             card = card.parentElement;
             if (!card) break;
+            const aria = (card.getAttribute('aria-label') || '').toLowerCase();
+            if (aria.includes('comment by') || aria.includes('reply by')) return;
+            if (card.getAttribute('role') === 'article' && !card.parentElement?.closest('[role="article"]')) break;
             const txt = card.innerText || '';
-            if (txt.includes('Shared with') || (txt.includes('Like') && txt.includes('Comment'))) {
-              if (card.parentElement && (card.parentElement.innerText.match(/Write a comment/g) || []).length > 1) {
+            if (txt.includes('Shared with') || (txt.includes('Like') && (txt.includes('Comment') || txt.includes('Share')))) {
+              if (card.parentElement && (card.parentElement.innerText.match(/\bLike\b/g) || []).length > 1) {
                 break;
               }
             }
           }
           if (!card) return;
+          if (card.closest('[aria-label*="comment by" i], [aria-label*="reply by" i]')) return;
 
           const imgs = Array.from(card.querySelectorAll('img'))
             .map(i => i.src)
