@@ -459,7 +459,7 @@ const ProfileSettingsScreen: React.FC<{fbProfile?: FbProfileData; frame: number}
   });
 
   return (
-    <div className="flex h-full w-full flex-col bg-white text-[#050505] font-['Optimistic_Text',sans-serif]">
+    <div className="flex h-full w-full flex-col bg-white text-[#050505] font-fb">
       {/* Top Header Bar */}
       <div className="flex h-[52px] shrink-0 items-center gap-3 border-b border-[#E4E6EB] bg-white px-3 z-10">
         <div className="flex h-10 w-10 items-center justify-center rounded-full active:bg-[#E4E6EB]">
@@ -607,7 +607,7 @@ const ProfileScreen: React.FC<{fbProfile: FbProfileData; frame: number}> = ({fbP
 
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-['Optimistic_Text',sans-serif]" style={{transform: `translateY(${scrollY}px)`}}>
+      <div className="min-h-full bg-[#F0F2F5] text-[#080809] font-fb" style={{transform: `translateY(${scrollY}px)`}}>
       <div className="flex h-[50px] items-center justify-between border-b border-[#D0D3D7] bg-white px-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-full"><MetaFacebookLogo size={36} /></div>
         <div className="flex items-center gap-1.5">
@@ -1004,7 +1004,7 @@ const MarketScreen: React.FC = () => (
 const FacebookScreen: React.FC<{frame:number; fbProfile?: FbProfileData}> = ({frame, fbProfile}) => {
   const tab=tabForFrame(frame, !!fbProfile);
   return (
-    <div className="flex h-full flex-col overflow-hidden bg-[#f0f2f5] font-['Optimistic_Text',sans-serif]">
+    <div className="flex h-full flex-col overflow-hidden bg-[#f0f2f5] font-fb">
       {tab==='feed'&&<TopBar/>}
       {tab!=='profile'&&<FacebookNav tab={tab} fbProfile={fbProfile}/>}
       <div className="min-h-0 flex-1 overflow-hidden">

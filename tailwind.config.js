@@ -13,6 +13,7 @@ module.exports = {
         google: ['"Google Sans"', '"Google Sans Text"', 'Roboto', 'system-ui', 'sans-serif'],
         display: ['"Google Sans Display"', '"Google Sans"', 'Roboto', 'sans-serif'],
         clock: ['"Google Sans Flex"', '"Google Sans"', 'Roboto', 'sans-serif'],
+        fb: ['"Optimistic Text"', '"Hind Siliguri"', '"Noto Sans Bengali"', 'Roboto', 'system-ui', 'sans-serif'],
       },
       colors: {
         monet: {
