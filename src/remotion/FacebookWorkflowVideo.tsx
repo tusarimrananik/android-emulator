@@ -58,7 +58,11 @@ const renderPostTextWithLinks = (text: string) => {
 };
 
 const clamp = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
-const asset = (path: string) => staticFile(path);
+const asset = (path: string) => {
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  const clean = path.replace(/^\/public\//, '/');
+  return staticFile(clean);
+};
 
 type FbTab = 'feed' | 'watch' | 'friends' | 'market' | 'notifications' | 'menu' | 'profile';
 
