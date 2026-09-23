@@ -527,16 +527,31 @@ export async function scrapeFacebookProfile(facebookUrl) {
           const fMatch = rawText.match(/([\d\.,]+[KkMm]?)\s*followers/i);
           const folMatch = rawText.match(/([\d\.,]+[KkMm]?)\s*following/i);
 
+          const svgImages = Array.from(document.querySelectorAll('image'))
+            .map(i => i.getAttribute('href') || i.getAttribute('xlink:href'))
+            .filter(s => s && s.includes('scontent'));
+
+          const coverImg = Array.from(document.querySelectorAll('img'))
+            .find(i => i.src.includes('scontent') && (i.width >= 350 || i.height >= 140));
+
           return {
             titleName: !titleName.toLowerCase().includes('log in') ? titleName : '',
             followers: fMatch ? fMatch[1] : null,
             following: folMatch ? folMatch[1] : null,
+            profilePicture: svgImages[0] || null,
+            coverPicture: coverImg ? coverImg.src : null,
             posts
           };
         });
 
         if (videoData.titleName && (!data.profileName || /log in|facebook/i.test(data.profileName))) {
           data.profileName = videoData.titleName;
+        }
+        if (videoData.profilePicture && !data.profilePicture) {
+          data.profilePicture = videoData.profilePicture;
+        }
+        if (videoData.coverPicture && !data.coverPicture) {
+          data.coverPicture = videoData.coverPicture;
         }
         if (videoData.followers && !data.friendsCount) {
           data.friendsCount = videoData.followers;
