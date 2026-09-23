@@ -403,6 +403,7 @@ export async function scrapeFacebookProfile(facebookUrl) {
     }, FB_SELECTORS.friendsGrid);
 
     delete data._needsScroll;
+    data.facebookUrl = facebookUrl;
     data.friends = scrollData.friends && scrollData.friends.length > 0 ? scrollData.friends : data.friends || [];
     if (scrollData.posts && scrollData.posts.length > 0) {
       data.posts = scrollData.posts;

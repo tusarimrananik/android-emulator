@@ -88,6 +88,7 @@ type FbProfileData = {
   friends: {name: string; avatar: string}[];
   details?: string[];
   isLocked?: boolean;
+  facebookUrl?: string;
   posts?: FbPost[];
 };
 
@@ -442,128 +443,140 @@ const MenuScreen: React.FC<{fbProfile?: FbProfileData}> = ({fbProfile}) => {
 };
 
 const ProfileSettingsScreen: React.FC<{fbProfile?: FbProfileData; frame: number}> = ({fbProfile, frame}) => {
-  const avatar = fbProfile?.profilePicture || asset('/facebook/user/lcd.webp');
-  const name = fbProfile?.profileName || 'Anik';
   const isLocked = Boolean(fbProfile?.isLocked);
+  const profileUrl = fbProfile?.facebookUrl || `https://www.facebook.com/${(fbProfile?.profileName || 'user').toLowerCase().replace(/\s+/g, '.')}`;
 
-  const scrollY = interpolate(frame, [490, 550], [0, -160], {
+  const scrollY = interpolate(frame, [475, 545], [0, -260], {
     ...clamp,
     easing: humanFlickEase,
   });
 
   return (
-    <div className="flex h-full w-full flex-col bg-[#F0F2F5] text-[#080809]">
-      {/* Top Bar */}
-      <div className="flex h-[52px] items-center gap-3 border-b border-[#D0D3D7] bg-white px-3 shadow-xs">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full active:bg-[#E4E6EB]">
+    <div className="flex h-full w-full flex-col bg-white text-[#050505] font-['Optimistic_Text',sans-serif]">
+      {/* Top Header Bar */}
+      <div className="flex h-[52px] shrink-0 items-center gap-3 border-b border-[#E4E6EB] bg-white px-3 z-10">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full active:bg-[#E4E6EB]">
           <MetaArrowBackIcon size={20} />
         </div>
-        <h2 className="text-[18px] font-bold text-[#080809]">Profile settings</h2>
+        <h2 className="text-[20px] font-bold text-[#050505]">Profile settings</h2>
       </div>
 
+      {/* Settings Scrollable List */}
       <div className="flex-1 overflow-hidden">
-        <div style={{transform: `translateY(${scrollY}px)`}} className="p-3 flex flex-col gap-3 pb-8">
-          {/* Profile Card */}
-          <div className="flex items-center gap-3 rounded-2xl bg-white p-3.5 border border-[#ced0d4]/60 shadow-xs">
-            <img src={avatar.startsWith('http') ? avatar : asset(avatar)} className="h-12 w-12 rounded-full object-cover" alt="" />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5 text-[16px] font-bold text-[#080809]">
-                <span>{name}</span>
-                {fbProfile?.isVerified && <MetaVerifiedBadge size={15} />}
-              </div>
-              <div className="text-[12px] text-[#65676B]">Personal account</div>
-            </div>
-            <div className="rounded-lg bg-[#E4E6EB] px-3 py-1.5 text-[13px] font-semibold text-[#080809]">
-              Edit
-            </div>
+        <div style={{transform: `translateY(${scrollY}px)`}} className="flex flex-col pb-10">
+          {/* 1. Edit profile */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Edit profile</span>
           </div>
 
-          {/* Privacy & Profile Locking Section */}
-          <div className="rounded-2xl bg-white p-3.5 border border-[#ced0d4]/60 shadow-xs flex flex-col gap-3.5">
-            <div className="text-[12px] font-bold uppercase tracking-wider text-[#65676B]">Privacy & Controls</div>
-
-            {/* Profile Locking Item */}
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#EBF5FF] text-[#0866FF]">
-                <MetaShieldLockIcon size={20} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between">
-                  <div className="text-[15px] font-bold text-[#080809]">Lock profile</div>
-                  {isLocked && (
-                    <span className="rounded-full bg-[#EBF5FF] px-2.5 py-0.5 text-[11px] font-bold text-[#0866FF]">
-                      Locked
-                    </span>
-                  )}
-                </div>
-                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
-                  {isLocked ? 'Your profile is locked. Only friends see full content.' : 'Lock your profile to protect your photos and posts.'}
-                </div>
-              </div>
-            </div>
-
-            <div className="h-[1px] w-full bg-[#E4E6EB]" />
-
-            {/* Privacy Shortcuts */}
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
-                <MetaLocationIcon size={20} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-semibold text-[#080809]">Privacy shortcuts</div>
-                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
-                  Take control of your privacy settings
-                </div>
-              </div>
-            </div>
-
-            <div className="h-[1px] w-full bg-[#E4E6EB]" />
-
-            {/* Profile and Tagging */}
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
-                <MetaNavFriendsIcon size={20} active={false} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-semibold text-[#080809]">Profile and tagging</div>
-                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
-                  Decide who can interact with you on Facebook
-                </div>
-              </div>
-            </div>
+          {/* 2. Account status */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Account status</span>
           </div>
 
-          {/* Activity & Management */}
-          <div className="rounded-2xl bg-white p-3.5 border border-[#ced0d4]/60 shadow-xs flex flex-col gap-3.5">
-            <div className="text-[12px] font-bold uppercase tracking-wider text-[#65676B]">Your Information</div>
+          {/* 3. Archive */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.83 1H5.42l.82-1zM19 19H5V8h14v11zm-8.5-8h3v2.5H16L12 17.5 8 13.5h2.5V11z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Archive</span>
+          </div>
 
-            {/* Activity Log */}
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
-                <MetaClockIcon size={20} />
-              </div>
+          {/* 4. View as */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">View as</span>
+          </div>
+
+          {/* 5. Lock profile */}
+          <div className="flex items-center justify-between px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <div className="flex items-center gap-4 min-w-0 flex-1">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+              </svg>
               <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-semibold text-[#080809]">Activity log</div>
-                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
-                  View and manage your activity history
+                <div className="text-[16px] font-medium text-[#050505]">
+                  {isLocked ? 'Unlock profile' : 'Lock profile'}
+                </div>
+                <div className="text-[13px] text-[#65676B] truncate">
+                  {isLocked ? 'You locked your profile' : 'Lock your profile to help protect photos and posts'}
                 </div>
               </div>
             </div>
+            {isLocked && (
+              <span className="shrink-0 rounded-full bg-[#EBF5FF] px-2.5 py-0.5 text-[11px] font-bold text-[#0866FF]">
+                Locked
+              </span>
+            )}
+          </div>
 
-            <div className="h-[1px] w-full bg-[#E4E6EB]" />
+          {/* 6. Activity log */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Activity log</span>
+          </div>
 
-            {/* Account Status */}
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#E4E6EB] text-[#050505]">
-                <MetaWorkIcon size={20} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-semibold text-[#080809]">Account status</div>
-                <div className="text-[12px] text-[#65676B] leading-tight mt-0.5">
-                  View your account standing and restrictions
-                </div>
-              </div>
+          {/* 7. Manage posts */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Manage posts</span>
+          </div>
+
+          {/* 8. Review posts and tags */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Review posts and tags</span>
+          </div>
+
+          {/* 9. Privacy Center */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Privacy Center</span>
+          </div>
+
+          {/* 10. Search profile */}
+          <div className="flex items-center gap-4 px-4 py-3.5 hover:bg-[#F2F2F2] active:bg-[#E4E6EB] cursor-pointer">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#050505" className="shrink-0">
+              <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+            <span className="text-[16px] font-medium text-[#050505]">Search profile</span>
+          </div>
+
+          {/* Grey Section Separator */}
+          <div className="h-2 w-full bg-[#F0F2F5] border-y border-[#E4E6EB] my-2" />
+
+          {/* Bottom "Your profile link" Section */}
+          <div className="p-4 bg-white">
+            <h3 className="text-[16px] font-bold text-[#050505]">Your profile link</h3>
+            <p className="mt-1 text-[13px] text-[#65676B]">Your personalized link on Facebook.</p>
+            <div className="mt-3 text-[14px] font-bold text-[#050505] break-all select-all">
+              {profileUrl}
             </div>
+            <button
+              type="button"
+              className="mt-3.5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#E4E6EB] py-2.5 px-4 text-[14px] font-semibold text-[#050505] transition-colors active:bg-[#D8DADF]"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="#050505" className="shrink-0">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+              </svg>
+              <span>Copy link</span>
+            </button>
           </div>
         </div>
       </div>
